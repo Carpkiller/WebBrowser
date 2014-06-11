@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Planeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <meno>ja</meno>
+  <pozicia>123</pozicia>
+  <id>1123456</id>
+  <majitel>majuitel</majitel>
+  <sektor>80</sektor>
+  <flagAktualny>1</flagAktualny>
+  <vlozil>lukass</vlozil>
+  <datumVlozenia>0001-01-01T00:00:00</datumVlozenia>
+</Planeta>
