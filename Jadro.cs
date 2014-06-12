@@ -156,12 +156,48 @@ namespace WebBrowser
                     list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, flag, vlozil, datum));
                 }
                 reader.Close();
-                reader.Close();
                 cnn.Close();
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                if (e.Message.Contains("no such table: planety"))
+                {
+                    using (TransactionScope tran = new TransactionScope())
+                    {
+                        using (SQLiteConnection DbConnection = new SQLiteConnection(_dbConnection))
+                        {
+                            DbConnection.Open();
+
+                            sql =
+                                "CREATE TABLE planety ([ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,[idPlanety] VARCHAR(12)  NULL," +
+                                "[nazov] VARCHAR(50)  NULL,[pozicia] VARCHAR(15)  NULL,[majitel] VARCHAR(35)  NULL,[typ] VARCHAR(25)  NULL," +
+                                "[sektor] VARCHAR(10)  NULL,[flagAktualny] BOOLEAN  NULL,[vlozil] VARCHAR(35)  NULL,[datumVlozenia] DATE  NULL)";
+
+                            using (SQLiteCommand command = new SQLiteCommand(sql, DbConnection))
+                            {
+                                command.ExecuteNonQuery();
+                            }
+                        }
+                        tran.Complete();
+                    }
+
+                    using (TransactionScope tran = new TransactionScope())
+                    {
+                        using (SQLiteConnection DbConnection = new SQLiteConnection(_dbConnection))
+                        {
+                            DbConnection.Open();
+                            sql = "CREATE TABLE Zoradenie ([ID] INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL , " +
+                                  "[NazovRasy] VARCHAR, [PocetHracov] VARCHAR, [CP] INTEGER, [PP] INTEGER, " +
+                                  "[Planety] INTEGER, [Populacia] INTEGER, [Rozloha] INTEGER, [DatumVlozenia] DATETIME DEFAULT CURRENT_TIMESTAMP)";
+
+                            using (SQLiteCommand command = new SQLiteCommand(sql, DbConnection))
+                            {
+                                command.ExecuteNonQuery();
+                            }
+                        }
+                        tran.Complete();
+                    }
+                }
             }
 
             return list;
@@ -281,12 +317,16 @@ namespace WebBrowser
 
                 try
                 {
-                    SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                    cnn.Open();
-                    var ee = cnn.State;
-                    SQLiteCommand mycommand = new SQLiteCommand(query, cnn);
-                    var e = mycommand.ExecuteNonQueryAsync();
-                    Console.WriteLine("Ukladanie do DB");
+                    using (SQLiteConnection cnn = new SQLiteConnection(_dbConnection))
+                    {
+                        cnn.Open();
+                        //var ee = cnn.State;
+                        using (SQLiteCommand mycommand = new SQLiteCommand(query, cnn))
+                        {
+                            mycommand.ExecuteNonQuery();
+                            Console.WriteLine("Ukladanie do DB");
+                        }
+                    }
                 }
                 catch (Exception fail)
                 {
@@ -492,34 +532,38 @@ namespace WebBrowser
         {
             var sql = "select sum(planety) from Zoradenie where ID in (select ID from zoradenie group by nazovRasy);";
             var pocet = 0;
+
             try
             {
-                var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                var mycommand = new SQLiteCommand(sql, cnn);
-                var reader = mycommand.ExecuteReader();
-
-                while (reader.Read())
+                using (SQLiteConnection cnn = new SQLiteConnection(_dbConnection))
                 {
-                    pocet = reader.GetInt32(0);
+                    cnn.Open();
+                    using (SQLiteCommand mycommand = new SQLiteCommand(sql, cnn))
+                    {
+                        using (SQLiteDataReader reader = mycommand.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                pocet = reader.GetInt32(0);
+                            }
+                        }
+                    }
                 }
 
-                reader.Close();
-                cnn.Close();
+                int aktPocet = 0;
+                foreach (CelkovaTabulka celkovaTabulka in ListPlanetpar)
+                    aktPocet += celkovaTabulka.PocetPlanet;
+
+                NovePlanety = (aktPocet - pocet);
+
+                if (Zmeneno != null) //vyvolani udalosti
+                    Zmeneno();
+
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                Console.WriteLine(e.Message);
             }
-
-            int aktPocet = 0;
-            foreach (CelkovaTabulka celkovaTabulka in ListPlanetpar)
-                aktPocet += celkovaTabulka.PocetPlanet;
-
-            NovePlanety = (aktPocet - pocet);
-
-            if (Zmeneno != null) //vyvolani udalosti
-                Zmeneno();
 
         }
 
