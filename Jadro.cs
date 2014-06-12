@@ -97,23 +97,25 @@ namespace WebBrowser
 
             try
             {
-                SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                SQLiteCommand mycommand = new SQLiteCommand(sql, cnn);
-
-                SQLiteDataReader reader = mycommand.ExecuteReader();
-
-                while (reader.Read())
+                using (SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
                 {
-                    var sektor = reader.GetString(1);
-                    var pocet = reader.GetInt32(0);
-                    var datum = DateTime.ParseExact(reader.GetString(2), "yyyy-MM-dd HH:mm:ss",
-                        CultureInfo.InvariantCulture);
+                    cnn.Open();
+                    using (SQLiteCommand mycommand = new SQLiteCommand(sql, cnn))
+                    {
+                        using (SQLiteDataReader reader = mycommand.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var sektor = reader.GetString(1);
+                                var pocet = reader.GetInt32(0);
+                                var datum = DateTime.ParseExact(reader.GetString(2), "yyyy-MM-dd HH:mm:ss",
+                                    CultureInfo.InvariantCulture);
 
-                    list.Add(new SektorPrehlad(sektor, pocet, "--", datum));
+                                list.Add(new SektorPrehlad(sektor, pocet, "--", datum));
+                            }
+                        }
+                    }
                 }
-                reader.Close();
-                cnn.Close();
             }
             catch (Exception e)
             {
@@ -133,30 +135,30 @@ namespace WebBrowser
 
             try
             {
-                SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                var e = cnn.State;
-                SQLiteCommand mycommand = new SQLiteCommand(sql1, cnn);
-
-                SQLiteDataReader reader = mycommand.ExecuteReader();
-
-                while (reader.Read())
+                using (SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
                 {
-                    var nazov = reader["nazov"].ToString();
-                    var majitel = reader["majitel"].ToString();
-                    var pozicia = reader["pozicia"].ToString();
-                    var id = reader["idPlanety"].ToString();
-                    var flag = bool.Parse(reader["flagAktualny"].ToString());
-                    var vlozil = reader["vlozil"].ToString();
-                    var c = reader.GetString(9);
-                    var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    var typ = reader["typ"].ToString();
-                    var sektor = reader["sektor"].ToString();
+                    using (SQLiteCommand mycommand = new SQLiteCommand(sql1, cnn))
+                    {
+                        using (SQLiteDataReader reader = mycommand.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var nazov = reader["nazov"].ToString();
+                                var majitel = reader["majitel"].ToString();
+                                var pozicia = reader["pozicia"].ToString();
+                                var id = reader["idPlanety"].ToString();
+                                var flag = bool.Parse(reader["flagAktualny"].ToString());
+                                var vlozil = reader["vlozil"].ToString();
+                                var c = reader.GetString(9);
+                                var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                var typ = reader["typ"].ToString();
+                                var sektor = reader["sektor"].ToString();
 
-                    list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, flag, vlozil, datum));
+                                list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, flag, vlozil, datum));
+                            }
+                        }
+                    }
                 }
-                reader.Close();
-                cnn.Close();
             }
             catch (Exception e)
             {
@@ -239,13 +241,15 @@ namespace WebBrowser
                 {
                     try
                     {
-                        var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                        cnn.Open();
-                        var mycommand = new SQLiteCommand(query, cnn);
-                        var e = mycommand.ExecuteNonQuery();
-                        cnn.Close();
-                        Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " +
-                                          listNaUlozenie.Count);
+                        using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                        {
+                            cnn.Open();
+                            using (var mycommand = new SQLiteCommand(query, cnn))
+                            {
+                                mycommand.ExecuteNonQuery();
+                            }
+                        }
+                        Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " + listNaUlozenie.Count);
                     }
                     catch (Exception fail)
                     {
@@ -258,13 +262,16 @@ namespace WebBrowser
 
             try
             {
-                var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                var mycommand = new SQLiteCommand(query, cnn);
-                var e = mycommand.ExecuteNonQuery();
-                cnn.Close();
-                Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " +
-                                  listNaUlozenie.Count);
+                using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                {
+                    cnn.Open();
+                    using (var mycommand = new SQLiteCommand(query, cnn))
+                    {
+                        mycommand.ExecuteNonQuery();
+                    }
+                    cnn.Close();
+                }
+                Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " + listNaUlozenie.Count);
             }
             catch (Exception fail)
             {
@@ -477,13 +484,14 @@ namespace WebBrowser
             var sql = "update sektory set datumVlozenia =datetime('" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + "') where nazov='" + sektor + "';";
             try
             {
-                SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                var e = cnn.State;
-                SQLiteCommand mycommand = new SQLiteCommand(sql, cnn);
-                mycommand.ExecuteNonQuery();
-
-                cnn.Close();
+                using (SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                {
+                    cnn.Open();
+                    using (SQLiteCommand mycommand = new SQLiteCommand(sql, cnn))
+                    {
+                        mycommand.ExecuteNonQuery();
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -550,9 +558,7 @@ namespace WebBrowser
                     }
                 }
 
-                int aktPocet = 0;
-                foreach (CelkovaTabulka celkovaTabulka in ListPlanetpar)
-                    aktPocet += celkovaTabulka.PocetPlanet;
+                int aktPocet = ListPlanetpar.Sum(celkovaTabulka => celkovaTabulka.PocetPlanet);
 
                 NovePlanety = (aktPocet - pocet);
 
@@ -696,7 +702,7 @@ namespace WebBrowser
 
         public List<SektorPlanety> ZobrazSektor(string sektor)
         {
-            List<SektorPlanety> list = new List<SektorPlanety>();
+            var list = new List<SektorPlanety>();
 
             var sql =
                 "select nazov,majitel,pozicia,datetime(datumVlozenia) as datumVlozenia,typ,sektor,count(majitel) as pocetZmien from planety where sektor = '" +
@@ -704,28 +710,29 @@ namespace WebBrowser
 
             try
             {
-                SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                var e = cnn.State;
-                SQLiteCommand mycommand = new SQLiteCommand(sql, cnn);
-
-                SQLiteDataReader reader = mycommand.ExecuteReader();
-
-                while (reader.Read())
+                using (SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
                 {
-                    var nazov = reader["nazov"].ToString();
-                    var majitel = reader["majitel"].ToString();
-                    var pozicia = reader["pozicia"].ToString();
-                    var c = reader.GetString(3);
-                    var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    var typ = reader["typ"].ToString();
-                    var sektorPlan = reader["sektor"].ToString();
-                    var pocetZmien = reader["pocetZmien"].ToString();
+                    cnn.Open();
+                    using (SQLiteCommand mycommand = new SQLiteCommand(sql, cnn))
+                    {
+                        using (SQLiteDataReader reader = mycommand.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var nazov = reader["nazov"].ToString();
+                                var majitel = reader["majitel"].ToString();
+                                var pozicia = reader["pozicia"].ToString();
+                                var c = reader.GetString(3);
+                                var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                var typ = reader["typ"].ToString();
+                                //var sektorPlan = reader["sektor"].ToString();
+                                var pocetZmien = reader["pocetZmien"].ToString();
 
-                    list.Add(new SektorPlanety(nazov, pozicia, majitel, datum, typ, sektor, pocetZmien));
+                                list.Add(new SektorPlanety(nazov, pozicia, majitel, datum, typ, sektor, pocetZmien));
+                            }
+                        }
+                    }
                 }
-                reader.Close();
-                cnn.Close();
             }
             catch (Exception e)
             {
@@ -746,29 +753,30 @@ namespace WebBrowser
 
             try
             {
-                SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                var e = cnn.State;
-                SQLiteCommand mycommand = new SQLiteCommand(sql, cnn);
-
-                SQLiteDataReader reader = mycommand.ExecuteReader();
-
-                while (reader.Read())
+                using (SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
                 {
-                    var id = reader["idPlanety"].ToString();
-                    var nazov = reader["nazov"].ToString();
-                    var majitel = reader["majitel"].ToString();
-                    var pozicia = reader["pozicia"].ToString();
-                    var sektor = reader["sektor"].ToString();
-                    var vlozil = reader["vlozil"].ToString();
-                    var c = reader["datumVlozenia"].ToString();
-                    var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    var typ = reader["typ"].ToString();
+                    cnn.Open();
+                    using (SQLiteCommand mycommand = new SQLiteCommand(sql, cnn))
+                    {
+                        using (SQLiteDataReader reader = mycommand.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var id = reader["idPlanety"].ToString();
+                                var nazov = reader["nazov"].ToString();
+                                var majitel = reader["majitel"].ToString();
+                                var pozicia = reader["pozicia"].ToString();
+                                var sektor = reader["sektor"].ToString();
+                                var vlozil = reader["vlozil"].ToString();
+                                var c = reader["datumVlozenia"].ToString();
+                                var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                var typ = reader["typ"].ToString();
 
-                    list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, true, vlozil, datum));
+                                list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, true, vlozil, datum));
+                            }
+                        }
+                    }
                 }
-                reader.Close();
-                cnn.Close();
             }
             catch (Exception e)
             {
@@ -877,13 +885,14 @@ namespace WebBrowser
                 poziciaPlanety + "';";
             try
             {
-                SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                var e = cnn.State;
-                SQLiteCommand mycommand = new SQLiteCommand(sql, cnn);
-                mycommand.ExecuteNonQuery();
-
-                cnn.Close();
+                using (SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                {
+                    cnn.Open();
+                    using (SQLiteCommand mycommand = new SQLiteCommand(sql, cnn))
+                    {
+                        mycommand.ExecuteNonQuery();
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -897,29 +906,30 @@ namespace WebBrowser
 
             try
             {
-                SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                var e = cnn.State;
-                SQLiteCommand mycommand = new SQLiteCommand(sql1, cnn);
-
-                SQLiteDataReader reader = mycommand.ExecuteReader();
-
-                while (reader.Read())
+                using (SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
                 {
-                    var id = reader["idPlanety"].ToString();
-                    var nazov = reader["nazov"].ToString();
-                    var majitel = reader["majitel"].ToString();
-                    var pozicia = reader["pozicia"].ToString();
-                    var sektor = reader["sektor"].ToString();
-                    var vlozil = reader["vlozil"].ToString();
-                    var c = reader["datumVlozenia"].ToString();
-                    var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    var typ = reader["typ"].ToString();
+                    cnn.Open();
+                    using (SQLiteCommand mycommand = new SQLiteCommand(sql1, cnn))
+                    {
+                        using (SQLiteDataReader reader = mycommand.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var id = reader["idPlanety"].ToString();
+                                var nazov = reader["nazov"].ToString();
+                                var majitel = reader["majitel"].ToString();
+                                var pozicia = reader["pozicia"].ToString();
+                                var sektor = reader["sektor"].ToString();
+                                var vlozil = reader["vlozil"].ToString();
+                                var c = reader["datumVlozenia"].ToString();
+                                var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                var typ = reader["typ"].ToString();
 
-                    list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, true, vlozil, datum));
+                                list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, true, vlozil, datum));
+                            }
+                        }
+                    }
                 }
-                reader.Close();
-                cnn.Close();
             }
             catch (Exception e)
             {
@@ -963,33 +973,34 @@ namespace WebBrowser
 
             try
             {
-                var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                var mycommand = new SQLiteCommand(sql, cnn);
-
-                var reader = mycommand.ExecuteReader();
-
-                if (reader.HasRows == true)
+                using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
                 {
-
-                    while (reader.Read())
+                    cnn.Open();
+                    using (var mycommand = new SQLiteCommand(sql, cnn))
                     {
-                        var nazov = reader["nazov"].ToString();
-                        var majitel = reader["majitel"].ToString();
-                        var pozicia = reader["pozicia"].ToString();
-                        var c = reader.GetString(3);
-                        var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        var typ = reader["typ"].ToString();
-                        var sektor = reader["sektor"].ToString();
-                        var id = reader["idPlanety"].ToString();
-                        var vlozil = reader["idPlanety"].ToString();
+                        using (var reader = mycommand.ExecuteReader())
+                        {
+                            if (reader.HasRows == true)
+                            {
 
-                        list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, true, vlozil, datum));
+                                while (reader.Read())
+                                {
+                                    var nazov = reader["nazov"].ToString();
+                                    var majitel = reader["majitel"].ToString();
+                                    var pozicia = reader["pozicia"].ToString();
+                                    var c = reader.GetString(3);
+                                    var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                    var typ = reader["typ"].ToString();
+                                    var sektor = reader["sektor"].ToString();
+                                    var id = reader["idPlanety"].ToString();
+                                    var vlozil = reader["idPlanety"].ToString();
+
+                                    list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, true, vlozil, datum));
+                                }
+                            }
+                        }
                     }
                 }
-                reader.Close();
-                cnn.Close();
-
             }
             catch (Exception e)
             {
@@ -1026,25 +1037,26 @@ namespace WebBrowser
 
             try
             {
-                SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                var e = cnn.State;
-                SQLiteCommand mycommand = new SQLiteCommand(sql, cnn);
-
-                SQLiteDataReader reader = mycommand.ExecuteReader();
-
-                if (reader.HasRows == true)
+                using (SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
                 {
-
-                    while (reader.Read())
+                    cnn.Open();
+                    using (SQLiteCommand mycommand = new SQLiteCommand(sql, cnn))
                     {
-                        var nazov = reader["nazov"].ToString();
+                        using (SQLiteDataReader reader = mycommand.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
 
-                        listSektorov.Add(nazov);
+                                while (reader.Read())
+                                {
+                                    var nazov = reader["nazov"].ToString();
+
+                                    listSektorov.Add(nazov);
+                                }
+                            }
+                        }
                     }
                 }
-                reader.Close();
-                cnn.Close();
             }
             catch (Exception e)
             {
@@ -1146,7 +1158,7 @@ namespace WebBrowser
 
             while (true)
             {
-                System.Windows.Forms.Application.DoEvents();
+                Application.DoEvents();
                 if (!string.IsNullOrEmpty(wb.StatusText))
                     break;
             }
@@ -1163,8 +1175,7 @@ namespace WebBrowser
         {
             Wb.Navigate("http://www.stargate-game.cz");
 
-            int x = 0;
-            while (x == 0)
+            while (true)
             {
                 Application.DoEvents();
                 if (!string.IsNullOrEmpty(Wb.StatusText))
@@ -1273,11 +1284,10 @@ namespace WebBrowser
         {
             try
             {
-                var fileStream = new StreamWriter("UserConfig.dat");
-
-                fileStream.Write(value);
-
-                fileStream.Close();
+                using (var fileStream = new StreamWriter("UserConfig.dat"))
+                {
+                    fileStream.Write(value);
+                }
             }
             catch (Exception)
             {
@@ -1288,9 +1298,11 @@ namespace WebBrowser
         {
             try
             {
-                var fileStream = new StreamReader("UserConfig.dat");
-                var date = DateTime.Parse(fileStream.ReadLine());
-                fileStream.Close();
+                DateTime date;
+                using (var fileStream = new StreamReader("UserConfig.dat"))
+                {
+                    date = DateTime.Parse(fileStream.ReadLine());
+                }
                 return date;
             }
             catch (Exception)
@@ -1311,34 +1323,34 @@ namespace WebBrowser
 
             try
             {
-                var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                var mycommand = new SQLiteCommand(sql, cnn);
-
-                var reader = mycommand.ExecuteReader();
-
-                if (reader.HasRows)
+                using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
                 {
-
-                    while (reader.Read())
+                    cnn.Open();
+                    using (var mycommand = new SQLiteCommand(sql, cnn))
                     {
-                        var nazov = reader["nazov"].ToString();
-                        var majitel = reader["majitel"].ToString();
-                        var pozicia = reader["poziciaa"].ToString();
-                        var c = reader.GetString(3);
-                        var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        var typ = reader["typ"].ToString();
-                        var sektor = reader["sektorr"].ToString();
-                        var id = reader["idPlanety"].ToString();
-                        var vlozil = reader["idPlanety"].ToString();
-                        var pocetZmien = reader.GetInt32(7);
+                        using (var reader = mycommand.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    var nazov = reader["nazov"].ToString();
+                                    var majitel = reader["majitel"].ToString();
+                                    var pozicia = reader["poziciaa"].ToString();
+                                    var c = reader.GetString(3);
+                                    var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                    var typ = reader["typ"].ToString();
+                                    var sektor = reader["sektorr"].ToString();
+                                    var id = reader["idPlanety"].ToString();
+                                    var vlozil = reader["idPlanety"].ToString();
+                                    var pocetZmien = reader.GetInt32(7);
 
-                        list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, true, vlozil, datum, pocetZmien));
+                                    list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, true, vlozil, datum, pocetZmien));
+                                }
+                            }
+                        }
                     }
                 }
-                reader.Close();
-                cnn.Close();
-
             }
             catch (Exception e)
             {
@@ -1356,25 +1368,26 @@ namespace WebBrowser
 
             try
             {
-                var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cnn.Open();
-                var mycommand = new SQLiteCommand(sql, cnn);
-
-                var reader = mycommand.ExecuteReader();
-
-                if (reader.HasRows)
+                using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
                 {
-
-                    while (reader.Read())
+                    cnn.Open();
+                    using (var mycommand = new SQLiteCommand(sql, cnn))
                     {
-                        var nazov = reader[1].ToString();
+                        using (var reader = mycommand.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
 
-                        list.Add(nazov);
+                                while (reader.Read())
+                                {
+                                    var nazov = reader[1].ToString();
+
+                                    list.Add(nazov);
+                                }
+                            }
+                        }
                     }
                 }
-                reader.Close();
-                cnn.Close();
-
             }
             catch (Exception e)
             {
@@ -1576,10 +1589,14 @@ namespace WebBrowser
 
             try
             {
-                var cmd = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cmd.Open();
-                var mycommand = new SQLiteCommand("CREATE INDEX Iplanety2index ON planety(sektor, pozicia, datumVlozenia );", cmd);
-                mycommand.ExecuteNonQuery();
+                using (var cmd = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                {
+                    cmd.Open();
+                    using (var mycommand = new SQLiteCommand("CREATE INDEX Iplanety2index ON planety(sektor, pozicia, datumVlozenia );", cmd))
+                    {
+                        mycommand.ExecuteNonQuery();
+                    }
+                }
             }
             catch (Exception)
             {
@@ -1596,30 +1613,29 @@ namespace WebBrowser
             {
                 var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
                 cnn.Open();
-                var mycommand = new SQLiteCommand(sql, cnn);
-
-                var reader = mycommand.ExecuteReader();
-
-                if (reader.HasRows)
+                using (var mycommand = new SQLiteCommand(sql, cnn))
                 {
-
-                    while (reader.Read())
+                    using (var reader = mycommand.ExecuteReader())
                     {
-                        var nazov = reader["nazov"].ToString();
-                        var majitel = reader["majitel"].ToString();
-                        var pozicia = reader["poziciaa"].ToString();
-                        var c = reader.GetString(3);
-                        var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        var typ = reader["typ"].ToString();
-                        var sektor = reader["sektorr"].ToString();
-                        var pocetZmien = reader.GetInt32(7).ToString(CultureInfo.InvariantCulture);
+                        if (reader.HasRows)
+                        {
 
-                        NajdenePlanety.Add(new SektorPlanety(nazov, pozicia, majitel, datum, typ, sektor, pocetZmien));
+                            while (reader.Read())
+                            {
+                                var nazov = reader["nazov"].ToString();
+                                var majitel = reader["majitel"].ToString();
+                                var pozicia = reader["poziciaa"].ToString();
+                                var c = reader.GetString(3);
+                                var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                var typ = reader["typ"].ToString();
+                                var sektor = reader["sektorr"].ToString();
+                                var pocetZmien = reader.GetInt32(7).ToString(CultureInfo.InvariantCulture);
+
+                                NajdenePlanety.Add(new SektorPlanety(nazov, pozicia, majitel, datum, typ, sektor, pocetZmien));
+                            }
+                        }
                     }
                 }
-                reader.Close();
-                cnn.Close();
-
             }
             catch (Exception e)
             {
@@ -1628,10 +1644,14 @@ namespace WebBrowser
 
             try
             {
-                var cmd = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                cmd.Open();
-                var mycommand = new SQLiteCommand("drop INDEX Iplanety2index;", cmd);
-                mycommand.ExecuteNonQuery();
+                using (var cmd = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                {
+                    cmd.Open();
+                    using (var mycommand = new SQLiteCommand("drop INDEX Iplanety2index;", cmd))
+                    {
+                        mycommand.ExecuteNonQuery();
+                    }
+                }
             }
             catch (Exception)
             {
@@ -1666,33 +1686,34 @@ namespace WebBrowser
                 var sqlLocal = "select nazov,majitel,pozicia,datetime(datumVlozenia) as datumVlozenia,typ,sektor, idPlanety, vlozil from planety where typ is not null and datumVlozenia > datetime('" + poslednyUpload.ToString("yyyy-MM-dd HH:mm:ss") + "');";
                 try
                 {
-                    var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                    cnn.Open();
-                    var mycommand = new SQLiteCommand(sqlLocal, cnn);
-
-                    var reader = mycommand.ExecuteReader();
-
-                    if (reader.HasRows)
+                    using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
                     {
-
-                        while (reader.Read())
+                        cnn.Open();
+                        using (var mycommand = new SQLiteCommand(sqlLocal, cnn))
                         {
-                            var nazov = reader["nazov"].ToString();
-                            var majitel = reader["majitel"].ToString();
-                            var pozicia = reader["pozicia"].ToString();
-                            var c = reader.GetString(3);
-                            var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                            var typ = reader["typ"].ToString();
-                            var sektor = reader["sektor"].ToString();
-                            var id = reader["idPlanety"].ToString();
-                            var vlozil = reader["vlozil"].ToString();
+                            using (var reader = mycommand.ExecuteReader())
+                            {
+                                if (reader.HasRows)
+                                {
 
-                            list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, true, vlozil, datum));
+                                    while (reader.Read())
+                                    {
+                                        var nazov = reader["nazov"].ToString();
+                                        var majitel = reader["majitel"].ToString();
+                                        var pozicia = reader["pozicia"].ToString();
+                                        var c = reader.GetString(3);
+                                        var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                        var typ = reader["typ"].ToString();
+                                        var sektor = reader["sektor"].ToString();
+                                        var id = reader["idPlanety"].ToString();
+                                        var vlozil = reader["vlozil"].ToString();
+
+                                        list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, true, vlozil, datum));
+                                    }
+                                }
+                            }
                         }
                     }
-                    reader.Close();
-                    cnn.Close();
-
                 }
                 catch (Exception e)
                 {
@@ -1737,11 +1758,14 @@ namespace WebBrowser
                     int pocetUpdateRows = 0;
                     try
                     {
-                        var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                        cnn.Open();
-                        var mycommand = new SQLiteCommand(query, cnn);
-                        pocetUpdateRows = mycommand.ExecuteNonQuery();
-                        cnn.Close();
+                        using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                        {
+                            cnn.Open();
+                            using (var mycommand = new SQLiteCommand(query, cnn))
+                            {
+                                pocetUpdateRows = mycommand.ExecuteNonQuery();
+                            }
+                        }
                         Console.WriteLine(@"Update planeta " + planeta.Meno + @" sektor : " + planeta.Sektor);
                     }
                     catch (Exception fail)
@@ -1757,11 +1781,14 @@ namespace WebBrowser
                                 "' and pozicia = '" + planeta.Pozicia + "';";
                         try
                         {
-                            var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
-                            cnn.Open();
-                            var mycommand = new SQLiteCommand(query, cnn);
-                            mycommand.ExecuteNonQuery();
-                            cnn.Close();
+                            using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                            {
+                                cnn.Open();
+                                using (var mycommand = new SQLiteCommand(query, cnn))
+                                {
+                                    mycommand.ExecuteNonQuery();
+                                }
+                            }
                             Console.WriteLine(@"Update po vkladani planeta " + planeta.Meno + @" sektor : " +
                                               planeta.Sektor);
                         }
