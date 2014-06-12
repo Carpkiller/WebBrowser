@@ -24,6 +24,7 @@ namespace WebBrowser.Hladanie
             _jadro.KoniecVlakna += KoniecVlakana;
             InitializeComponent();
             comboBox1.DataSource = RasyId.ListId.Keys.ToList();
+            comboBox2.DataSource = _jadro.NaplnSektory();
         }
 
         public void KoniecVlakana()
@@ -84,8 +85,9 @@ namespace WebBrowser.Hladanie
         {
             _jadro.UkoncenieHladaniePlanetRasy += KoniecHladaniaPlanetRasy;
             var rasa = comboBox1.SelectedValue.ToString();
+            var sektor = comboBox2.SelectedIndex;
             _hladanyItem = rasa;
-            _jadro.VypisPlanetyRasy(rasa);
+            _jadro.VypisPlanetyRasy(rasa, sektor);
         }
 
         private void HladanieForm_FormClosed(object sender, FormClosedEventArgs e)

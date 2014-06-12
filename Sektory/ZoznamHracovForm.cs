@@ -45,7 +45,7 @@ namespace WebBrowser.Sektory
         private void RefreshOkno()
         {
             _jadro.UkoncenieHladaniePlanetRasy += KoniecHladaniaPlanetRasy;
-            _jadro.VypisPlanetyRasy(_rasa);
+            _jadro.VypisPlanetyRasy(_rasa, 0);
         }
 
         private void KoniecHladaniaPlanetRasy()

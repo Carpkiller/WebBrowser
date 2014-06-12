@@ -1415,12 +1415,12 @@ namespace WebBrowser
                         break;
                 }
 
-                var list = ParsujIdHracov(wb.Document.Body.InnerHtml);
+                ParsujIdHracov(wb.Document.Body.InnerHtml);
             }
             return null;
         }
 
-        private object ParsujIdHracov(string innerHtml)
+        private void ParsujIdHracov(string innerHtml)
         {
             var list = new List<Vyvrhel>();
             var text = innerHtml.Substring(innerHtml.IndexOf("</THEAD>", StringComparison.Ordinal));
@@ -1453,7 +1453,6 @@ namespace WebBrowser
                     list.Add(new Vyvrhel(meno, sila, pocetPlanet));
                 }
             }
-            return null;
         }
 
         public void AktualizujConfig(object text, int riadok)
@@ -1545,7 +1544,7 @@ namespace WebBrowser
                 AktualizujAktualnySektor();
         }
 
-        public void VypisPlanetyRasy(string rasa)
+        public void VypisPlanetyRasy(string rasa, int sektor)
         {
             var listHracov = new List<string>();
 
@@ -1570,13 +1569,13 @@ namespace WebBrowser
 
             if (listHracov.Any())
             {
-                Thread t = new Thread(() => VyhladajPlanetyRasa(listHracov));
+                Thread t = new Thread(() => VyhladajPlanetyRasa(listHracov, sektor));
                 t.SetApartmentState(ApartmentState.STA);
                 t.Start();
             }
         }
 
-        private void VyhladajPlanetyRasa(List<string> listHracov)
+        private void VyhladajPlanetyRasa(List<string> listHracov, int hladSektor)
         {
             NajdenePlanety = new List<SektorPlanety>();
             var hraci = "(";
@@ -1603,11 +1602,29 @@ namespace WebBrowser
                 Console.WriteLine("Chyba pri vytvarani indexu");
             }
 
-            var sql =
-                "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia group by pozicia )  from " +
-                "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in" +
-                hraci + " and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
-                "') group by pozicia order by datumVlozenia desc);";
+            var sql = "";
+
+            if (hladSektor == 0)
+            {
+                sql =
+                    "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia group by pozicia )  from " +
+                    "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in" +
+                    hraci + " and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
+                    "') group by pozicia order by datumVlozenia desc);";
+            }
+            else
+            {
+                var nazovSektora = "";
+                nazovSektora = SektoryID.ListId.TryGetValue(hladSektor, out nazovSektora)
+                    ? nazovSektora
+                    : hladSektor.ToString(CultureInfo.InvariantCulture);
+
+                sql =
+                    "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia group by pozicia )  from " +
+                    "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in" +
+                    hraci + " and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
+                    "') and sektor = '" + nazovSektora + "' group by pozicia order by datumVlozenia desc);";
+            }
 
             try
             {
@@ -1804,6 +1821,21 @@ namespace WebBrowser
             }
             
             AktualizujConfig(DateTime.Now, 3);
+        }
+
+        public List<string> NaplnSektory()
+        {
+            var list = new List<string>();
+
+            for (int i = 0; i <= 200; i++)
+            {
+                string nazovSektora;
+                list.Add(SektoryID.ListId.TryGetValue(i, out nazovSektora)
+                    ? nazovSektora
+                    : i.ToString(CultureInfo.InvariantCulture));
+            }
+
+            return list;
         }
     }
 }
