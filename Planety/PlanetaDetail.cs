@@ -85,6 +85,11 @@ namespace WebBrowser.Planety
                 _jadro.ZmenaPlanety -= ZobrazTypPlanety;
                 _najdena = true;
             }
+            else if (_jadro.TypPlanety == "Neexistuje")
+            {
+                _jadro.ZmenaPlanety -= ZobrazTypPlanety;
+                _najdena = true;
+            }                
             else
             {
                 MessageBox.Show(@"Neznama chyba",@"Najdene planety",MessageBoxButtons.OK,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button1);

@@ -118,6 +118,12 @@
       <DependentUpon>InfoHrac.cs</DependentUpon>
     </Compile>
     <Compile Include="Dohadzovanie\PoctyJadnotiek.cs" />
+    <Compile Include="Export\ExportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Export\ExportForm.Designer.cs">
+      <DependentUpon>ExportForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -187,6 +193,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dohadzovanie\InfoHrac.resx">
       <DependentUpon>InfoHrac.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Export\ExportForm.resx">
+      <DependentUpon>ExportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

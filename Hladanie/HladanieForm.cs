@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using WebBrowser.Planety;
@@ -43,7 +44,7 @@ namespace WebBrowser.Hladanie
             {
                 _jadro.UkoncenieHladaniePlanetRasy -= KoniecHladaniaPlanetRasy;
                 var title = "Vsetky planety rasy : "+_hladanyItem;
-                var detailPlanety = new ZoznamHracovForm(_jadro.NajdenePlanety, _jadro, title);
+                var detailPlanety = new ZoznamHracovForm(_jadro.NajdenePlanety, _jadro, title, comboBox2.SelectedIndex.ToString(CultureInfo.InvariantCulture));
                 detailPlanety.Show(this);
             }));
         }

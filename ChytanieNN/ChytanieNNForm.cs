@@ -19,6 +19,7 @@ namespace WebBrowser.ChytanieNN
         [DllImport("user32.dll")]
         static extern void mouse_event(int dwFlags, int dx, int dy,int dwData, UIntPtr dwExtraInfo);
 
+// ReSharper disable InconsistentNaming
         private const int MOUSEEVENTF_MOVE = 0x0001;
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
         private const int MOUSEEVENTF_LEFTUP = 0x04;
@@ -167,8 +168,8 @@ namespace WebBrowser.ChytanieNN
                                     if (!string.IsNullOrEmpty(textBoxRelatX.Text) &&
                                         !string.IsNullOrEmpty(textBoxRelatY.Text))
                                     {
-                                        DoMouseClick(int.Parse(textBoxRelatX.Text)+x * 65535 / screenBounds.Width,
-                                            int.Parse(textBoxRelatY.Text)+y * 65535 / screenBounds.Height);
+                                        DoMouseClick((int.Parse(textBoxRelatX.Text)+x) * 65535 / screenBounds.Width,
+                                            (int.Parse(textBoxRelatY.Text)+y) * 65535 / screenBounds.Height);
                                     }
                                 }
                             }
@@ -187,61 +188,68 @@ namespace WebBrowser.ChytanieNN
 
         private void button2_Click(object sender, EventArgs e)
         {
-            int vystx;
-            int vysty;
-
             int i = int.Parse(textBoxRefresh.Text);
 
-            var element = webBrowser1.Document.Body.GetElementsByTagName("input").GetElementsByName("pl_koupit")[i * 2 + 1];
-
-            webBrowser1.Document.Window.ScrollTo(getXoffset(element, out vystx), getYoffset(element, out vysty) + vysty / 5);
-
-            var fmx = webBrowser1.Parent.Location.X;
-            var fmy = webBrowser1.Parent.Location.Y;
-
-            var wbx = webBrowser1.Location.X;
-
-            vystx = 50 + element.Parent.OffsetRectangle.X + element.Parent.Parent.OffsetRectangle.X /* + (element.Parent.OffsetRectangle.X*2 + element.Parent.Parent.OffsetRectangle.Width) / 2*/ + element.Parent.Parent.OffsetRectangle.Width / 2;
-            vysty = element.OffsetRectangle.Y;
-
-            var x = vystx + fmx + wbx;
-            var y = vysty + fmy + 75;
-
-            var screenBounds = Screen.PrimaryScreen.Bounds;
-
-            if (!checkBoxSuradnice.Checked && !checkBoxSuradniceRelativne.Checked)
+            if (webBrowser1.Document != null && webBrowser1.Document.Body != null)
             {
-                textBoxPoziciaX.Text = x.ToString();
-                textBoxPoziciaY.Text = y.ToString();
 
-                x = x*65535/screenBounds.Width;
-                y = y * 65535 / screenBounds.Height;
+                var element =
+                    webBrowser1.Document.Body.GetElementsByTagName("input").GetElementsByName("pl_koupit")[i*2 + 1];
 
-                mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, x, y, 0, new UIntPtr());
-            }
-            else
-            {
-                if (checkBoxSuradnice.Checked)
+                int vysty;
+                int vystx;
+                webBrowser1.Document.Window.ScrollTo(getXoffset(element, out vystx),
+                    getYoffset(element, out vysty) + vysty/5);
+
+                var fmx = webBrowser1.Parent.Location.X;
+                var fmy = webBrowser1.Parent.Location.Y;
+
+                var wbx = webBrowser1.Location.X;
+
+                vystx = 50 + element.Parent.OffsetRectangle.X + element.Parent.Parent.OffsetRectangle.X
+                    /* + (element.Parent.OffsetRectangle.X*2 + element.Parent.Parent.OffsetRectangle.Width) / 2*/+
+                        element.Parent.Parent.OffsetRectangle.Width/2;
+                vysty = element.OffsetRectangle.Y;
+
+                var x = vystx + fmx + wbx;
+                var y = vysty + fmy + 75;
+
+                var screenBounds = Screen.PrimaryScreen.Bounds;
+
+                if (!checkBoxSuradnice.Checked && !checkBoxSuradniceRelativne.Checked)
                 {
-                    if (!string.IsNullOrEmpty(textBoxPoziciaX.Text) &&
-                        !string.IsNullOrEmpty(textBoxPoziciaY.Text))
-                    {
-                        x = int.Parse(textBoxPoziciaX.Text)*65535/screenBounds.Width;
-                        y = int.Parse(textBoxPoziciaY.Text) * 65535 / screenBounds.Height;
+                    textBoxPoziciaX.Text = x.ToString();
+                    textBoxPoziciaY.Text = y.ToString();
 
-                        mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, x, y, 0, new UIntPtr());
-                    }
+                    x = x*65535/screenBounds.Width;
+                    y = y*65535/screenBounds.Height;
+
+                    mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, x, y, 0, new UIntPtr());
                 }
-                if (checkBoxSuradniceRelativne.Checked)
+                else
                 {
-                    if (!string.IsNullOrEmpty(textBoxRelatX.Text) &&
-                        !string.IsNullOrEmpty(textBoxRelatY.Text))
+                    if (checkBoxSuradnice.Checked)
                     {
-                        x = (int.Parse(textBoxRelatX.Text) + x)*65535/screenBounds.Width;
-                        y = (int.Parse(textBoxRelatY.Text) + y)*65535/screenBounds.Height;
+                        if (!string.IsNullOrEmpty(textBoxPoziciaX.Text) &&
+                            !string.IsNullOrEmpty(textBoxPoziciaY.Text))
+                        {
+                            x = int.Parse(textBoxPoziciaX.Text)*65535/screenBounds.Width;
+                            y = int.Parse(textBoxPoziciaY.Text)*65535/screenBounds.Height;
+
+                            mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, x, y, 0, new UIntPtr());
+                        }
+                    }
+                    if (checkBoxSuradniceRelativne.Checked)
+                    {
+                        if (!string.IsNullOrEmpty(textBoxRelatX.Text) &&
+                            !string.IsNullOrEmpty(textBoxRelatY.Text))
+                        {
+                            x = (int.Parse(textBoxRelatX.Text) + x)*65535/screenBounds.Width;
+                            y = (int.Parse(textBoxRelatY.Text) + y)*65535/screenBounds.Height;
 
 
-                        mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, x, y, 0, new UIntPtr());
+                            mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, x, y, 0, new UIntPtr());
+                        }
                     }
                 }
             }
