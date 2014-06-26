@@ -45,6 +45,9 @@ namespace WebBrowser.ChytanieNN
             this.textBoxPoziciaY = new System.Windows.Forms.TextBox();
             this.textBoxPoziciaX = new System.Windows.Forms.TextBox();
             this.labelPoziciaY = new System.Windows.Forms.Label();
+            this.textBoxRelatX = new System.Windows.Forms.TextBox();
+            this.textBoxRelatY = new System.Windows.Forms.TextBox();
+            this.checkBoxSuradniceRelativne = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,9 +77,9 @@ namespace WebBrowser.ChytanieNN
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(461, 12);
+            this.button1.Location = new System.Drawing.Point(308, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(138, 23);
             this.button1.TabIndex = 2;
             this.button1.Text = "Start";
             this.button1.UseVisualStyleBackColor = true;
@@ -121,9 +124,9 @@ namespace WebBrowser.ChytanieNN
             // 
             this.button2.Location = new System.Drawing.Point(778, 9);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(116, 23);
             this.button2.TabIndex = 7;
-            this.button2.Text = "button2";
+            this.button2.Text = "Kontrolny klik";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -181,11 +184,40 @@ namespace WebBrowser.ChytanieNN
             this.labelPoziciaY.Size = new System.Drawing.Size(0, 13);
             this.labelPoziciaY.TabIndex = 13;
             // 
+            // textBoxRelatX
+            // 
+            this.textBoxRelatX.Location = new System.Drawing.Point(921, 34);
+            this.textBoxRelatX.Name = "textBoxRelatX";
+            this.textBoxRelatX.Size = new System.Drawing.Size(71, 20);
+            this.textBoxRelatX.TabIndex = 16;
+            this.textBoxRelatX.Text = "0";
+            // 
+            // textBoxRelatY
+            // 
+            this.textBoxRelatY.Location = new System.Drawing.Point(998, 34);
+            this.textBoxRelatY.Name = "textBoxRelatY";
+            this.textBoxRelatY.Size = new System.Drawing.Size(71, 20);
+            this.textBoxRelatY.TabIndex = 15;
+            this.textBoxRelatY.Text = "0";
+            // 
+            // checkBoxSuradniceRelativne
+            // 
+            this.checkBoxSuradniceRelativne.AutoSize = true;
+            this.checkBoxSuradniceRelativne.Location = new System.Drawing.Point(778, 37);
+            this.checkBoxSuradniceRelativne.Name = "checkBoxSuradniceRelativne";
+            this.checkBoxSuradniceRelativne.Size = new System.Drawing.Size(147, 17);
+            this.checkBoxSuradniceRelativne.TabIndex = 14;
+            this.checkBoxSuradniceRelativne.Text = "Pouzit relativne suradnice";
+            this.checkBoxSuradniceRelativne.UseVisualStyleBackColor = true;
+            // 
             // ChytanieNNForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1325, 472);
+            this.Controls.Add(this.textBoxRelatX);
+            this.Controls.Add(this.textBoxRelatY);
+            this.Controls.Add(this.checkBoxSuradniceRelativne);
             this.Controls.Add(this.labelPoziciaY);
             this.Controls.Add(this.textBoxPoziciaX);
             this.Controls.Add(this.textBoxPoziciaY);
@@ -229,5 +261,8 @@ namespace WebBrowser.ChytanieNN
         private TextBox textBoxPoziciaY;
         private TextBox textBoxPoziciaX;
         private Label labelPoziciaY;
+        private TextBox textBoxRelatX;
+        private TextBox textBoxRelatY;
+        private CheckBox checkBoxSuradniceRelativne;
     }
 }

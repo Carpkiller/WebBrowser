@@ -147,15 +147,29 @@ namespace WebBrowser.ChytanieNN
                         if (checkBox1.Checked)
                         {
                             var screenBounds = Screen.PrimaryScreen.Bounds;
-                            if (!checkBoxSuradnice.Checked)
+                            if (!checkBoxSuradnice.Checked && !checkBoxSuradniceRelativne.Checked)
                             {
-                                DoMouseClick(x * 65535 / screenBounds.Width, y * 65535 / screenBounds.Height);
+                                DoMouseClick(x*65535/screenBounds.Width, y*65535/screenBounds.Height);
                             }
                             else
                             {
-                                if (!string.IsNullOrEmpty(textBoxPoziciaX.Text) && !string.IsNullOrEmpty(textBoxPoziciaY.Text))
+                                if (checkBoxSuradnice.Checked)
                                 {
-                                    DoMouseClick(int.Parse(textBoxPoziciaX.Text) * 65535 / screenBounds.Width, int.Parse(textBoxPoziciaY.Text) * 65535 / screenBounds.Height);
+                                    if (!string.IsNullOrEmpty(textBoxPoziciaX.Text) &&
+                                        !string.IsNullOrEmpty(textBoxPoziciaY.Text))
+                                    {
+                                        DoMouseClick(int.Parse(textBoxPoziciaX.Text)*65535/screenBounds.Width,
+                                            int.Parse(textBoxPoziciaY.Text)*65535/screenBounds.Height);
+                                    }
+                                }
+                                if (checkBoxSuradniceRelativne.Checked)
+                                {
+                                    if (!string.IsNullOrEmpty(textBoxRelatX.Text) &&
+                                        !string.IsNullOrEmpty(textBoxRelatY.Text))
+                                    {
+                                        DoMouseClick(int.Parse(textBoxRelatX.Text)+x * 65535 / screenBounds.Width,
+                                            int.Parse(textBoxRelatY.Text)+y * 65535 / screenBounds.Height);
+                                    }
                                 }
                             }
                             _poc++;
@@ -195,17 +209,40 @@ namespace WebBrowser.ChytanieNN
 
             var screenBounds = Screen.PrimaryScreen.Bounds;
 
-            if (!checkBoxSuradnice.Checked)
+            if (!checkBoxSuradnice.Checked && !checkBoxSuradniceRelativne.Checked)
             {
-                DoMouseClick(x * 65535 / screenBounds.Width, y * 65535 / screenBounds.Height);
                 textBoxPoziciaX.Text = x.ToString();
                 textBoxPoziciaY.Text = y.ToString();
+
+                x = x*65535/screenBounds.Width;
+                y = y * 65535 / screenBounds.Height;
+
+                mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, x, y, 0, new UIntPtr());
             }
             else
             {
-                if (!string.IsNullOrEmpty(textBoxPoziciaX.Text) && !string.IsNullOrEmpty(textBoxPoziciaY.Text))
+                if (checkBoxSuradnice.Checked)
                 {
-                    DoMouseClick(int.Parse(textBoxPoziciaX.Text) * 65535 / screenBounds.Width, int.Parse(textBoxPoziciaY.Text) * 65535 / screenBounds.Height);
+                    if (!string.IsNullOrEmpty(textBoxPoziciaX.Text) &&
+                        !string.IsNullOrEmpty(textBoxPoziciaY.Text))
+                    {
+                        x = int.Parse(textBoxPoziciaX.Text)*65535/screenBounds.Width;
+                        y = int.Parse(textBoxPoziciaY.Text) * 65535 / screenBounds.Height;
+
+                        mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, x, y, 0, new UIntPtr());
+                    }
+                }
+                if (checkBoxSuradniceRelativne.Checked)
+                {
+                    if (!string.IsNullOrEmpty(textBoxRelatX.Text) &&
+                        !string.IsNullOrEmpty(textBoxRelatY.Text))
+                    {
+                        x = (int.Parse(textBoxRelatX.Text) + x)*65535/screenBounds.Width;
+                        y = (int.Parse(textBoxRelatY.Text) + y)*65535/screenBounds.Height;
+
+
+                        mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, x, y, 0, new UIntPtr());
+                    }
                 }
             }
         }
