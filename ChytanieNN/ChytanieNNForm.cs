@@ -260,7 +260,7 @@ namespace WebBrowser.ChytanieNN
                 }
             }
 
-            MessageBox.Show(SystemInformation.CaptionHeight.ToString());
+            //MessageBox.Show(SystemInformation.CaptionHeight.ToString());
         }
 
         private void ChytanieNNForm_MouseMove(object sender, MouseEventArgs e)
