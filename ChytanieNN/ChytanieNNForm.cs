@@ -43,6 +43,9 @@ namespace WebBrowser.ChytanieNN
             webBrowser1.ScriptErrorsSuppressed = true;
             _pocetLoad = 0;
             _koniec = false;
+
+            textBoxRelatX.Text = Config.RelativnaSuradnicaX;
+            textBoxRelatY.Text = Config.RelativnaSuradnicaY;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -133,7 +136,7 @@ namespace WebBrowser.ChytanieNN
                         vysty = element.OffsetRectangle.Y;
 
                         var x = vystx + fmx + wbx;
-                        var y = vysty + fmy + 75;
+                        var y = vysty + fmy + SystemInformation.CaptionHeight + 55;//+ 75;
                         
                         ZastavRefresh();
 
@@ -186,8 +189,11 @@ namespace WebBrowser.ChytanieNN
            // webBrowser1.Navigate(url);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)   // kontrolny klik
         {
+            _jadro.AktualizujConfig(textBoxRelatX.Text, 5);
+            _jadro.AktualizujConfig(textBoxRelatY.Text, 6);
+
             int i = int.Parse(textBoxRefresh.Text);
 
             if (webBrowser1.Document != null && webBrowser1.Document.Body != null)
@@ -212,7 +218,7 @@ namespace WebBrowser.ChytanieNN
                 vysty = element.OffsetRectangle.Y;
 
                 var x = vystx + fmx + wbx;
-                var y = vysty + fmy + 75;
+                var y = vysty + fmy + SystemInformation.CaptionHeight + 55;//+ 75;
 
                 var screenBounds = Screen.PrimaryScreen.Bounds;
 
@@ -253,6 +259,8 @@ namespace WebBrowser.ChytanieNN
                     }
                 }
             }
+
+            MessageBox.Show(SystemInformation.CaptionHeight.ToString());
         }
 
         private void ChytanieNNForm_MouseMove(object sender, MouseEventArgs e)

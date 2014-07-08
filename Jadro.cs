@@ -88,6 +88,11 @@ namespace WebBrowser
             Povolene = false;
         }
 
+        public Jadro()
+        {
+            // TODO: Complete member initialization
+        }
+
         private List<SektorPrehlad> LoadPrehladSektorov()
         {
             var list = new List<SektorPrehlad>();

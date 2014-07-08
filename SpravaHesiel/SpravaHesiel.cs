@@ -17,11 +17,11 @@ namespace WebBrowser.SpravaHesiel
                 {
                     var res = File.ReadAllBytes("UserData.dat");
 
-                    var meno = res.Take(146).ToArray();
-                    var heslo = res.Skip(146).Take(146).ToArray();
+                    var meno = res.Take(Config.DlzkaHesla).ToArray();
+                    var heslo = res.Skip(Config.DlzkaHesla).Take(Config.DlzkaHesla).ToArray();
 
-                    byte[] meno1 = ProtectedData.Unprotect(meno, null, DataProtectionScope.CurrentUser);
-                    byte[] heslo1 = ProtectedData.Unprotect(heslo, null, DataProtectionScope.CurrentUser);
+                    byte[] meno1 = ProtectedData.Unprotect(meno, null, DataProtectionScope.LocalMachine);
+                    byte[] heslo1 = ProtectedData.Unprotect(heslo, null, DataProtectionScope.LocalMachine);
 
                     string men = Encoding.UTF8.GetString(meno1);
                     string hes = Encoding.UTF8.GetString(heslo1);
@@ -51,9 +51,9 @@ namespace WebBrowser.SpravaHesiel
                 }
 
                 byte[] ciphertextMeno = ProtectedData.Protect(plaintextMeno, null,
-                    DataProtectionScope.CurrentUser);
+                    DataProtectionScope.LocalMachine);
                 byte[] ciphertextHeslo = ProtectedData.Protect(plaintextHeslo, null,
-                    DataProtectionScope.CurrentUser);
+                    DataProtectionScope.LocalMachine);
 
                 var fileStream = new FileStream("UserData.dat", FileMode.Create, FileAccess.Write);
 
@@ -61,6 +61,8 @@ namespace WebBrowser.SpravaHesiel
                 fileStream.Write(ciphertextHeslo, 0, ciphertextMeno.Length);
 
                 fileStream.Close();
+
+                new Jadro().AktualizujConfig(ciphertextHeslo.Length, 4);
             }
             catch (Exception e)
             {

@@ -133,7 +133,7 @@ namespace WebBrowser.ChytanieNN
             // labelPoziciaX
             // 
             this.labelPoziciaX.AutoSize = true;
-            this.labelPoziciaX.Location = new System.Drawing.Point(918, 41);
+            this.labelPoziciaX.Location = new System.Drawing.Point(925, 12);
             this.labelPoziciaX.Name = "labelPoziciaX";
             this.labelPoziciaX.Size = new System.Drawing.Size(0, 13);
             this.labelPoziciaX.TabIndex = 8;
@@ -179,7 +179,7 @@ namespace WebBrowser.ChytanieNN
             // labelPoziciaY
             // 
             this.labelPoziciaY.AutoSize = true;
-            this.labelPoziciaY.Location = new System.Drawing.Point(995, 41);
+            this.labelPoziciaY.Location = new System.Drawing.Point(995, 12);
             this.labelPoziciaY.Name = "labelPoziciaY";
             this.labelPoziciaY.Size = new System.Drawing.Size(0, 13);
             this.labelPoziciaY.TabIndex = 13;
