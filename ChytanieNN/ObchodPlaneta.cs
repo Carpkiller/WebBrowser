@@ -47,7 +47,7 @@ namespace WebBrowser.ChytanieNN
                 }
                 case "+10%":
                 {
-                    return 0.90;
+                    return 0.85;
                 }
                 case "-25%":
                 {
@@ -58,7 +58,7 @@ namespace WebBrowser.ChytanieNN
                     return 1.10;
                 }
                 default :
-                    return 1;
+                    return 2;
             }
         }
 
@@ -67,7 +67,7 @@ namespace WebBrowser.ChytanieNN
             var ret = 0;
             if (int.Parse(PocetMiest) >= 130)
             {
-                return 0.5;
+                return 0.3;
             }
             if (int.Parse(PocetMiest) >= 110)
             {

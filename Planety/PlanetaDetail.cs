@@ -78,9 +78,9 @@ namespace WebBrowser.Planety
         {
             _typPlanety = _jadro.TypPlanety;
             Console.WriteLine(_typPlanety);
-            if (_typPlanety.Contains("Typ planety:"))
+            if (_typPlanety.Contains("Výsledek průzkumu:"))
             {
-                _listPlanetHraca = _jadro.ZmenPlanetyDb(_typPlanety.Replace("Typ planety: ", ""), _listPlanetHraca.FirstOrDefault());
+                _listPlanetHraca = _jadro.ZmenPlanetyDb(_typPlanety.Replace("Výsledek průzkumu: ", ""), _listPlanetHraca.FirstOrDefault());
                 dataGridView1.DataSource = _listPlanetHraca;
                 _jadro.ZmenaPlanety -= ZobrazTypPlanety;
                 _najdena = true;
@@ -92,6 +92,7 @@ namespace WebBrowser.Planety
             }                
             else
             {
+                _jadro.ZmenaPlanety -= ZobrazTypPlanety;
                 MessageBox.Show(@"Neznama chyba",@"Najdene planety",MessageBoxButtons.OK,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button1);
             }
             

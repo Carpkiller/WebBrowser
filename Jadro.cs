@@ -135,13 +135,14 @@ namespace WebBrowser
             var list = new List<Planeta>();
             var sql =
                 "select ID,nazov,majitel,pozicia,idPlanety,flagAktualny,vlozil,datetime(datumVlozenia),typ,sektor from planety;";
-            var sql1 = "select * from planety where flagAktualny = '1';";
+            var sql1 = "select * from planety where flagAktualny = '1' and datumVlozenia > datetime('" +Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") + "') ;";
             var sql2 = "select nazov from planety;";
 
             try
             {
                 using (SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
                 {
+                    cnn.Open();
                     using (SQLiteCommand mycommand = new SQLiteCommand(sql1, cnn))
                     {
                         using (SQLiteDataReader reader = mycommand.ExecuteReader())
@@ -214,6 +215,7 @@ namespace WebBrowser
         {
             var listPlanet = ParsujPlanety(innerHtml, outerHtml);
             var listNaUlozenie = CheckPlanety(listPlanet);
+            var listNaZmazanie = CheckPlanetyZmazanie(listPlanet);
             var sektorCislo = outerHtml.Substring(outerHtml.IndexOf("sektor=") + 7);
 
             var query = string.Empty;
@@ -435,6 +437,22 @@ namespace WebBrowser
             foreach (var planeta in listPlanety)
             {
                 if (!listPlan.Contains(planeta))
+                {
+                    list.Add(planeta);
+                }
+            }
+            return list;
+        }
+
+        private List<Planeta> CheckPlanetyZmazanie(List<Planeta> listPlanety)
+        {
+            var list = new List<Planeta>();
+            var pomList = LoadPlanety();
+            var listPlan = pomList.Where(x => x.Sektor == listPlanety.FirstOrDefault().Sektor && x.DatumVlozenia > Config.ZaciatokVeku).ToList();
+
+            foreach (var planeta in listPlan)
+            {
+                if (!listPlanety.Contains(planeta))
                 {
                     list.Add(planeta);
                 }
@@ -859,8 +877,20 @@ namespace WebBrowser
                 }
                 else
                 {
-                    TypPlanety = text.Substring(text.IndexOf("Typ planety:"),
-                        text.IndexOf("Zjištění typu") - text.IndexOf("Typ planety:") - 2);
+                    var aa = text.IndexOf("Výsledek průzkumu:");
+                    var bb = text.IndexOf("Typ planety:");
+                    var cc = text.IndexOf("Výsledek průzkumu:") - text.IndexOf("Typ planety:") - 2;
+
+                    if (text.IndexOf("Výsledek průzkumu:") != -1)
+                    {
+                        TypPlanety = text.Substring(text.IndexOf("Výsledek průzkumu:"),
+                            text.IndexOf("Typ planety:") - text.IndexOf("Výsledek průzkumu:") - 6);
+                    }
+                    else
+                    {
+                        TypPlanety = string.Empty;
+                    }
+                    
 
                     if (ZmenaPlanety != null) //vyvolani udalosti
                         ZmenaPlanety();

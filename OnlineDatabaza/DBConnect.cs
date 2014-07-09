@@ -23,10 +23,10 @@ namespace WebBrowser.OnlineDatabaza
         //Initialize values
         private void Initialize()
         {
-            _server = "sql5.freemysqlhosting.net";
-            _database = "sql542898";
-            _uid = "sql542898";
-            _password = "sC4%zC4!";
+            _server = "db4free.net";
+            _database = "sgtool";
+            _uid = "sgtool";
+            _password = "sgtool123456";
             string connectionString = "SERVER=" + _server + ";" + "DATABASE=" + _database + ";" + "UID=" + _uid + ";" +
                                       "PASSWORD=" + _password + ";";
 
@@ -98,9 +98,9 @@ namespace WebBrowser.OnlineDatabaza
             foreach (var planeta in planety)
             {
                 string query =
-                    "INSERT INTO `sql542898`.`planety` (`idPlanety`, `Nazov`, `Pozicia`, `Majitel`, `Typ`, `Sektor`, `FlagAktualny`, `Vlozil`, `DatumVlozenia`) VALUES ('" +
+                    "INSERT INTO `sgtool`.`planety` (`idPlanety`, `Nazov`, `Pozicia`, `Majitel`, `Typ`, `Sektor`, `FlagAktualny`, `Vlozil`, `DatumVlozenia`) VALUES ('" +
                     planeta.Id + "','" + planeta.Meno + "','" + planeta.Pozicia + "','" + planeta.Majitel + "','" +
-                    planeta.Typ + "','" + planeta.Sektor + "','" + planeta.FlagAktualny + "','" + planeta.Vlozil +
+                    planeta.Typ + "','" + planeta.Sektor + "'," + planeta.FlagAktualny + ",'" + planeta.Vlozil +
                     "',SYSDATE());";
 
                 //open connection
