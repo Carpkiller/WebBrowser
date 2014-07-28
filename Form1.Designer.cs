@@ -49,11 +49,15 @@
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vytvoritZalohuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chytanieTrolovToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hviezdneBranyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.onlineDatabazaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testSpojeniaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stiahnutDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.odPoslednehoStiahnutiaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uploadnutDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.odZaciatkuVekuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.odPoslednehoUploaduToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nastaveniaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moznostiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label4 = new System.Windows.Forms.Label();
@@ -63,9 +67,7 @@
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.odPoslednehoStiahnutiaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.odZaciatkuVekuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.odPoslednehoUploaduToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -261,7 +263,8 @@
             // 
             this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.vytvoritZalohuToolStripMenuItem,
-            this.chytanieTrolovToolStripMenuItem});
+            this.chytanieTrolovToolStripMenuItem,
+            this.hviezdneBranyToolStripMenuItem});
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
             this.menuToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
             this.menuToolStripMenuItem.Text = "Menu";
@@ -280,6 +283,13 @@
             this.chytanieTrolovToolStripMenuItem.Text = "Chytanie trolov";
             this.chytanieTrolovToolStripMenuItem.Click += new System.EventHandler(this.chytanieTrolovToolStripMenuItem_Click);
             // 
+            // hviezdneBranyToolStripMenuItem
+            // 
+            this.hviezdneBranyToolStripMenuItem.Name = "hviezdneBranyToolStripMenuItem";
+            this.hviezdneBranyToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.hviezdneBranyToolStripMenuItem.Text = "Hviezdne brany";
+            this.hviezdneBranyToolStripMenuItem.Click += new System.EventHandler(this.hviezdneBranyToolStripMenuItem_Click);
+            // 
             // onlineDatabazaToolStripMenuItem
             // 
             this.onlineDatabazaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -293,7 +303,7 @@
             // testSpojeniaToolStripMenuItem
             // 
             this.testSpojeniaToolStripMenuItem.Name = "testSpojeniaToolStripMenuItem";
-            this.testSpojeniaToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.testSpojeniaToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.testSpojeniaToolStripMenuItem.Text = "Test spojenia";
             this.testSpojeniaToolStripMenuItem.Click += new System.EventHandler(this.testSpojeniaToolStripMenuItem_Click);
             // 
@@ -303,7 +313,7 @@
             this.toolStripMenuItem1,
             this.odPoslednehoStiahnutiaToolStripMenuItem});
             this.stiahnutDataToolStripMenuItem.Name = "stiahnutDataToolStripMenuItem";
-            this.stiahnutDataToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stiahnutDataToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.stiahnutDataToolStripMenuItem.Text = "Stiahnut data";
             // 
             // toolStripMenuItem1
@@ -313,14 +323,35 @@
             this.toolStripMenuItem1.Text = "Od zaciatku veku";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
+            // odPoslednehoStiahnutiaToolStripMenuItem
+            // 
+            this.odPoslednehoStiahnutiaToolStripMenuItem.Name = "odPoslednehoStiahnutiaToolStripMenuItem";
+            this.odPoslednehoStiahnutiaToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.odPoslednehoStiahnutiaToolStripMenuItem.Text = "Od posledneho stiahnutia";
+            this.odPoslednehoStiahnutiaToolStripMenuItem.Click += new System.EventHandler(this.odPoslednehoStiahnutiaToolStripMenuItem_Click);
+            // 
             // uploadnutDataToolStripMenuItem
             // 
             this.uploadnutDataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.odZaciatkuVekuToolStripMenuItem,
             this.odPoslednehoUploaduToolStripMenuItem});
             this.uploadnutDataToolStripMenuItem.Name = "uploadnutDataToolStripMenuItem";
-            this.uploadnutDataToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.uploadnutDataToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.uploadnutDataToolStripMenuItem.Text = "Uploadnut data";
+            // 
+            // odZaciatkuVekuToolStripMenuItem
+            // 
+            this.odZaciatkuVekuToolStripMenuItem.Name = "odZaciatkuVekuToolStripMenuItem";
+            this.odZaciatkuVekuToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.odZaciatkuVekuToolStripMenuItem.Text = "Od zaciatku veku";
+            this.odZaciatkuVekuToolStripMenuItem.Click += new System.EventHandler(this.odZaciatkuVekuToolStripMenuItem_Click);
+            // 
+            // odPoslednehoUploaduToolStripMenuItem
+            // 
+            this.odPoslednehoUploaduToolStripMenuItem.Name = "odPoslednehoUploaduToolStripMenuItem";
+            this.odPoslednehoUploaduToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.odPoslednehoUploaduToolStripMenuItem.Text = "Od posledneho uploadu";
+            this.odPoslednehoUploaduToolStripMenuItem.Click += new System.EventHandler(this.odPoslednehoUploaduToolStripMenuItem_Click);
             // 
             // nastaveniaToolStripMenuItem
             // 
@@ -387,7 +418,8 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabel2});
             this.statusStrip1.Location = new System.Drawing.Point(0, 650);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1428, 22);
@@ -399,26 +431,10 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
-            // odPoslednehoStiahnutiaToolStripMenuItem
+            // toolStripStatusLabel2
             // 
-            this.odPoslednehoStiahnutiaToolStripMenuItem.Name = "odPoslednehoStiahnutiaToolStripMenuItem";
-            this.odPoslednehoStiahnutiaToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.odPoslednehoStiahnutiaToolStripMenuItem.Text = "Od posledneho stiahnutia";
-            this.odPoslednehoStiahnutiaToolStripMenuItem.Click += new System.EventHandler(this.odPoslednehoStiahnutiaToolStripMenuItem_Click);
-            // 
-            // odZaciatkuVekuToolStripMenuItem
-            // 
-            this.odZaciatkuVekuToolStripMenuItem.Name = "odZaciatkuVekuToolStripMenuItem";
-            this.odZaciatkuVekuToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.odZaciatkuVekuToolStripMenuItem.Text = "Od zaciatku veku";
-            this.odZaciatkuVekuToolStripMenuItem.Click += new System.EventHandler(this.odZaciatkuVekuToolStripMenuItem_Click);
-            // 
-            // odPoslednehoUploaduToolStripMenuItem
-            // 
-            this.odPoslednehoUploaduToolStripMenuItem.Name = "odPoslednehoUploaduToolStripMenuItem";
-            this.odPoslednehoUploaduToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.odPoslednehoUploaduToolStripMenuItem.Text = "Od posledneho uploadu";
-            this.odPoslednehoUploaduToolStripMenuItem.Click += new System.EventHandler(this.odPoslednehoUploaduToolStripMenuItem_Click);
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
             // 
             // Form1
             // 
@@ -503,6 +519,8 @@
         private System.Windows.Forms.ToolStripMenuItem odPoslednehoStiahnutiaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem odZaciatkuVekuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem odPoslednehoUploaduToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hviezdneBranyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     }
 }
 

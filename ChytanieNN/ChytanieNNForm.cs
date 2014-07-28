@@ -43,6 +43,7 @@ namespace WebBrowser.ChytanieNN
             webBrowser1.ScriptErrorsSuppressed = true;
             _pocetLoad = 0;
             _koniec = false;
+            TopMost = false;
 
             textBoxRelatX.Text = Config.RelativnaSuradnicaX;
             textBoxRelatY.Text = Config.RelativnaSuradnicaY;

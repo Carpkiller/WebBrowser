@@ -8,6 +8,7 @@ using WebBrowser.ChytanieNN;
 using WebBrowser.ChytanieTrolov;
 using WebBrowser.ChytanieVV;
 using WebBrowser.Hladanie;
+using WebBrowser.Hviezdne_brany;
 using WebBrowser.PomocneTriedy;
 using WebBrowser.Sektory;
 using WebBrowser.StavbaPO;
@@ -291,6 +292,12 @@ namespace WebBrowser
             var poslednyDownload = Config.PoslednyUpload ?? Config.ZaciatokVeku;
             Task.Factory.StartNew(() => _jadro.UploadOnlineData(poslednyDownload));
             //_jadro.UploadOnlineData(poslednyDownload);
+        }
+
+        private void hviezdneBranyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HviezdnaBranaForm hb = new HviezdnaBranaForm(_jadro);
+            hb.Show(); 
         }
     }
 }

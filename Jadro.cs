@@ -70,6 +70,7 @@ namespace WebBrowser
         public string Heslo;
         public int CasMedziDohozmi;
         public int CasSpomalenia;
+        private Thread hladacieVlakno;
         public List<HracPodmienky> AktualnaSchema { get; set; }
         public int AktualnaHodnota { get; set; }
         public List<Planeta> KoniecVlaknaList { get; set; }
@@ -1869,6 +1870,60 @@ namespace WebBrowser
             var list = ((List<SektorPlanety>) dataSource).OrderBy(x => x.Majitel);
 
             return list.Aggregate("", (current, planeta) => current + (planeta.Sektor + " - " + planeta.Majitel + " - " + planeta.Meno + (!string.IsNullOrEmpty(planeta.Typ) ? " ,typ planety - " + planeta.Typ : string.Empty) + Environment.NewLine));
+        }
+
+        public void HladajHB(string cas, string cena)
+        {
+            if (hladacieVlakno == null)
+            {
+                hladacieVlakno = new Thread(() => HladajHb(cas, cena));
+                hladacieVlakno.SetApartmentState(ApartmentState.STA);
+                hladacieVlakno.Start();
+            }
+            else
+            {
+                hladacieVlakno.Abort();
+            }
+        }
+
+        private void HladajHb(string cas, string cenaVstup)
+        {
+            var cen = int.Parse(cenaVstup);
+            var cass = int.Parse(cas);
+            var wb1 = new System.Windows.Forms.WebBrowser();
+            wb1.ScriptErrorsSuppressed = true;
+            wb1.Navigate(new Uri("http://www.stargate-game.cz/obchod.php?page=4"));
+            while (true)
+            {
+                while (true)
+                {
+                    Application.DoEvents();
+                    if (!string.IsNullOrEmpty(wb1.StatusText) && !wb1.StatusText.Contains("obchod.php?"))
+                        break;
+                }
+
+                if (
+                    wb1.Document.Body.InnerText.Contains("nabízena za "))
+                {
+                    var zac = wb1.Document.Body.InnerText.IndexOf("nabízena za ") + 12;
+                    var kon = wb1.Document.Body.InnerText.IndexOf("kg naquadahu", zac);
+
+                    var cena =
+                        wb1.Document.Body.InnerText.Substring(zac,
+                            kon - zac).Replace(" ", "");
+
+                    if (int.Parse(cena) < cen)
+                    {
+                        MessageBox.Show("Lacne HB", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        break;
+                    }
+
+                    Random rand = new Random();
+                    Thread.Sleep((cass + rand.Next(-5, 10)) * 1000);
+                    wb1.Refresh();
+                    Thread.Sleep(1000);
+                }
+            }
         }
     }
 }

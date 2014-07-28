@@ -136,6 +136,12 @@
     <Compile Include="Hladanie\HladanieForm.Designer.cs">
       <DependentUpon>HladanieForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Hviezdne brany\HviezdnaBranaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hviezdne brany\HviezdnaBranaForm.Designer.cs">
+      <DependentUpon>HviezdnaBranaForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Jadro.cs" />
     <Compile Include="LogHelper.cs" />
     <Compile Include="Nastavenia\CestaDatabaza.cs">
@@ -202,6 +208,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Hladanie\HladanieForm.resx">
       <DependentUpon>HladanieForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hviezdne brany\HviezdnaBranaForm.resx">
+      <DependentUpon>HviezdnaBranaForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Nastavenia\CestaDatabaza.resx">
       <DependentUpon>CestaDatabaza.cs</DependentUpon>

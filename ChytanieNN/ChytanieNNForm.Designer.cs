@@ -212,8 +212,7 @@ namespace WebBrowser.ChytanieNN
             // 
             // ChytanieNNForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1325, 472);
             this.Controls.Add(this.textBoxRelatX);
             this.Controls.Add(this.textBoxRelatY);
@@ -235,7 +234,7 @@ namespace WebBrowser.ChytanieNN
             this.HelpButton = true;
             this.Location = new System.Drawing.Point(100, 10);
             this.Name = "ChytanieNNForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ChytanieNNForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ChytanieNNForm_FormClosed);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ChytanieNNForm_MouseMove);
