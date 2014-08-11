@@ -19,7 +19,7 @@ namespace WebBrowser.ChytanieNN
         [DllImport("user32.dll")]
         static extern void mouse_event(int dwFlags, int dx, int dy,int dwData, UIntPtr dwExtraInfo);
 
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         private const int MOUSEEVENTF_MOVE = 0x0001;
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
         private const int MOUSEEVENTF_LEFTUP = 0x04;

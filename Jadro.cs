@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
@@ -9,24 +8,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Windows.Forms;
-using System.Windows.Shapes;
 using WebBrowser.ChytanieNN;
 using WebBrowser.ChytanieTrolov;
 using WebBrowser.ChytanieVV;
 using WebBrowser.Dohadzovanie;
 using WebBrowser.Hladanie;
 using WebBrowser.OnlineDatabaza;
-using WebBrowser.Planety;
 using WebBrowser.PomocneTriedy;
 
+// ReSharper disable InconsistentNaming
 namespace WebBrowser
 {
     public class Jadro
     {
         private System.Windows.Forms.WebBrowser Wb { get; set; }
         private Form1 Form { get; set; }
-        private int AktualnySektor { get; set; }
-        private List<Planeta> AktualnyListPlanet { get; set; }
+        private int AktualnySektor;
+        private List<Planeta> AktualnyListPlanet;
         public List<SektorPrehlad> PrehladSektorovList { get; set; }
         public List<CelkovaTabulka> ListPlanetpar;
         public string User { get; set; }
@@ -206,9 +204,21 @@ namespace WebBrowser
                         }
                         tran.Complete();
                     }
+                    using (TransactionScope tran = new TransactionScope())
+                    {
+                        sql = "create table sektory (nazov varchar(5),datumVlozenia date);";
+                        using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                        {
+                            cnn.Open();
+                            using (SQLiteCommand command = new SQLiteCommand(sql, cnn))
+                            {
+                                command.ExecuteNonQuery();
+                            }
+                            tran.Complete();
+                        }
+                    }
                 }
             }
-
             return list;
         }
 
@@ -648,7 +658,8 @@ namespace WebBrowser
                             (" ", ""),
                         doc.DocumentNode.ChildNodes[0].ChildNodes[0].ChildNodes[i*2 + 1].ChildNodes[5].InnerText.Replace
                             (" ", ""),
-                        doc.DocumentNode.ChildNodes[0].ChildNodes[0].ChildNodes[i*2 + 1].ChildNodes[9].InnerText));
+                        doc.DocumentNode.ChildNodes[0].ChildNodes[0].ChildNodes[i*2 + 1].ChildNodes[9].InnerText,
+                        doc.DocumentNode.ChildNodes[0].ChildNodes[0].ChildNodes[i * 2 + 1].ChildNodes[3].InnerHtml.Substring(doc.DocumentNode.ChildNodes[0].ChildNodes[0].ChildNodes[i * 2 + 1].ChildNodes[3].InnerHtml.IndexOf("id_hrac=")+8,7)));
             }
 
             return list;
@@ -1022,7 +1033,7 @@ namespace WebBrowser
                                     var sektor = reader["sektor"].ToString();
                                     var id = reader["idPlanety"].ToString();
                                     var vlozil = reader["idPlanety"].ToString();
-                                    var exist = reader.GetBoolean(8);
+                                    var exist = reader.GetBoolean(7);
 
                                     list.Add(new Planeta(nazov, pozicia, id, majitel, typ, sektor, exist, vlozil, datum));
                                 }
@@ -1146,6 +1157,8 @@ namespace WebBrowser
 
         private IEnumerable<Planeta> OverPolohuPlanetVSektore(string sektor, int casSpomalenia)
         {
+            try
+            {
             var wb = new System.Windows.Forms.WebBrowser();
             var url = new Uri("http://www.stargate-game.cz/vesmir.php?page=13&id_sektor=" + sektor, true);
             wb.Navigate(url);
@@ -1168,6 +1181,13 @@ namespace WebBrowser
             Thread.Sleep(casSpomalenia);
 
             return list;
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return new List<Planeta>();
+            }
         }
 
         private void wb_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -1345,10 +1365,11 @@ namespace WebBrowser
             var list = new List<Planeta>();
 
             var sql =
-                "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia )  from " +
+                "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia )," +
+                "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ) as poslMajitel  from " +
                 "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel = '" +
                 hrac + "' and flagAktualny = '1' and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
-                "') group by pozicia order by datumVlozenia desc);";
+                "') group by pozicia order by datumVlozenia desc) where poslMajitel = '"+hrac+"';";
 
             try
             {
@@ -1534,9 +1555,17 @@ namespace WebBrowser
 
         public void NaskenujVesmir()
         {
-            _vlakno = new Thread(SkenovacieVlakno);
-            _vlakno.SetApartmentState(ApartmentState.STA);
-            _vlakno.Start();
+            try
+            {
+                _vlakno = new Thread(SkenovacieVlakno);
+                _vlakno.SetApartmentState(ApartmentState.STA);
+                _vlakno.Start();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
         }
 
         private void SkenovacieVlakno()
@@ -1618,7 +1647,7 @@ namespace WebBrowser
                 using (var cmd = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
                 {
                     cmd.Open();
-                    using (var mycommand = new SQLiteCommand("CREATE INDEX Iplanety2index ON planety(sektor, pozicia, datumVlozenia );", cmd))
+                    using (var mycommand = new SQLiteCommand("CREATE INDEX Iplanety2index ON planety(majitel, sektor, pozicia, datumVlozenia );", cmd))
                     {
                         mycommand.ExecuteNonQuery();
                     }
@@ -1634,10 +1663,11 @@ namespace WebBrowser
             if (hladSektor == 0)
             {
                 sql =
-                    "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia )  from " +
+                    "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia )," +
+                    "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ) as poslMajitel from " +
                     "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in" +
                     hraci + " and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
-                    "') and flagAktualny = '1' group by pozicia order by datumVlozenia desc);";
+                    "') and flagAktualny = '1' group by pozicia order by datumVlozenia desc) where poslMajitel in "+hraci+";";
             }
             else
             {
@@ -1647,10 +1677,11 @@ namespace WebBrowser
                     : hladSektor.ToString(CultureInfo.InvariantCulture);
 
                 sql =
-                    "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia )  from " +
+                    "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ), " +
+                    "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ) as poslMajitel from " +
                     "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in" +
                     hraci + " and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
-                    "') and sektor = '" + nazovSektora + "' and flagAktualny = '1' group by pozicia order by datumVlozenia desc);";
+                    "') and sektor = '" + nazovSektora + "' and flagAktualny = '1' group by pozicia order by datumVlozenia desc) where poslMajitel in " + hraci + ";";
             }
 
             try
@@ -1873,6 +1904,7 @@ namespace WebBrowser
         }
 
         public void HladajHB(string cas, string cena)
+
         {
             if (hladacieVlakno == null)
             {
@@ -1925,6 +1957,91 @@ namespace WebBrowser
                 }
             }
         }
+
+        public List<Planeta> NajdiZmenenePlanety(string povodnaRasa, string sucasnaRasa)
+        {
+            var listHracovPovodna = VypisHracovRasy(povodnaRasa);
+            var listHracovSucasna = VypisHracovRasy(sucasnaRasa);
+            var hraciPov = listHracovPovodna.Aggregate("(", (current, s) => current + ("'" + s + "', "));
+            hraciPov += ")";
+            hraciPov = hraciPov.Replace(", )", ")");
+            var hraciSuc = listHracovSucasna.Aggregate("(", (current, s) => current + ("'" + s + "', "));
+            hraciSuc += ")";
+            hraciSuc = hraciSuc.Replace(", )", ")");
+
+            var list = new List<Planeta>();
+
+            var sql =
+                "select * from planety p inner join (select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia," +
+                "typ,sektor as sektorr, idPlanety from planety where majitel in  " + hraciPov +
+                " and datumVlozenia >datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
+                "') and flagAktualny = '1' and sektor = '128' ) ss on (ss.poziciaa = p.pozicia and ss.sektorr=p.sektor)" +
+                "where p.majitel in " + hraciSuc;
+            try
+            {
+                var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
+                cnn.Open();
+                using (var mycommand = new SQLiteCommand(sql, cnn))
+                {
+                    using (var reader = mycommand.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+
+                            while (reader.Read())
+                            {
+                                var nazov = reader["nazov"].ToString();
+                                var majitel = reader["majitel"].ToString();
+                                var pozicia = reader["pozicia"].ToString();
+                                var c = reader.GetString(9);
+                                var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                var typ = reader["typ"].ToString();
+                                var sektor = reader["sektor"].ToString();
+                                //var pocetZmien = reader.GetInt32(6).ToString(CultureInfo.InvariantCulture);
+                                var pocetZmien = "2";
+
+                                list.Add(new Planeta(nazov, pozicia, majitel, datum, typ, sektor, pocetZmien));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return list;
+        }
+
+        private List<string> VypisHracovRasy(string nazovRasy)
+        {
+            var listHracov = new List<string>();
+
+            var wb = new System.Windows.Forms.WebBrowser();
+            string idRasy;
+            RasyId.ListId.TryGetValue(nazovRasy, out idRasy);
+
+            if (!string.IsNullOrEmpty(idRasy))
+            {
+                var url = new Uri("http://www.stargate-game.cz/vesmir.php?page=1&id_rasa=" + idRasy + "&sort=2");
+                wb.Navigate(url);
+
+                while (true)
+                {
+                    Application.DoEvents();
+                    if (!string.IsNullOrEmpty(wb.StatusText) && !wb.StatusText.Contains("vesmir.php?page=1&id_rasa="))
+                        break;
+                }
+
+                if (wb.Document != null)
+                    if (wb.Document.Body != null)
+                        listHracov = ParsujVyvrhelov(wb.Document.Body.InnerHtml).Select(x => x.Meno).ToList();
+            }
+
+            return listHracov;
+        } 
     }
 }
 
+// ReSharper restore InconsistentNaming

@@ -19,6 +19,7 @@ namespace WebBrowser.ChytanieTrolov
         private bool _koniec;
         private readonly Jadro _jadro;
         private List<HracPodmienky> _listPodm;
+        public List<Hrac> listHracov;
 
         public ChytanieTrolovForm(Jadro jadro)
         {
@@ -71,7 +72,7 @@ namespace WebBrowser.ChytanieTrolov
 
         public void Utok()
         {
-            _chytanieTrolov.Start(this, textBoxMenoHraca.Text, comboBox1.SelectedValue.ToString(), _webBrowser1, webBrowser3, textBoxPechota.Text, textBoxEB.Text);
+            _chytanieTrolov.Start(this, null, textBoxMenoHraca.Text, comboBox1.SelectedValue.ToString(), _webBrowser1, webBrowser3, textBoxPechota.Text, textBoxEB.Text);
         }
 
         private void SpustRefreshDohadzovanie(string text)
@@ -113,7 +114,7 @@ namespace WebBrowser.ChytanieTrolov
         {
             if (!string.IsNullOrEmpty(_webBrowser2.StatusText) && _pocetLoad == 0 && !_webBrowser2.StatusText.Contains("vesmir.php"))
             {
-                var listHracov = _jadro.parsujHracov(_webBrowser2.Document.Window.Document.Body.InnerHtml);
+                listHracov = _jadro.parsujHracov(_webBrowser2.Document.Window.Document.Body.InnerHtml);
                 var ee = listHracov.Contains(new Hrac(textBoxMenoHraca.Text, "", ""));
                 if (!listHracov.Contains(new Hrac(textBoxMenoHraca.Text, "", "")))
                 {

@@ -40,6 +40,12 @@
             this.buttonRasa = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.comboBoxRasaSucasna = new System.Windows.Forms.ComboBox();
+            this.comboBoxRasaPovodna = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonPlaneta
@@ -70,7 +76,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(217, 198);
+            this.button2.Location = new System.Drawing.Point(199, 219);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 3;
@@ -115,7 +121,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(22, 110);
+            this.label3.Location = new System.Drawing.Point(22, 115);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(70, 13);
             this.label3.TabIndex = 9;
@@ -147,11 +153,70 @@
             this.comboBox2.Size = new System.Drawing.Size(121, 21);
             this.comboBox2.TabIndex = 11;
             // 
+            // comboBoxRasaSucasna
+            // 
+            this.comboBoxRasaSucasna.FormattingEnabled = true;
+            this.comboBoxRasaSucasna.Location = new System.Drawing.Point(246, 183);
+            this.comboBoxRasaSucasna.Name = "comboBoxRasaSucasna";
+            this.comboBoxRasaSucasna.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxRasaSucasna.TabIndex = 15;
+            // 
+            // comboBoxRasaPovodna
+            // 
+            this.comboBoxRasaPovodna.FormattingEnabled = true;
+            this.comboBoxRasaPovodna.Location = new System.Drawing.Point(246, 149);
+            this.comboBoxRasaPovodna.Name = "comboBoxRasaPovodna";
+            this.comboBoxRasaPovodna.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxRasaPovodna.TabIndex = 14;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(22, 157);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(78, 13);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Dobyte planety";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(373, 181);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "Zobraz z DB";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(150, 152);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(73, 13);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Povodna rasa";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(150, 186);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(72, 13);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "Sucasna rasa";
+            // 
             // HladanieForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(485, 272);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.comboBoxRasaSucasna);
+            this.Controls.Add(this.comboBoxRasaPovodna);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label3);
@@ -186,5 +251,11 @@
         private System.Windows.Forms.Button buttonRasa;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBoxRasaSucasna;
+        private System.Windows.Forms.ComboBox comboBoxRasaPovodna;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
     }
 }

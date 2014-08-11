@@ -16,6 +16,8 @@ namespace WebBrowser.Hladanie
         {
             InitializeComponent();
             comboBox1.DataSource = RasyId.ListId.Keys.ToList();
+            comboBoxRasaPovodna.DataSource = RasyId.ListId.Keys.ToList();
+            comboBoxRasaSucasna.DataSource = RasyId.ListId.Keys.ToList();
         }
 
         public HladanieForm(Jadro jadro)
@@ -25,6 +27,8 @@ namespace WebBrowser.Hladanie
             _jadro.KoniecVlakna += KoniecVlakana;
             InitializeComponent();
             comboBox1.DataSource = RasyId.ListId.Keys.ToList();
+            comboBoxRasaPovodna.DataSource = RasyId.ListId.Keys.ToList();
+            comboBoxRasaSucasna.DataSource = RasyId.ListId.Keys.ToList();
             comboBox2.DataSource = _jadro.NaplnSektory();
         }
 
@@ -98,6 +102,14 @@ namespace WebBrowser.Hladanie
                 _jadro.HladacieVlakno.Abort();
             }
             _jadro.UkoncenieHladaniePlanetRasy -= KoniecHladaniaPlanetRasy;
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            var hrac = textBox2.Text;
+            var title = "Povodna rasa : " + comboBoxRasaPovodna.Text + " , sucasna rasa : "+comboBoxRasaSucasna.Text;
+            var detailPlanety = new PlanetaDetail(_jadro.NajdiZmenenePlanety(comboBoxRasaPovodna.Text, comboBoxRasaSucasna.Text), _jadro, title);
+            detailPlanety.Show(this);
         }
     }
 }

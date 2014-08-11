@@ -17,6 +17,7 @@ namespace WebBrowser.ChytanieTrolov
         private System.Windows.Forms.WebBrowser wbUtok;
         private System.Windows.Forms.WebBrowser wbJednotky;
         private string hladanyHrac;
+        private string idHrac;
         private bool existuje;
         private int pocetZobrazeni = 0;
         private string _pocetPechota;
@@ -26,13 +27,15 @@ namespace WebBrowser.ChytanieTrolov
         private ChytanieTrolovForm _form;
 
         public delegate void HracExistujeHandler();
+
         public event HracExistujeHandler HracExistuje;
 
         public delegate void Utok();
+
         public event Utok UtokJeMozny;
 
         [DllImport("user32.dll")]
-        static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, UIntPtr dwExtraInfo);
+        private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, UIntPtr dwExtraInfo);
 
         private const int MOUSEEVENTF_MOVE = 0x0001;
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
@@ -45,11 +48,11 @@ namespace WebBrowser.ChytanieTrolov
         {
             _jadro = jadro;
             _chytanieTrolovForm = chytanieTrolovForm;
-           // HracExistuje += HracExistujePotvrdenie;
+            // HracExistuje += HracExistujePotvrdenie;
             UtokJeMozny += UtokMozny;
             wbJednotky = new System.Windows.Forms.WebBrowser
             {
-                Url = new Uri("http://www.stargate-game.cz/jednotky.php?vyber=3")
+                Url = new Uri("http://www.stargate-game.cz/jednotky.php?page=3")
             };
         }
 
@@ -58,7 +61,9 @@ namespace WebBrowser.ChytanieTrolov
             ZautocNaHraca();
         }
 
-        public void Start(ChytanieTrolovForm form, string menoHraca, string rasa, System.Windows.Forms.WebBrowser webBrowser1, System.Windows.Forms.WebBrowser webBrowser2, string pocetPechota, string pocetEb)
+        public void Start(ChytanieTrolovForm form, string menoHraca, string idHraca, string rasa,
+            System.Windows.Forms.WebBrowser webBrowser1, System.Windows.Forms.WebBrowser webBrowser2,
+            string pocetPechota, string pocetEb)
         {
             _form = form;
             _pocetPechota = pocetPechota;
@@ -68,6 +73,7 @@ namespace WebBrowser.ChytanieTrolov
             wb = webBrowser1;
             wbUtok = webBrowser2;
             hladanyHrac = menoHraca;
+            idHrac = idHraca;
             wb.DocumentCompleted += this.webBrowser1_DocumentCompleted;
 
             //ExistujeHrac(menoHraca);
@@ -106,11 +112,11 @@ namespace WebBrowser.ChytanieTrolov
         {
             wbJednotky.Document.GetElementById("jed1").SetAttribute("value", pocty.Pechota);
             wbJednotky.Document.GetElementById("jed2").SetAttribute("value", pocty.Uni);
-            wbJednotky.Document.GetElementById("jed4").SetAttribute("value", pocty.Orbit);
-            wbJednotky.Document.GetElementById("jed5").SetAttribute("value", pocty.Elitaci);
+            wbJednotky.Document.GetElementById("jed3").SetAttribute("value", pocty.Orbit);
+            //wbJednotky.Document.GetElementById("jed4").SetAttribute("value", pocty.Elitaci);
             wbJednotky.Document.GetElementsByTagName("input").GetElementsByName("ra_z_jmeno")[0].SetAttribute(
                 "value", pocty.Meno);
-            var d = wbJednotky.Document.GetElementsByTagName("input").GetElementsByName("ra_z");
+            var d = wbJednotky.Document.GetElementsByTagName("input").GetElementsByName("odeslat_ra");
 
             d[0].InvokeMember("Click");
 
@@ -119,10 +125,27 @@ namespace WebBrowser.ChytanieTrolov
             while (true)
             {
                 Application.DoEvents();
-                if (!string.IsNullOrEmpty(wbJednotky.StatusText) && !wbJednotky.StatusText.Contains("jednotky.php?vyber=3#ra-z") && wbJednotky.Document.Body.InnerText.Contains("Jednotky byly úspěšně odeslány."))
+                if (!string.IsNullOrEmpty(wbJednotky.StatusText) &&
+                    !wbJednotky.StatusText.Contains("jednotky.php?page=3#nakup") &&
+                    wbJednotky.Document.Body.InnerText.Contains("byly úspěšně přesunuty k hráči"))
+                {
+                    Console.WriteLine("OK");
                     break;
+                }
+                if (!string.IsNullOrEmpty(wbJednotky.StatusText) &&
+                    !wbJednotky.StatusText.Contains("jednotky.php?page=3#nakup") &&
+                    wbJednotky.Document.Body.InnerText.Contains("Odeslat musíte nejméně 1 jednotku!"))
+                {
+
+                    Console.WriteLine("Chyba");
+                    MessageBox.Show("Odeslat musíte nejméně 1 jednotku!", "Chyba pri odosielani jednotie");
+                    break;
+                }
             }
-            if (wbJednotky.Document.Body.InnerText.Contains("Jednotky byly úspěšně odeslány."))
+
+            if (
+
+                wbJednotky.Document.Body.InnerText.Contains("byly úspěšně přesunuty k hráči"))
             {
                 Console.WriteLine("Jednotky byly úspěšně odeslány.");
                 if (UtokJeMozny != null) //vyvolani udalosti
@@ -132,21 +155,24 @@ namespace WebBrowser.ChytanieTrolov
 
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            var webBrowser1 = ((System.Windows.Forms.WebBrowser)(sender));
+            var webBrowser1 = ((System.Windows.Forms.WebBrowser) (sender));
 
             var text = webBrowser1.Document.Body.InnerText;
             existuje = text.Contains("Tento hráč neexistuje! ");
 
-                if (HracExistuje != null) //vyvolani udalosti
-                    HracExistuje();
+            if (HracExistuje != null) //vyvolani udalosti
+                HracExistuje();
         }
 
         private void ZautocNaHraca()
         {
             Console.WriteLine(@"Utok");
             pocetZobrazeni = 0;
+            idHrac = _form.listHracov[_form.listHracov.IndexOf(new Hrac(hladanyHrac, "", ""))].ID;
 
-            var url = new Uri("http://www.stargate-game.cz/utok.php?jakej=2&cil=" + hladanyHrac);
+            // http://www.stargate-game.cz/utok.php?jakej=2&cil=  stare
+            // http://www.stargate-game.cz/utok.php?page=0&hrac_id=1224426&utok_id=5
+            var url = new Uri("http://www.stargate-game.cz/utok.php?page=0&hrac_id=" + idHrac + "&utok_id=5");
             wbUtok.Navigate(url);
 
             while (true)
@@ -155,11 +181,11 @@ namespace WebBrowser.ChytanieTrolov
                 if (!string.IsNullOrEmpty(wbUtok.StatusText) && !wbUtok.StatusText.Contains("utok.php"))
                     break;
             }
-           
+
             var pech = wbUtok.Document.GetElementsByTagName("input").GetElementsByName("jednot1");
             pech[0].SetAttribute("value", _pocetPechota);
-            var EB = wbUtok.Document.GetElementsByTagName("input").GetElementsByName("jednot5");
-            EB[0].SetAttribute("value", _pocetEB);
+            //var EB = wbUtok.Document.GetElementsByTagName("input").GetElementsByName("jednot5");
+            //EB[0].SetAttribute("value", _pocetEB);
             var e = wbUtok.Document.GetElementById("zautocit");
 
             var c = wbUtok.Document.GetElementsByTagName("input");
@@ -179,11 +205,11 @@ namespace WebBrowser.ChytanieTrolov
 
             var x = vystx + fmx + wbx + 10;
             var y = vysty + fmy + wby + 40;
-            
+
             _form.TopMost = true;
 
             var screenBounds = Screen.PrimaryScreen.Bounds;
-            DoMouseClick(x * 65535 / screenBounds.Width, y * 65535 / screenBounds.Height);
+            DoMouseClick(x*65535/screenBounds.Width, y*65535/screenBounds.Height);
         }
 
         public void DoMouseClick(int x, int y)
