@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using WebBrowser.Dohadzovanie;
@@ -110,18 +112,23 @@ namespace WebBrowser.ChytanieTrolov
 
         private void PosliSiJednotky(PoctyJadnotiek pocty)
         {
-            wbJednotky.Document.GetElementById("jed1").SetAttribute("value", pocty.Pechota);
+            wbJednotky.Navigating += new WebBrowserNavigatingEventHandler(wbJednotky_Navigating);
+            CultureInfo elGR = CultureInfo.CreateSpecificCulture("el-GR");
+
+      //      wbJednotky.Document.GetElementById("jed1").SetAttribute("value", int.Parse(pocty.Pechota).ToString("0,0", elGR));
+            wbJednotky.Document.GetElementsByTagName("input").GetElementsByName("jed1")[0].SetAttribute("value", int.Parse(pocty.Pechota).ToString("0,0", elGR));
+
             wbJednotky.Document.GetElementById("jed2").SetAttribute("value", pocty.Uni);
             wbJednotky.Document.GetElementById("jed3").SetAttribute("value", pocty.Orbit);
             //wbJednotky.Document.GetElementById("jed4").SetAttribute("value", pocty.Elitaci);
-            wbJednotky.Document.GetElementsByTagName("input").GetElementsByName("ra_z_jmeno")[0].SetAttribute(
-                "value", pocty.Meno);
+            wbJednotky.Document.GetElementsByTagName("input").GetElementsByName("ra_z_jmeno")[0].SetAttribute("value", pocty.Meno);
             var d = wbJednotky.Document.GetElementsByTagName("input").GetElementsByName("odeslat_ra");
 
             d[0].InvokeMember("Click");
 
+            var c = wbJednotky.Document.GetElementById("jed1").GetAttribute("value");
             Console.WriteLine("Poslanie jednotiek ... ");
-
+            var cs = wbJednotky.Document.GetElementById("jed1");
             while (true)
             {
                 Application.DoEvents();
@@ -182,13 +189,16 @@ namespace WebBrowser.ChytanieTrolov
                     break;
             }
 
-            var pech = wbUtok.Document.GetElementsByTagName("input").GetElementsByName("jednot1");
-            pech[0].SetAttribute("value", _pocetPechota);
+            CultureInfo elGR = CultureInfo.CreateSpecificCulture("el-GR");
+
+            wbUtok.Document.GetElementsByTagName("input").GetElementsByName("jed1")[0].SetAttribute("value", int.Parse(_pocetPechota).ToString("0,0", elGR));
+            //pech[0].SetAttribute("value", _pocetPechota);
             //var EB = wbUtok.Document.GetElementsByTagName("input").GetElementsByName("jednot5");
             //EB[0].SetAttribute("value", _pocetEB);
-            var e = wbUtok.Document.GetElementById("zautocit");
 
             var c = wbUtok.Document.GetElementsByTagName("input");
+            var d = wbUtok.Document.GetElementsByTagName("input").GetElementsByName("zautocit");
+            d[0].InvokeMember("Click");
 
             var vystx = 0;
             var vysty = 0;
@@ -217,6 +227,26 @@ namespace WebBrowser.ChytanieTrolov
             mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, x, y, 0, new UIntPtr());
 
             mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, x, y, 0, new UIntPtr());
+        }
+
+        private void wbJednotky_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            if (wbJednotky.Document.Forms.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < wbJednotky.Document.Forms.Count; ++i)
+                {
+                    HtmlElement formElmt = wbJednotky.Document.Forms[i];
+                    HtmlElementCollection inputEls = formElmt.GetElementsByTagName("input");
+                    foreach (HtmlElement inputEl in inputEls)
+                    {
+                        string name = inputEl.GetAttribute("name");
+                        string value = inputEl.GetAttribute("value");
+                        sb.AppendFormat("{0}={1}&", name, value);
+                    }
+                }
+                Console.WriteLine(sb.ToString().TrimEnd('&'));
+            }
         }
     }
 }

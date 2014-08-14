@@ -266,6 +266,7 @@ namespace WebBrowser
                             {
                                 mycommand.ExecuteNonQuery();
                             }
+                            cnn.Close();
                         }
                         Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " + listNaUlozenie.Count);
                     }
@@ -289,7 +290,7 @@ namespace WebBrowser
                     }
                     cnn.Close();
                 }
-                Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " + listNaUlozenie.Count);
+                Console.WriteLine("Ukladanie do DB -- sektor -> " + sektorCislo + " ,pocet zaznamov : " + listNaUlozenie.Count);
             }
             catch (Exception fail)
             {
@@ -351,6 +352,7 @@ namespace WebBrowser
                             mycommand.ExecuteNonQuery();
                             Console.WriteLine("Ukladanie do DB");
                         }
+                        cnn.Close();
                     }
                 }
                 catch (Exception fail)
@@ -1998,7 +2000,7 @@ namespace WebBrowser
                                 var typ = reader["typ"].ToString();
                                 var sektor = reader["sektor"].ToString();
                                 //var pocetZmien = reader.GetInt32(6).ToString(CultureInfo.InvariantCulture);
-                                var pocetZmien = "2";
+                                var pocetZmien = "-";
 
                                 list.Add(new Planeta(nazov, pozicia, majitel, datum, typ, sektor, pocetZmien));
                             }

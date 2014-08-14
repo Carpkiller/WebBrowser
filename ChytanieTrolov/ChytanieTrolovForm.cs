@@ -72,7 +72,7 @@ namespace WebBrowser.ChytanieTrolov
 
         public void Utok()
         {
-            _chytanieTrolov.Start(this, null, textBoxMenoHraca.Text, comboBox1.SelectedValue.ToString(), _webBrowser1, webBrowser3, textBoxPechota.Text, textBoxEB.Text);
+            _chytanieTrolov.Start(this, textBoxMenoHraca.Text, textBoxMenoHraca.Text, comboBox1.SelectedValue.ToString(), _webBrowser1, webBrowser3, textBoxPechota.Text, textBoxEB.Text);
         }
 
         private void SpustRefreshDohadzovanie(string text)
@@ -124,7 +124,7 @@ namespace WebBrowser.ChytanieTrolov
                 }
                 else
                 {
-                    _pocetLoad = 1;
+                    //_pocetLoad = 1;
                     if (_webBrowser2.Document.Url.AbsolutePath.Contains("vesmir.php"))
                     {
                         _jadro.SkontrolujHracov(listHracov, this, _listPodm, false, 2);
