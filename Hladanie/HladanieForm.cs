@@ -50,6 +50,7 @@ namespace WebBrowser.Hladanie
                 var title = "Vsetky planety rasy : "+_hladanyItem;
                 var detailPlanety = new ZoznamHracovForm(_jadro.NajdenePlanety, _jadro, title, comboBox2.SelectedIndex.ToString(CultureInfo.InvariantCulture));
                 detailPlanety.Show(this);
+                progressBar1.Style = ProgressBarStyle.Blocks;
             }));
         }
 
@@ -88,6 +89,7 @@ namespace WebBrowser.Hladanie
 
         private void button4_Click(object sender, EventArgs e)
         {
+            progressBar1.Style = ProgressBarStyle.Marquee;
             _jadro.UkoncenieHladaniePlanetRasy += KoniecHladaniaPlanetRasy;
             var rasa = comboBox1.SelectedValue.ToString();
             var sektor = comboBox2.SelectedIndex;

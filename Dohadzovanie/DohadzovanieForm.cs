@@ -17,7 +17,7 @@ namespace WebBrowser
     public partial class DohadzovanieForm : Form
     {
         private Jadro jadro;
-        private Form1 form;
+        private HlavneOkno form;
         private int poc = 0;
         private int refreshovaciCas;
         private Thread refreshovacieVlakno;
@@ -41,7 +41,7 @@ namespace WebBrowser
             InitializeComponent();
         }
 
-        public DohadzovanieForm(Jadro jadro, Form1 form1, string mode, List<HracPodmienky> schema, int refreshCas, int casSpom)
+        public DohadzovanieForm(Jadro jadro, HlavneOkno form1, string mode, List<HracPodmienky> schema, int refreshCas, int casSpom)
         {
             // TODO: Complete member initialization
             InitializeComponent();

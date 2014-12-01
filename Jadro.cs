@@ -22,7 +22,7 @@ namespace WebBrowser
     public class Jadro
     {
         private System.Windows.Forms.WebBrowser Wb { get; set; }
-        private Form1 Form { get; set; }
+        private HlavneOkno Form { get; set; }
         private int AktualnySektor;
         private List<Planeta> AktualnyListPlanet;
         public List<SektorPrehlad> PrehladSektorovList { get; set; }
@@ -75,7 +75,7 @@ namespace WebBrowser
         public List<SektorPlanety> NajdenePlanety { get; set; }
         public Planeta HladanaPlaneta { get; set; }
 
-        public Jadro(System.Windows.Forms.WebBrowser wb, Form1 form1)
+        public Jadro(System.Windows.Forms.WebBrowser wb, HlavneOkno form1)
         {
             Wb = wb;
             Form = form1;
@@ -1306,9 +1306,9 @@ namespace WebBrowser
             var text = innerHtml.Substring(innerHtml.IndexOf("</THEAD>"));
             var pocetPlanet = 0;
 
-            while (pocetPlanet != 1 )
+            while (pocetPlanet != 1)
             {
-
+                var c = text.IndexOf("<A class");
                 text = text.Remove(0, text.IndexOf("\">", text.IndexOf("<A class")) + 2);
                 var index = text.IndexOf("</A>");
                 var meno = text.Substring(0, index);
@@ -1326,6 +1326,8 @@ namespace WebBrowser
                 {
                     list.Add(new Vyvrhel(meno, sila, pocetPlanet));
                 }
+
+                if (text.IndexOf("<A class", StringComparison.Ordinal) == -1) break;
             }
 
             return list;
@@ -1696,7 +1698,6 @@ namespace WebBrowser
                     {
                         if (reader.HasRows)
                         {
-
                             while (reader.Read())
                             {
                                 var nazov = reader["nazov"].ToString();
@@ -1977,7 +1978,7 @@ namespace WebBrowser
                 "select * from planety p inner join (select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia," +
                 "typ,sektor as sektorr, idPlanety from planety where majitel in  " + hraciPov +
                 " and datumVlozenia >datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
-                "') and flagAktualny = '1' and sektor = '128' ) ss on (ss.poziciaa = p.pozicia and ss.sektorr=p.sektor)" +
+                "') and flagAktualny = '1') ss on (ss.poziciaa = p.pozicia and ss.sektorr=p.sektor)" +
                 "where p.majitel in " + hraciSuc;
             try
             {
@@ -2042,7 +2043,61 @@ namespace WebBrowser
             }
 
             return listHracov;
-        } 
+        }
+
+        public bool OdstranStareZaznamy()
+        {
+            var sql = "INSERT INTO planety_stare SELECT * FROM planety where datumVlozenia < datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") + "');";
+            var sqlDelete = "DELETE from planety where datumVlozenia < datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") + "');";
+            try
+            {
+                using (SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                {
+                    cnn.Open();
+                    using (SQLiteCommand mycommand = new SQLiteCommand(sql, cnn))
+                    {
+                        mycommand.ExecuteReader();
+                    }
+                }
+
+                using (SQLiteConnection cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                {
+                    cnn.Open();
+                    using (SQLiteCommand mycommand = new SQLiteCommand(sqlDelete, cnn))
+                    {
+                        mycommand.ExecuteReader();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("no such table: planety_stare"))
+                {
+                    using (TransactionScope tran = new TransactionScope())
+                    {
+                        using (SQLiteConnection DbConnection = new SQLiteConnection(_dbConnection))
+                        {
+                            DbConnection.Open();
+
+                            sql =
+                                "CREATE TABLE planety_stare ([ID] INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,[idPlanety] VARCHAR(12)  NULL," +
+                                "[nazov] VARCHAR(50)  NULL,[pozicia] VARCHAR(15)  NULL,[majitel] VARCHAR(35)  NULL,[typ] VARCHAR(25)  NULL," +
+                                "[sektor] VARCHAR(10)  NULL,[flagAktualny] BOOLEAN  NULL,[vlozil] VARCHAR(35)  NULL,[datumVlozenia] DATE  NULL)";
+
+                            using (SQLiteCommand command = new SQLiteCommand(sql, DbConnection))
+                            {
+                                command.ExecuteNonQuery();
+                            }
+                        }
+                        tran.Complete();
+                    }
+                }
+
+                return false;
+            }
+
+            return true;
+        }
     }
 }
 

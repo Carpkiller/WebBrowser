@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WebBrowser.ChytanieNN;
@@ -16,7 +17,7 @@ using WebBrowser.StavbaPO;
 
 namespace WebBrowser
 {
-    public partial class Form1 : Form
+    public partial class HlavneOkno : Form
     {
         private readonly Jadro _jadro;
         private int _poc;
@@ -37,7 +38,7 @@ namespace WebBrowser
             UrlMkSetSessionOption(URLMON_OPTION_USERAGENT, ua, ua.Length, 0);
         }
 
-        public Form1()
+        public HlavneOkno()
         {
             ChangeUserAgent();
             InitializeComponent();
@@ -298,6 +299,37 @@ namespace WebBrowser
         {
             HviezdnaBranaForm hb = new HviezdnaBranaForm(_jadro);
             hb.Show(); 
+        }
+
+        private void odstranitStareZaznamyZDBToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_jadro.OdstranStareZaznamy())
+            {
+                MessageBox.Show("Zaznamy odstranene", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Zaznamy neboli odstranene, skus to este raz", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        public static Task<T> StartSTATask<T>(Func<T> func)
+        {
+            var tcs = new TaskCompletionSource<T>();
+            Thread thread = new Thread(() =>
+            {
+                try
+                {
+                    tcs.SetResult(func());
+                }
+                catch (Exception e)
+                {
+                    tcs.SetException(e);
+                }
+            });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            return tcs.Task;
         }
     }
 }

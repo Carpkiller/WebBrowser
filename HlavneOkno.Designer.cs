@@ -1,6 +1,6 @@
 ﻿namespace WebBrowser
 {
-    partial class Form1
+    partial class HlavneOkno
     {
         /// <summary>
         /// Required designer variable.
@@ -68,6 +68,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.odstranitStareZaznamyZDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -264,29 +265,30 @@
             this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.vytvoritZalohuToolStripMenuItem,
             this.chytanieTrolovToolStripMenuItem,
-            this.hviezdneBranyToolStripMenuItem});
+            this.hviezdneBranyToolStripMenuItem,
+            this.odstranitStareZaznamyZDBToolStripMenuItem});
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
-            this.menuToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
+            this.menuToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.menuToolStripMenuItem.Text = "Menu";
             // 
             // vytvoritZalohuToolStripMenuItem
             // 
             this.vytvoritZalohuToolStripMenuItem.Name = "vytvoritZalohuToolStripMenuItem";
-            this.vytvoritZalohuToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.vytvoritZalohuToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.vytvoritZalohuToolStripMenuItem.Text = "Naskenovat vesmir";
             this.vytvoritZalohuToolStripMenuItem.Click += new System.EventHandler(this.vytvoritZalohuToolStripMenuItem_Click);
             // 
             // chytanieTrolovToolStripMenuItem
             // 
             this.chytanieTrolovToolStripMenuItem.Name = "chytanieTrolovToolStripMenuItem";
-            this.chytanieTrolovToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.chytanieTrolovToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.chytanieTrolovToolStripMenuItem.Text = "Chytanie trolov";
             this.chytanieTrolovToolStripMenuItem.Click += new System.EventHandler(this.chytanieTrolovToolStripMenuItem_Click);
             // 
             // hviezdneBranyToolStripMenuItem
             // 
             this.hviezdneBranyToolStripMenuItem.Name = "hviezdneBranyToolStripMenuItem";
-            this.hviezdneBranyToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.hviezdneBranyToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.hviezdneBranyToolStripMenuItem.Text = "Hviezdne brany";
             this.hviezdneBranyToolStripMenuItem.Click += new System.EventHandler(this.hviezdneBranyToolStripMenuItem_Click);
             // 
@@ -297,13 +299,13 @@
             this.stiahnutDataToolStripMenuItem,
             this.uploadnutDataToolStripMenuItem});
             this.onlineDatabazaToolStripMenuItem.Name = "onlineDatabazaToolStripMenuItem";
-            this.onlineDatabazaToolStripMenuItem.Size = new System.Drawing.Size(97, 20);
+            this.onlineDatabazaToolStripMenuItem.Size = new System.Drawing.Size(104, 20);
             this.onlineDatabazaToolStripMenuItem.Text = "Online databaza";
             // 
             // testSpojeniaToolStripMenuItem
             // 
             this.testSpojeniaToolStripMenuItem.Name = "testSpojeniaToolStripMenuItem";
-            this.testSpojeniaToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.testSpojeniaToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.testSpojeniaToolStripMenuItem.Text = "Test spojenia";
             this.testSpojeniaToolStripMenuItem.Click += new System.EventHandler(this.testSpojeniaToolStripMenuItem_Click);
             // 
@@ -313,20 +315,20 @@
             this.toolStripMenuItem1,
             this.odPoslednehoStiahnutiaToolStripMenuItem});
             this.stiahnutDataToolStripMenuItem.Name = "stiahnutDataToolStripMenuItem";
-            this.stiahnutDataToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.stiahnutDataToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.stiahnutDataToolStripMenuItem.Text = "Stiahnut data";
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(196, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(210, 22);
             this.toolStripMenuItem1.Text = "Od zaciatku veku";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // odPoslednehoStiahnutiaToolStripMenuItem
             // 
             this.odPoslednehoStiahnutiaToolStripMenuItem.Name = "odPoslednehoStiahnutiaToolStripMenuItem";
-            this.odPoslednehoStiahnutiaToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.odPoslednehoStiahnutiaToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.odPoslednehoStiahnutiaToolStripMenuItem.Text = "Od posledneho stiahnutia";
             this.odPoslednehoStiahnutiaToolStripMenuItem.Click += new System.EventHandler(this.odPoslednehoStiahnutiaToolStripMenuItem_Click);
             // 
@@ -336,20 +338,20 @@
             this.odZaciatkuVekuToolStripMenuItem,
             this.odPoslednehoUploaduToolStripMenuItem});
             this.uploadnutDataToolStripMenuItem.Name = "uploadnutDataToolStripMenuItem";
-            this.uploadnutDataToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.uploadnutDataToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.uploadnutDataToolStripMenuItem.Text = "Uploadnut data";
             // 
             // odZaciatkuVekuToolStripMenuItem
             // 
             this.odZaciatkuVekuToolStripMenuItem.Name = "odZaciatkuVekuToolStripMenuItem";
-            this.odZaciatkuVekuToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.odZaciatkuVekuToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.odZaciatkuVekuToolStripMenuItem.Text = "Od zaciatku veku";
             this.odZaciatkuVekuToolStripMenuItem.Click += new System.EventHandler(this.odZaciatkuVekuToolStripMenuItem_Click);
             // 
             // odPoslednehoUploaduToolStripMenuItem
             // 
             this.odPoslednehoUploaduToolStripMenuItem.Name = "odPoslednehoUploaduToolStripMenuItem";
-            this.odPoslednehoUploaduToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.odPoslednehoUploaduToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.odPoslednehoUploaduToolStripMenuItem.Text = "Od posledneho uploadu";
             this.odPoslednehoUploaduToolStripMenuItem.Click += new System.EventHandler(this.odPoslednehoUploaduToolStripMenuItem_Click);
             // 
@@ -358,13 +360,13 @@
             this.nastaveniaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.moznostiToolStripMenuItem});
             this.nastaveniaToolStripMenuItem.Name = "nastaveniaToolStripMenuItem";
-            this.nastaveniaToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.nastaveniaToolStripMenuItem.Size = new System.Drawing.Size(77, 20);
             this.nastaveniaToolStripMenuItem.Text = "Nastavenia";
             // 
             // moznostiToolStripMenuItem
             // 
             this.moznostiToolStripMenuItem.Name = "moznostiToolStripMenuItem";
-            this.moznostiToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.moznostiToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.moznostiToolStripMenuItem.Text = "Moznosti";
             this.moznostiToolStripMenuItem.Click += new System.EventHandler(this.moznostiToolStripMenuItem_Click);
             // 
@@ -436,7 +438,14 @@
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
             // 
-            // Form1
+            // odstranitStareZaznamyZDBToolStripMenuItem
+            // 
+            this.odstranitStareZaznamyZDBToolStripMenuItem.Name = "odstranitStareZaznamyZDBToolStripMenuItem";
+            this.odstranitStareZaznamyZDBToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.odstranitStareZaznamyZDBToolStripMenuItem.Text = "Odstranit stare zaznamy z DB";
+            this.odstranitStareZaznamyZDBToolStripMenuItem.Click += new System.EventHandler(this.odstranitStareZaznamyZDBToolStripMenuItem_Click);
+            // 
+            // HlavneOkno
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -466,7 +475,7 @@
             this.Controls.Add(this.Login);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "HlavneOkno";
             this.Text = "Hlavne okno";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
@@ -521,6 +530,7 @@
         private System.Windows.Forms.ToolStripMenuItem odPoslednehoUploaduToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hviezdneBranyToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripMenuItem odstranitStareZaznamyZDBToolStripMenuItem;
     }
 }
 
