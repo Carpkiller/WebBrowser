@@ -272,27 +272,38 @@ namespace WebBrowser
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            Task.Factory.StartNew(() => _jadro.StiahniOnlineData(Config.ZaciatokVeku));
+            //Task.Factory.StartNew(() => _jadro.StiahniOnlineData(Config.ZaciatokVeku));
+            Thread t = new Thread(() => _jadro.StiahniOnlineData(Config.ZaciatokVeku));
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
         }
 
         private void odPoslednehoStiahnutiaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var poslednyDownload = Config.PoslednyDownload ?? Config.ZaciatokVeku;
-            Task.Factory.StartNew(() => _jadro.StiahniOnlineData(poslednyDownload));
-            //_jadro.StiahniOnlineData(poslednyDownload);
+            //Task.Factory.StartNew(() => _jadro.StiahniOnlineData(poslednyDownload));
+            Thread t = new Thread(() => _jadro.StiahniOnlineData(poslednyDownload));
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
         }
 
         private void odZaciatkuVekuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Task.Factory.StartNew(() => _jadro.UploadOnlineData(Config.ZaciatokVeku));
+            //Task.Factory.StartNew(() => _jadro.UploadOnlineData(Config.ZaciatokVeku));
             //_jadro.UploadOnlineData(Config.ZaciatokVeku);
+            Thread t = new Thread(() => _jadro.UploadOnlineData(Config.ZaciatokVeku));
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
         }
 
         private void odPoslednehoUploaduToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var poslednyDownload = Config.PoslednyUpload ?? Config.ZaciatokVeku;
-            Task.Factory.StartNew(() => _jadro.UploadOnlineData(poslednyDownload));
+            //Task.Factory.StartNew(() => _jadro.UploadOnlineData(poslednyDownload));
             //_jadro.UploadOnlineData(poslednyDownload);
+            Thread t = new Thread(() => _jadro.UploadOnlineData(poslednyDownload));
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
         }
 
         private void hviezdneBranyToolStripMenuItem_Click(object sender, EventArgs e)
