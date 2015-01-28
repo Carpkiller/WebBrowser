@@ -1848,7 +1848,7 @@ namespace WebBrowser
                     }
                     catch (Exception fail)
                     {
-                        MessageBox.Show(fail.Message);
+                        MessageBox.Show(fail.Message, "Exception pri ukladani novych planet");
                     }
 
                     if (pocetUpdateRows == 0)
@@ -1872,7 +1872,7 @@ namespace WebBrowser
                         }
                         catch (Exception fail)
                         {
-                            MessageBox.Show(fail.Message);
+                            MessageBox.Show(fail.Message, "Exception pri ukladani novych planet, ak predtym ...");
                         }
                     }
                 }
@@ -1974,12 +1974,19 @@ namespace WebBrowser
 
             var list = new List<Planeta>();
 
+            //var sql =
+            //    "select * from planety p inner join (select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia," +
+            //    "typ,sektor as sektorr, idPlanety from planety where majitel in  " + hraciPov +
+            //    " and datumVlozenia >datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
+            //    "') and flagAktualny = '1') ss on (ss.poziciaa = p.pozicia and ss.sektorr=p.sektor)" +
+            //    "where p.majitel in " + hraciSuc;
+
             var sql =
-                "select * from planety p inner join (select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia," +
-                "typ,sektor as sektorr, idPlanety from planety where majitel in  " + hraciPov +
-                " and datumVlozenia >datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
-                "') and flagAktualny = '1') ss on (ss.poziciaa = p.pozicia and ss.sektorr=p.sektor)" +
-                "where p.majitel in " + hraciSuc;
+                "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia )," +
+                "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ) as poslMajitel  from " +
+                "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in " +
+                hraciSuc + " and flagAktualny = '1' and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
+                "') group by pozicia order by datumVlozenia desc) where poslMajitel in " + hraciPov + ";";
             try
             {
                 var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
@@ -1994,16 +2001,16 @@ namespace WebBrowser
                             while (reader.Read())
                             {
                                 var nazov = reader["nazov"].ToString();
-                                var majitel = reader["majitel"].ToString();
-                                var pozicia = reader["pozicia"].ToString();
-                                var c = reader.GetString(9);
+                                var majitel = reader["poslMajitel"].ToString();
+                                var pozicia = reader["poziciaa"].ToString();
+                                var c = reader.GetString(3);
                                 var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                                 var typ = reader["typ"].ToString();
-                                var sektor = reader["sektor"].ToString();
-                                //var pocetZmien = reader.GetInt32(6).ToString(CultureInfo.InvariantCulture);
-                                var pocetZmien = "-";
+                                var sektor = reader["sektorr"].ToString();
+                                var pocetZmien = reader.GetInt32(7).ToString(CultureInfo.InvariantCulture);
+                                var predch = reader["majitel"].ToString();
 
-                                list.Add(new Planeta(nazov, pozicia, majitel, datum, typ, sektor, pocetZmien));
+                                list.Add(new Planeta(nazov, pozicia, majitel, datum, typ, sektor, pocetZmien, predch));
                             }
                         }
                     }
