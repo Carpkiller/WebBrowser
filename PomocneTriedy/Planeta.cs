@@ -15,6 +15,7 @@ namespace WebBrowser.PomocneTriedy
         public string Vlozil { get; set; }
         public DateTime? DatumVlozenia { get; set; }
         public int PocetZmien { get; set; }
+        public string PredchMajitel { get; set; }
 
         public Planeta()
         {
@@ -48,7 +49,7 @@ namespace WebBrowser.PomocneTriedy
             PocetZmien = pocetZmien;
         }
 
-        public Planeta(string nazov, string pozicia, string majitel, DateTime datum, string typ, string sektor, string pocetZmien)
+        public Planeta(string nazov, string pozicia, string majitel, DateTime datum, string typ, string sektor, string pocetZmien, string predch)
         {
             Meno = nazov;
             Pozicia = pozicia;
@@ -56,7 +57,8 @@ namespace WebBrowser.PomocneTriedy
             Typ = typ;
             Sektor = sektor;
             DatumVlozenia = datum;
-            PocetZmien = int.Parse(pocetZmien);
+            PocetZmien = int.Parse(pocetZmien == "-" ? "0" : pocetZmien);
+            PredchMajitel = predch;
         }
 
         public bool Equals(Planeta other)

@@ -115,6 +115,17 @@ namespace WebBrowser.ChytanieNN
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = _listPlanet;
                 _pocetLoad = 1;
+
+                if (webBrowser1.Document.Body.InnerText.Contains("Byla koupena"))
+                {
+                    ZastavRefresh();
+                    _poc++;
+                }
+                else
+                {
+                    //_refreshovaciCas = 1;
+                }
+
                 if (_poc==1)
                 {
                     bool akcia = _jadro.CheckKupuPlanety(_listPlanet,textBoxCena.Text);
@@ -122,7 +133,21 @@ namespace WebBrowser.ChytanieNN
                     var ind = _jadro.VypocitajSkore(list);
                     if (akcia)
                     {
-                        var element = webBrowser1.Document.Body.GetElementsByTagName("input").GetElementsByName("pl_koupit")[ind*2+1];
+                        HtmlElement element;
+                        if (checkBoxObry.Checked)
+                        {
+                            var index = list.FindIndex(item => item.Typ.Contains("obr"));
+
+                            if (index == -1)
+                            {
+                                index = ind;
+                            }
+                            element = webBrowser1.Document.Body.GetElementsByTagName("input").GetElementsByName("pl_koupit")[index*2+1];
+                        }else
+                        {
+                            element = webBrowser1.Document.Body.GetElementsByTagName("input").GetElementsByName("pl_koupit")[ind*2+1];
+                        }
+                        
 
                         int vystx;
                         int vysty;
@@ -137,9 +162,7 @@ namespace WebBrowser.ChytanieNN
                         vysty = element.OffsetRectangle.Y;
 
                         var x = vystx + fmx + wbx;
-                        var y = vysty + fmy + SystemInformation.CaptionHeight + 55;//+ 75;
-                        
-                        ZastavRefresh();
+                        var y = vysty + fmy + SystemInformation.CaptionHeight + 55;//+ 75;                        
 
                         TopMost = true;
                         if (_uloz == 0)
@@ -177,8 +200,10 @@ namespace WebBrowser.ChytanieNN
                                     }
                                 }
                             }
-                            _poc++;
+                            //_poc++;
                         }
+
+                        _refreshovaciCas = 1;
                     }
                 }
             }

@@ -48,6 +48,7 @@ namespace WebBrowser.ChytanieNN
             this.textBoxRelatX = new System.Windows.Forms.TextBox();
             this.textBoxRelatY = new System.Windows.Forms.TextBox();
             this.checkBoxSuradniceRelativne = new System.Windows.Forms.CheckBox();
+            this.checkBoxObry = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -210,10 +211,21 @@ namespace WebBrowser.ChytanieNN
             this.checkBoxSuradniceRelativne.Text = "Pouzit relativne suradnice";
             this.checkBoxSuradniceRelativne.UseVisualStyleBackColor = true;
             // 
+            // checkBoxObry
+            // 
+            this.checkBoxObry.AutoSize = true;
+            this.checkBoxObry.Location = new System.Drawing.Point(462, 48);
+            this.checkBoxObry.Name = "checkBoxObry";
+            this.checkBoxObry.Size = new System.Drawing.Size(134, 17);
+            this.checkBoxObry.TabIndex = 17;
+            this.checkBoxObry.Text = "Kupovat obry ako prve";
+            this.checkBoxObry.UseVisualStyleBackColor = true;
+            // 
             // ChytanieNNForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1325, 472);
+            this.Controls.Add(this.checkBoxObry);
             this.Controls.Add(this.textBoxRelatX);
             this.Controls.Add(this.textBoxRelatY);
             this.Controls.Add(this.checkBoxSuradniceRelativne);
@@ -263,5 +275,6 @@ namespace WebBrowser.ChytanieNN
         private TextBox textBoxRelatX;
         private TextBox textBoxRelatY;
         private CheckBox checkBoxSuradniceRelativne;
+        private CheckBox checkBoxObry;
     }
 }

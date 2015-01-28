@@ -273,9 +273,10 @@ namespace WebBrowser
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
             //Task.Factory.StartNew(() => _jadro.StiahniOnlineData(Config.ZaciatokVeku));
-            Thread t = new Thread(() => _jadro.StiahniOnlineData(Config.ZaciatokVeku));
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
+            //Thread t = new Thread(() => _jadro.StiahniOnlineData(Config.ZaciatokVeku));
+            //t.SetApartmentState(ApartmentState.STA);
+            //t.Start();
+            _jadro.StiahniOnlineData(Config.ZaciatokVeku);
         }
 
         private void odPoslednehoStiahnutiaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -283,17 +284,17 @@ namespace WebBrowser
             var poslednyDownload = Config.PoslednyDownload ?? Config.ZaciatokVeku;
             //Task.Factory.StartNew(() => _jadro.StiahniOnlineData(poslednyDownload));
             Thread t = new Thread(() => _jadro.StiahniOnlineData(poslednyDownload));
-            t.SetApartmentState(ApartmentState.STA);
+            t.SetApartmentState(ApartmentState.MTA);
             t.Start();
         }
 
         private void odZaciatkuVekuToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Task.Factory.StartNew(() => _jadro.UploadOnlineData(Config.ZaciatokVeku));
-            //_jadro.UploadOnlineData(Config.ZaciatokVeku);
-            Thread t = new Thread(() => _jadro.UploadOnlineData(Config.ZaciatokVeku));
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
+            _jadro.UploadOnlineData(Config.ZaciatokVeku);
+            //Thread t = new Thread(() => _jadro.UploadOnlineData(Config.ZaciatokVeku));
+            //t.SetApartmentState(ApartmentState.STA);
+            //t.Start();
         }
 
         private void odPoslednehoUploaduToolStripMenuItem_Click(object sender, EventArgs e)
@@ -302,7 +303,7 @@ namespace WebBrowser
             //Task.Factory.StartNew(() => _jadro.UploadOnlineData(poslednyDownload));
             //_jadro.UploadOnlineData(poslednyDownload);
             Thread t = new Thread(() => _jadro.UploadOnlineData(poslednyDownload));
-            t.SetApartmentState(ApartmentState.STA);
+            t.SetApartmentState(ApartmentState.MTA);
             t.Start();
         }
 
