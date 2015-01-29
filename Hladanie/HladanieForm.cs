@@ -110,7 +110,7 @@ namespace WebBrowser.Hladanie
         {
             var hrac = textBox2.Text;
             var title = "Povodna rasa : " + comboBoxRasaPovodna.Text + " , sucasna rasa : "+comboBoxRasaSucasna.Text;
-            var detailPlanety = new PlanetaDetail(_jadro.NajdiZmenenePlanety(comboBoxRasaPovodna.Text, comboBoxRasaSucasna.Text), _jadro, title);
+            var detailPlanety = new PlanetaDetail(_jadro.NajdiZmenenePlanety(comboBoxRasaSucasna.Text, comboBoxRasaPovodna.Text), _jadro, title);
             detailPlanety.Show(this);
         }
     }
