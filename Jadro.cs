@@ -1982,9 +1982,11 @@ namespace WebBrowser
             //    "where p.majitel in " + hraciSuc;
 
             var sql =
-                "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia )," +
+                "select *, "+
+                "(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia )," +
+                "(select nazov as nazovv from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ) as nazov," +
                 "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ) as poslMajitel  from " +
-                "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in " +
+                "(select majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in " +
                 hraciSuc + " and flagAktualny = '1' and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
                 "') group by pozicia order by datumVlozenia desc) where poslMajitel in " + hraciPov + ";";
             try
@@ -2003,11 +2005,11 @@ namespace WebBrowser
                                 var nazov = reader["nazov"].ToString();
                                 var majitel = reader["poslMajitel"].ToString();
                                 var pozicia = reader["poziciaa"].ToString();
-                                var c = reader.GetString(3);
+                                var c = reader.GetString(2);
                                 var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                                 var typ = reader["typ"].ToString();
                                 var sektor = reader["sektorr"].ToString();
-                                var pocetZmien = reader.GetInt32(7).ToString(CultureInfo.InvariantCulture);
+                                var pocetZmien = reader.GetInt32(6).ToString(CultureInfo.InvariantCulture);
                                 var predch = reader["majitel"].ToString();
 
                                 list.Add(new Planeta(nazov, pozicia, majitel, datum, typ, sektor, pocetZmien, predch));
