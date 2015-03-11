@@ -136,7 +136,7 @@ namespace WebBrowser.ChytanieNN
                         HtmlElement element;
                         if (checkBoxObry.Checked)
                         {
-                            var index = list.FindIndex(item => item.Typ.Contains("obr"));
+                            var index = list.FindIndex(item => item.Typ.Contains("Naquadahový obr"));
 
                             if (index == -1)
                             {
@@ -203,7 +203,7 @@ namespace WebBrowser.ChytanieNN
                             //_poc++;
                         }
 
-                        _refreshovaciCas = 1;
+                        //_refreshovaciCas = 1;
                     }
                 }
             }
