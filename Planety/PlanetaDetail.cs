@@ -17,7 +17,7 @@ namespace WebBrowser.Planety
         private HladanieForm _hladanieForm;
         private bool _najdena;
 
-        public delegate void UkoncenieOkna();
+        public delegate string UkoncenieOkna(string typ);
         public event UkoncenieOkna KoniecOkna;
 
         public PlanetaDetail()
@@ -93,7 +93,7 @@ namespace WebBrowser.Planety
             else
             {
                 _jadro.ZmenaPlanety -= ZobrazTypPlanety;
-                MessageBox.Show(@"Neznama chyba",@"Najdene planety",MessageBoxButtons.OK,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button1);
+                MessageBox.Show(@"Nemate dost druzic alebo dosli utoky",@"Najdene planety",MessageBoxButtons.OK,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button1);
             }
             
         }
@@ -107,7 +107,7 @@ namespace WebBrowser.Planety
         private void PlanetaDetail_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (KoniecOkna != null && _najdena)
-                KoniecOkna();
+                KoniecOkna(_typPlanety.Replace("Výsledek průzkumu: ", ""));
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)

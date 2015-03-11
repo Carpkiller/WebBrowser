@@ -13,6 +13,8 @@ namespace WebBrowser.Sektory
         private readonly string _rasa;
         private readonly string _sektor;
         private int _firstDisplayedRow;
+        private SektorPlanety _hladanaPLaneta;
+        private int _selectedRow;
 
         public ZoznamHracovForm(string sektor, Jadro jadro, string title)
         {
@@ -46,14 +48,21 @@ namespace WebBrowser.Sektory
             zoznamHracovForm.KoniecOkna += RefreshOkno;
             zoznamHracovForm.Show();
             _firstDisplayedRow = dataGridView1.FirstDisplayedScrollingRowIndex;
+            //_hladanaPLaneta = ((List<SektorPlanety>)dataGridView1.DataSource)[dataGridView1.CurrentRow.Index];
+            _selectedRow = dataGridView1.CurrentRow.Index;
+
         }
 
-        private void RefreshOkno()
+        private string RefreshOkno(string typ)
         {
             if (_rasa != null)
             {
-                _jadro.UkoncenieHladaniePlanetRasy += KoniecHladaniaPlanetRasy;
-                _jadro.VypisPlanetyRasy(_rasa, int.Parse(_sektor));
+                var planety = (List<SektorPlanety>)dataGridView1.DataSource;
+                planety[_selectedRow].Typ = typ;
+                dataGridView1.DataSource = null;
+                dataGridView1.DataSource = planety;
+                //_jadro.UkoncenieHladaniePlanetRasy += KoniecHladaniaPlanetRasy;
+                //_jadro.VypisPlanetyRasy(_rasa, int.Parse(_sektor));
                 dataGridView1.FirstDisplayedScrollingRowIndex = _firstDisplayedRow;
             }
             else if (_sektor != null)
@@ -61,13 +70,15 @@ namespace WebBrowser.Sektory
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = _jadro.ZobrazSektor(_sektor);
             }
-            
+
+            return string.Empty;
         }
 
         private void KoniecHladaniaPlanetRasy()
         {
             Invoke((MethodInvoker)(() =>
             {
+                dataGridView1.DataSource = null;
                 dataGridView1.DataSource = _jadro.NajdenePlanety.OrderByDescending(x => x.Sektor).ThenBy(x => x.Meno).ToList();
                 _jadro.UkoncenieHladaniePlanetRasy -= KoniecHladaniaPlanetRasy;
                 dataGridView1.FirstDisplayedScrollingRowIndex = _firstDisplayedRow;
