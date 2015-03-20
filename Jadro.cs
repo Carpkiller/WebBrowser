@@ -1187,7 +1187,7 @@ namespace WebBrowser
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                //MessageBox.Show(e.Message);
                 return new List<Planeta>();
             }
         }
@@ -1899,9 +1899,14 @@ namespace WebBrowser
             return list;
         }
 
-        public string ExportPlanetString(object dataSource)
+        public string ExportPlanetString(object dataSource, bool meno, bool sektor, bool typ)
         {
             var list = ((List<SektorPlanety>) dataSource).OrderBy(x => x.Majitel);
+
+            if (typ)
+            {
+                return list.Where(x => x.Typ != string.Empty).Aggregate("", (current, planeta) => current + (planeta.Sektor + " - " + planeta.Majitel + " - " + planeta.Meno + (!string.IsNullOrEmpty(planeta.Typ) ? " ,typ planety - " + planeta.Typ : string.Empty) + Environment.NewLine));
+            }
 
             return list.Aggregate("", (current, planeta) => current + (planeta.Sektor + " - " + planeta.Majitel + " - " + planeta.Meno + (!string.IsNullOrEmpty(planeta.Typ) ? " ,typ planety - " + planeta.Typ : string.Empty) + Environment.NewLine));
         }

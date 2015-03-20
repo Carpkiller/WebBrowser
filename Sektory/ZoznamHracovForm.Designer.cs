@@ -30,6 +30,9 @@
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
+            this.checkBoxMeno = new System.Windows.Forms.CheckBox();
+            this.checkBoxSektor = new System.Windows.Forms.CheckBox();
+            this.checkBoxTyp = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,11 +59,51 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // checkBoxMeno
+            // 
+            this.checkBoxMeno.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxMeno.AutoSize = true;
+            this.checkBoxMeno.Checked = true;
+            this.checkBoxMeno.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxMeno.Location = new System.Drawing.Point(135, 319);
+            this.checkBoxMeno.Name = "checkBoxMeno";
+            this.checkBoxMeno.Size = new System.Drawing.Size(94, 17);
+            this.checkBoxMeno.TabIndex = 2;
+            this.checkBoxMeno.Text = "Meno + nazov";
+            this.checkBoxMeno.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxSektor
+            // 
+            this.checkBoxSektor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxSektor.AutoSize = true;
+            this.checkBoxSektor.Checked = true;
+            this.checkBoxSektor.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxSektor.Location = new System.Drawing.Point(245, 319);
+            this.checkBoxSektor.Name = "checkBoxSektor";
+            this.checkBoxSektor.Size = new System.Drawing.Size(57, 17);
+            this.checkBoxSektor.TabIndex = 3;
+            this.checkBoxSektor.Text = "Sektor";
+            this.checkBoxSektor.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxTyp
+            // 
+            this.checkBoxTyp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxTyp.AutoSize = true;
+            this.checkBoxTyp.Location = new System.Drawing.Point(328, 319);
+            this.checkBoxTyp.Name = "checkBoxTyp";
+            this.checkBoxTyp.Size = new System.Drawing.Size(81, 17);
+            this.checkBoxTyp.TabIndex = 4;
+            this.checkBoxTyp.Text = "Typ planety";
+            this.checkBoxTyp.UseVisualStyleBackColor = true;
+            // 
             // ZoznamHracovForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(812, 344);
+            this.Controls.Add(this.checkBoxTyp);
+            this.Controls.Add(this.checkBoxSektor);
+            this.Controls.Add(this.checkBoxMeno);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
             this.Name = "ZoznamHracovForm";
@@ -68,6 +111,7 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ZoznamHracovForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -75,5 +119,8 @@
 
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox checkBoxMeno;
+        private System.Windows.Forms.CheckBox checkBoxSektor;
+        private System.Windows.Forms.CheckBox checkBoxTyp;
     }
 }

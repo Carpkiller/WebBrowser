@@ -92,7 +92,7 @@ namespace WebBrowser.Sektory
 
         private void button1_Click(object sender, System.EventArgs e)
         {
-            ExportForm exportForm = new ExportForm(_jadro.ExportPlanetString(dataGridView1.DataSource));
+            ExportForm exportForm = new ExportForm(_jadro.ExportPlanetString(dataGridView1.DataSource, checkBoxMeno.Checked, checkBoxSektor.Checked, checkBoxTyp.Checked));
             exportForm.Show();
         }
     }
