@@ -13,6 +13,7 @@ using WebBrowser.Hviezdne_brany;
 using WebBrowser.PomocneTriedy;
 using WebBrowser.Sektory;
 using WebBrowser.StavbaPO;
+using WebBrowser.WarMod;
 
 
 namespace WebBrowser
@@ -342,6 +343,29 @@ namespace WebBrowser
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
             return tcs.Task;
+        }
+
+        private void warModToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (warModToolStripMenuItem.Text == "War mod")
+            {
+                warModToolStripMenuItem.Text = "War mod - vypnut";
+                WarMode wm = new WarMode();
+                wm.ShowDialog();
+                if (wm.DialogResult == DialogResult.OK)
+                {
+                    _jadro.SpustWarMod(wm.RefreshovaciCas, wm.MnozstvoNaqu);
+                }
+                if (wm.DialogResult == DialogResult.Cancel)
+                {
+                    _jadro.VypniWarMod();
+                }
+            }
+            else if (warModToolStripMenuItem.Text == "War mod - vypnut")
+            {
+                warModToolStripMenuItem.Text = "War mod";
+                _jadro.VypniWarMod();
+            }
         }
     }
 }

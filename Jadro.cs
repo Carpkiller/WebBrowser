@@ -74,7 +74,8 @@ namespace WebBrowser
         public List<Planeta> KoniecVlaknaList { get; set; }
         public List<SektorPlanety> NajdenePlanety { get; set; }
         public Planeta HladanaPlaneta { get; set; }
-
+        private int WarMode = 0;
+        
         public Jadro(System.Windows.Forms.WebBrowser wb, HlavneOkno form1)
         {
             Wb = wb;
@@ -389,9 +390,16 @@ namespace WebBrowser
 
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            var o =
-                ((System.Windows.Forms.WebBrowser) (sender)).Document.Body.InnerHtml;
-            UlozData(o, "vesmir.php?page=3");
+            if (WarMode == 0)
+            {
+                var o =
+                ((System.Windows.Forms.WebBrowser)(sender)).Document.Body.InnerHtml;
+                UlozData(o, "vesmir.php?page=3");
+            }
+            if (WarMode == 1)
+            {
+                SkontrolujStav();
+            }
         }
 
         private List<CelkovaTabulka> parsujRasy(string innerHtml)
@@ -2111,6 +2119,169 @@ namespace WebBrowser
             }
 
             return true;
+        }
+
+        public void SpustWarMod(int refreshovaciCas, int mnozstvoNaqu)
+        {
+            WarMode = 1;
+            HranicneMnozstvoNaqu = mnozstvoNaqu;
+            Wb.DocumentCompleted +=
+                    new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
+            wbNezamestnany = new System.Windows.Forms.WebBrowser();
+            wbNezamestnany.ScriptErrorsSuppressed = true;
+            wbNezamestnany.DocumentCompleted +=
+                    new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.wbNezamestnany_DocumentCompleted);
+            wbNezamestnany.Navigate("http://www.stargate-game.cz/obchod.php?page=8");
+            while (true)
+            {
+                Application.DoEvents();
+                if (wbNezamestnany.ReadyState == WebBrowserReadyState.Complete)
+                    break;
+            }
+
+            Thread t = new Thread(() => SpustHlavnyRefresh(refreshovaciCas));
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+        }
+
+        public int HranicneMnozstvoNaqu { get; set; }
+        private System.Windows.Forms.WebBrowser wbNezamestnany;
+
+        private void SpustHlavnyRefresh(int refreshovaciCas)
+        {
+            while (WarMode == 1)
+            {
+                Wb.Refresh();
+                //wbNezamestnany.Refresh();
+                Thread.Sleep(refreshovaciCas*1000);
+            }
+        }
+
+        private void wbNezamestnany_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            var c = wbNezamestnany.Document.GetElementsByTagName("input");
+            var d = c.GetElementsByName("koupit_nez");
+
+            if (d.Count > 0)
+            {
+                d[0].InvokeMember("Click");
+                Console.WriteLine("Nakup nezamestnanych ... ");
+            }
+        }
+
+        public void VypniWarMod()
+        {
+            WarMode = 0;
+            Wb.DocumentCompleted -=
+                    new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
+            wbNezamestnany.DocumentCompleted -=
+                    new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.wbNezamestnany_DocumentCompleted);
+        }
+
+        private void SkontrolujStav()
+        {
+            try
+            {  // Probíhá údržba
+                if (Wb.Document.Body.InnerText.Contains("Probíhá údržba") || 
+                    //Wb.Document.Window.Frames[1].Document.Body.InnerText.Contains("Probíhá údržba") ||
+                    Wb.Document.Body.InnerText.Contains("Váš profil byl pro neaktivitu odhlášen"))
+                {
+                    Wb.Navigate("http://www.stargate-game.cz/index.php");
+                    while (true)
+                    {
+                        Application.DoEvents();
+                        if (!string.IsNullOrEmpty(Wb.StatusText) && !Wb.StatusText.Contains("index"))
+                            break;
+                    }
+                }
+                else if (Wb.Url.AbsoluteUri == "http://www.stargate-game.cz/index.php")
+                {
+                    Wb.Document.GetElementById("log-jmeno").SetAttribute("value", User);
+                    Wb.Document.GetElementById("log-heslo").SetAttribute("value", Heslo);
+                    var c = Wb.Document.GetElementsByTagName("input");
+                    var d = c.GetElementsByName("prihlasit");
+
+                    d[1].InvokeMember("Click");
+                    Console.WriteLine("Opakovany login ... ");
+                }
+                else if (Wb.Document.Window.Frames[1].Document.Url.AbsoluteUri ==
+                         "http://www.stargate-game.cz/neaktivita")
+                {
+                    Wb.Navigate("http://www.stargate-game.cz/index.php");
+                    while (true)
+                    {
+                        Application.DoEvents();
+                        if (!string.IsNullOrEmpty(Wb.StatusText) && !Wb.StatusText.Contains("index"))
+                            break;
+                    }
+                }
+                else if (Wb.Document.Window.Frames[1].Document.Body != null)
+                {
+                    var g = Wb.Document.Window.Frames[1].Document.Body.InnerText;
+                    var naq =
+                        int.Parse(g.Substring(g.IndexOf("Naquadah") + 8,
+                            g.IndexOf(" kg", g.IndexOf("Naquadah")) - g.IndexOf("Naquadah") - 8)
+                            .Replace(" ", ""));
+                    if (naq > HranicneMnozstvoNaqu)
+                    {
+                        OdosliNaqDoFondu(naq);
+                    }
+
+                   // SkontrolujLudi();
+
+                } // http://www.stargate-game.cz/neaktivita
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void SkontrolujLudi()
+        {
+            try
+            {
+                var c = wbNezamestnany.Document.GetElementsByTagName("input");
+                var d = c.GetElementsByName("koupit_nez");
+
+                if (d.Count > 0)
+                {
+                    d[0].InvokeMember("Click");
+                    Console.WriteLine("Nakup nezamestnanych ... ");
+                }
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void OdosliNaqDoFondu(int naq)
+        {
+            var wbFond = new System.Windows.Forms.WebBrowser
+            {
+                Url = new Uri("http://www.stargate-game.cz/fond.php")
+            };
+            wbFond.Navigate(new Uri("http://www.stargate-game.cz/fond.php"));
+
+            //wb1.DocumentCompleted += webBrowser2_DocumentCompleted;
+
+            while (true)
+            {
+                Application.DoEvents();
+                if (!string.IsNullOrEmpty(wbFond.StatusText) && !wbFond.StatusText.Contains("fond"))
+                    break;
+            }
+
+
+            CultureInfo elGR = CultureInfo.CreateSpecificCulture("el-GR");
+
+            wbFond.Document.GetElementById("naq-fond").SetAttribute("value", naq.ToString());
+            //wbJednotky.Document.GetElementById("jed4").SetAttribute("value", pocty.Elitaci);
+            //wbFond.Document.GetElementsByTagName("input").GetElementsByName("fond_vlozit")[0].SetAttribute("value", pocty.Meno);
+            var d = wbFond.Document.GetElementsByTagName("input").GetElementsByName("fond_vlozit");
+
+            d[0].InvokeMember("Click");
         }
     }
 }

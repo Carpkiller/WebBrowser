@@ -50,6 +50,7 @@
             this.vytvoritZalohuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chytanieTrolovToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hviezdneBranyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.odstranitStareZaznamyZDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.onlineDatabazaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testSpojeniaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stiahnutDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +69,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.odstranitStareZaznamyZDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.warModToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -127,7 +128,7 @@
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.ScriptErrorsSuppressed = true;
-            this.webBrowser1.Size = new System.Drawing.Size(973, 586);
+            this.webBrowser1.Size = new System.Drawing.Size(907, 586);
             this.webBrowser1.TabIndex = 6;
             this.webBrowser1.Url = new System.Uri("http://www.stargate-game.cz/index.php", System.UriKind.Absolute);
             this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
@@ -156,7 +157,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(991, 225);
+            this.label3.Location = new System.Drawing.Point(925, 225);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(107, 13);
             this.label3.TabIndex = 9;
@@ -167,7 +168,7 @@
             this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(994, 241);
+            this.dataGridView1.Location = new System.Drawing.Point(928, 241);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(422, 406);
             this.dataGridView1.TabIndex = 10;
@@ -176,7 +177,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(994, 32);
+            this.button1.Location = new System.Drawing.Point(928, 32);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(422, 32);
             this.button1.TabIndex = 13;
@@ -207,7 +208,7 @@
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(994, 150);
+            this.button3.Location = new System.Drawing.Point(928, 150);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(147, 62);
             this.button3.TabIndex = 16;
@@ -218,7 +219,7 @@
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(1285, 150);
+            this.button4.Location = new System.Drawing.Point(1219, 150);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(131, 62);
             this.button4.TabIndex = 17;
@@ -229,7 +230,7 @@
             // button5
             // 
             this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.Location = new System.Drawing.Point(1147, 150);
+            this.button5.Location = new System.Drawing.Point(1081, 150);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(131, 62);
             this.button5.TabIndex = 18;
@@ -240,7 +241,7 @@
             // buttonVyvrhel
             // 
             this.buttonVyvrhel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonVyvrhel.Location = new System.Drawing.Point(1284, 70);
+            this.buttonVyvrhel.Location = new System.Drawing.Point(1218, 70);
             this.buttonVyvrhel.Name = "buttonVyvrhel";
             this.buttonVyvrhel.Size = new System.Drawing.Size(131, 62);
             this.buttonVyvrhel.TabIndex = 19;
@@ -256,7 +257,7 @@
             this.nastaveniaToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1428, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1362, 24);
             this.menuStrip1.TabIndex = 20;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -265,6 +266,7 @@
             this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.vytvoritZalohuToolStripMenuItem,
             this.chytanieTrolovToolStripMenuItem,
+            this.warModToolStripMenuItem,
             this.hviezdneBranyToolStripMenuItem,
             this.odstranitStareZaznamyZDBToolStripMenuItem});
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
@@ -291,6 +293,13 @@
             this.hviezdneBranyToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.hviezdneBranyToolStripMenuItem.Text = "Hviezdne brany";
             this.hviezdneBranyToolStripMenuItem.Click += new System.EventHandler(this.hviezdneBranyToolStripMenuItem_Click);
+            // 
+            // odstranitStareZaznamyZDBToolStripMenuItem
+            // 
+            this.odstranitStareZaznamyZDBToolStripMenuItem.Name = "odstranitStareZaznamyZDBToolStripMenuItem";
+            this.odstranitStareZaznamyZDBToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.odstranitStareZaznamyZDBToolStripMenuItem.Text = "Odstranit stare zaznamy z DB";
+            this.odstranitStareZaznamyZDBToolStripMenuItem.Click += new System.EventHandler(this.odstranitStareZaznamyZDBToolStripMenuItem_Click);
             // 
             // onlineDatabazaToolStripMenuItem
             // 
@@ -374,7 +383,7 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(991, 86);
+            this.label4.Location = new System.Drawing.Point(925, 86);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(117, 13);
             this.label4.TabIndex = 0;
@@ -384,7 +393,7 @@
             // 
             this.labelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelInfo.AutoSize = true;
-            this.labelInfo.Location = new System.Drawing.Point(1108, 225);
+            this.labelInfo.Location = new System.Drawing.Point(1042, 225);
             this.labelInfo.Name = "labelInfo";
             this.labelInfo.Size = new System.Drawing.Size(0, 13);
             this.labelInfo.TabIndex = 11;
@@ -393,7 +402,7 @@
             // 
             this.labelInfoPlanety.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelInfoPlanety.AutoSize = true;
-            this.labelInfoPlanety.Location = new System.Drawing.Point(1167, 86);
+            this.labelInfoPlanety.Location = new System.Drawing.Point(1101, 86);
             this.labelInfoPlanety.Name = "labelInfoPlanety";
             this.labelInfoPlanety.Size = new System.Drawing.Size(0, 13);
             this.labelInfoPlanety.TabIndex = 1;
@@ -402,7 +411,7 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(991, 119);
+            this.label5.Location = new System.Drawing.Point(925, 119);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(88, 13);
             this.label5.TabIndex = 21;
@@ -411,7 +420,7 @@
             // dateTimePicker1
             // 
             this.dateTimePicker1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.dateTimePicker1.Location = new System.Drawing.Point(1085, 112);
+            this.dateTimePicker1.Location = new System.Drawing.Point(1019, 112);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(189, 20);
             this.dateTimePicker1.TabIndex = 22;
@@ -424,7 +433,7 @@
             this.toolStripStatusLabel2});
             this.statusStrip1.Location = new System.Drawing.Point(0, 650);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1428, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1362, 22);
             this.statusStrip1.TabIndex = 23;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -438,18 +447,18 @@
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
             // 
-            // odstranitStareZaznamyZDBToolStripMenuItem
+            // warModToolStripMenuItem
             // 
-            this.odstranitStareZaznamyZDBToolStripMenuItem.Name = "odstranitStareZaznamyZDBToolStripMenuItem";
-            this.odstranitStareZaznamyZDBToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
-            this.odstranitStareZaznamyZDBToolStripMenuItem.Text = "Odstranit stare zaznamy z DB";
-            this.odstranitStareZaznamyZDBToolStripMenuItem.Click += new System.EventHandler(this.odstranitStareZaznamyZDBToolStripMenuItem_Click);
+            this.warModToolStripMenuItem.Name = "warModToolStripMenuItem";
+            this.warModToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.warModToolStripMenuItem.Text = "War mod";
+            this.warModToolStripMenuItem.Click += new System.EventHandler(this.warModToolStripMenuItem_Click);
             // 
             // HlavneOkno
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1428, 672);
+            this.ClientSize = new System.Drawing.Size(1362, 672);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.label5);
@@ -531,6 +540,7 @@
         private System.Windows.Forms.ToolStripMenuItem hviezdneBranyToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripMenuItem odstranitStareZaznamyZDBToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem warModToolStripMenuItem;
     }
 }
 

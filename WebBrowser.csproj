@@ -180,6 +180,12 @@
     <Compile Include="StavbaPO\StavbaPOForm.Designer.cs">
       <DependentUpon>StavbaPOForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="WarMod\WarMode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WarMod\WarMode.Designer.cs">
+      <DependentUpon>WarMode.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="BrowserForm\DefaultBrowser.resx">
       <DependentUpon>DefaultBrowser.cs</DependentUpon>
     </EmbeddedResource>
@@ -234,6 +240,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StavbaPO\StavbaPOForm.resx">
       <DependentUpon>StavbaPOForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WarMod\WarMode.resx">
+      <DependentUpon>WarMode.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
