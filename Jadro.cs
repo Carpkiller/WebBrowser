@@ -2283,6 +2283,34 @@ namespace WebBrowser
 
             d[0].InvokeMember("Click");
         }
+
+        public Dictionary<string, int> VytvorOnlineStatistiky()
+        {
+            var dict = new Dictionary<string,int>();
+
+            if (CheckSpojenie())
+            {
+                var sql = "select * from planety where datumVlozenia > STR_TO_DATE('" +
+                          Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") + "', '%Y-%m-%d %H:%i:%s' );";
+
+                var databaza = new DBConnect();
+                var prijatePlanety = databaza.Select(sql);
+
+                foreach (var planeta in prijatePlanety)
+                {
+                    if (dict.ContainsKey(planeta.Vlozil))
+                    {
+                        dict[planeta.Vlozil]++;
+                    }
+                    else
+                    {
+                        dict.Add(planeta.Vlozil, 1);
+                    }
+                }
+            }
+
+            return dict;
+        }
     }
 }
 

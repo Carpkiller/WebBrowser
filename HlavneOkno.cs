@@ -14,6 +14,7 @@ using WebBrowser.PomocneTriedy;
 using WebBrowser.Sektory;
 using WebBrowser.StavbaPO;
 using WebBrowser.WarMod;
+using WebBrowser.OnlineStatistiky;
 
 
 namespace WebBrowser
@@ -366,6 +367,12 @@ namespace WebBrowser
                 warModToolStripMenuItem.Text = "War mod";
                 _jadro.VypniWarMod();
             }
+        }
+
+        private void statistikyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var os = new OnlineStatistikyForm(_jadro);
+            os.Show();
         }
     }
 }

@@ -106,8 +106,14 @@ namespace WebBrowser.Planety
 
         private void PlanetaDetail_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (KoniecOkna != null && _najdena)
-                KoniecOkna(_typPlanety.Replace("Výsledek průzkumu: ", ""));
+            try
+            {
+                if (KoniecOkna != null && _najdena)
+                    KoniecOkna(_typPlanety.Replace("Výsledek průzkumu: ", ""));
+            }
+            catch
+            {
+            }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)

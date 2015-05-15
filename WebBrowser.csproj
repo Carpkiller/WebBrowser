@@ -151,6 +151,12 @@
       <DependentUpon>CestaDatabaza.cs</DependentUpon>
     </Compile>
     <Compile Include="OnlineDatabaza\DBConnect.cs" />
+    <Compile Include="OnlineStatistiky\OnlineStatistikyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OnlineStatistiky\OnlineStatistikyForm.Designer.cs">
+      <DependentUpon>OnlineStatistikyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Planety\PlanetaDetail.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -221,6 +227,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Nastavenia\CestaDatabaza.resx">
       <DependentUpon>CestaDatabaza.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OnlineStatistiky\OnlineStatistikyForm.resx">
+      <DependentUpon>OnlineStatistikyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Planety\PlanetaDetail.resx">
       <DependentUpon>PlanetaDetail.cs</DependentUpon>

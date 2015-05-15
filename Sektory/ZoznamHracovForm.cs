@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using WebBrowser.Export;
@@ -87,7 +88,13 @@ namespace WebBrowser.Sektory
 
         private void ZoznamHracovForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _jadro.UkoncenieHladaniePlanetRasy -= KoniecHladaniaPlanetRasy;
+            try
+            {
+                _jadro.UkoncenieHladaniePlanetRasy -= KoniecHladaniaPlanetRasy;
+            }
+            catch
+            {
+            }
         }
 
         private void button1_Click(object sender, System.EventArgs e)
