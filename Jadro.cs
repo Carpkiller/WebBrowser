@@ -269,7 +269,8 @@ namespace WebBrowser
                             }
                             cnn.Close();
                         }
-                        Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " + listNaUlozenie.Count);
+                        Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " +
+                                          listNaUlozenie.Count);
                     }
                     catch (Exception fail)
                     {
@@ -278,6 +279,31 @@ namespace WebBrowser
                     query = string.Empty;
                     zaciatok = true;
                 }
+            }
+
+
+
+            using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+            {
+                cnn.Open();
+                foreach (var planeta in listNaZmazanie)
+                {
+                    try
+                    {
+                        query = "UPDATE Planety SET flagaktualny = 0 where idplanety = " + planeta.Id;
+                        using (var mycommand = new SQLiteCommand(query, cnn))
+                        {
+                            mycommand.ExecuteNonQuery();
+                        }
+                        Console.WriteLine("Update flag - planeta -> " + planeta.Meno + " ,majitel : " + planeta.Majitel);
+                    }
+
+                    catch (Exception fail)
+                    {
+                        MessageBox.Show(fail.Message);
+                    }
+                } 
+                cnn.Close();
             }
 
             try
@@ -291,7 +317,8 @@ namespace WebBrowser
                     }
                     cnn.Close();
                 }
-                Console.WriteLine("Ukladanie do DB -- sektor -> " + sektorCislo + " ,pocet zaznamov : " + listNaUlozenie.Count);
+                Console.WriteLine("Ukladanie do DB -- sektor -> " + sektorCislo + " ,pocet zaznamov : " +
+                                  listNaUlozenie.Count);
             }
             catch (Exception fail)
             {
@@ -470,6 +497,8 @@ namespace WebBrowser
             var list = new List<Planeta>();
             var pomList = LoadPlanety();
             var listPlan = pomList.Where(x => x.Sektor == listPlanety.FirstOrDefault().Sektor && x.DatumVlozenia > Config.ZaciatokVeku).ToList();
+
+            listPlanety.RemoveAt(0);
 
             foreach (var planeta in listPlan)
             {
@@ -669,7 +698,10 @@ namespace WebBrowser
                         doc.DocumentNode.ChildNodes[0].ChildNodes[0].ChildNodes[i*2 + 1].ChildNodes[5].InnerText.Replace
                             (" ", ""),
                         doc.DocumentNode.ChildNodes[0].ChildNodes[0].ChildNodes[i*2 + 1].ChildNodes[9].InnerText,
-                        doc.DocumentNode.ChildNodes[0].ChildNodes[0].ChildNodes[i * 2 + 1].ChildNodes[3].InnerHtml.Substring(doc.DocumentNode.ChildNodes[0].ChildNodes[0].ChildNodes[i * 2 + 1].ChildNodes[3].InnerHtml.IndexOf("id_hrac=")+8,7)));
+                        doc.DocumentNode.ChildNodes[0].ChildNodes[0].ChildNodes[i*2 + 1].ChildNodes[3].InnerHtml
+                            .Substring(
+                                doc.DocumentNode.ChildNodes[0].ChildNodes[0].ChildNodes[i*2 + 1].ChildNodes[3].InnerHtml
+                                    .IndexOf("id_hrac=") + 8, 7)));
             }
 
             return list;
@@ -748,10 +780,12 @@ namespace WebBrowser
         public List<SektorPlanety> ZobrazSektor(string sektor)
         {
             var list = new List<SektorPlanety>();
-
+            List<SektorPlanety> pomList;
             var sql =
                 "select nazov,majitel,pozicia,datetime(datumVlozenia) as datumVlozenia,typ,sektor,count(majitel) as pocetZmien from planety where sektor = '" +
-                sektor + "' and flagAktualny = '1' and datumVlozenia > datetime('" +Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") + "') group by pozicia;";
+                sektor + "' and " +
+                //"flagAktualny = '1' and " +
+                "datumVlozenia > datetime('" +Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") + "') group by pozicia;";
 
             try
             {
@@ -777,6 +811,27 @@ namespace WebBrowser
                             }
                         }
                     }
+                    sql = "select nazov,majitel,pozicia,datetime(datumVlozenia) as datumVlozenia,typ,sektor,0 as pocetZmien from planety where sektor = '" + sektor + "' and flagAktualny = '1' and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") + "') group by pozicia;";
+                    pomList = new List<SektorPlanety>();
+                    using (SQLiteCommand mycommand = new SQLiteCommand(sql, cnn))
+                    {
+                        using (SQLiteDataReader reader = mycommand.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var nazov = reader["nazov"].ToString();
+                                var majitel = reader["majitel"].ToString();
+                                var pozicia = reader["pozicia"].ToString();
+                                var c = reader.GetString(3);
+                                var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                var typ = reader["typ"].ToString();
+                                //var sektorPlan = reader["sektor"].ToString();
+                                var pocetZmien = reader["pocetZmien"].ToString();
+
+                                pomList.Add(new SektorPlanety(nazov, pozicia, majitel, datum, typ, sektor, pocetZmien));
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception e)
@@ -784,7 +839,14 @@ namespace WebBrowser
                 throw new Exception(e.Message);
             }
 
-            return list;
+            var result = (from l1 in list
+                          join l2 in pomList on new { l1.Pozicia }
+                          equals new { l2.Pozicia }
+                          select l1).ToList();
+
+            //var authorsList = list.Where(x => x.Pozicia.Contains(pomList.)).ToList();
+
+            return result;
 
         }
 
@@ -2290,8 +2352,9 @@ namespace WebBrowser
 
             if (CheckSpojenie())
             {
-                var sql = "select * from planety where datumVlozenia > STR_TO_DATE('" +
-                          Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") + "', '%Y-%m-%d %H:%i:%s' );";
+                var sql = "select * from planety where datumVlozenia > STR_TO_DATE('" +Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") + "', '%Y-%m-%d %H:%i:%s' );";
+
+                //var sql = "delete from planety where datumVlozenia > STR_TO_DATE('" +Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") + "', '%Y-%m-%d %H:%i:%s' );";
 
                 var databaza = new DBConnect();
                 var prijatePlanety = databaza.Select(sql);
