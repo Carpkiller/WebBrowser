@@ -528,11 +528,11 @@ namespace WebBrowser
             {
                 var index = innerHtml.IndexOf("planeta=");
                 var id = innerHtml.Substring(index + 8, 7);
-                index = innerHtml.IndexOf("title=");
-                var koncIndex = innerHtml.IndexOf(" - ");
-                var planeta = innerHtml.Substring(index + 15, koncIndex - index - 15);
-                index = innerHtml.IndexOf("shape=circle");
-                var majitel = innerHtml.Substring(koncIndex + 3, index - koncIndex - 5);
+                index = innerHtml.IndexOf("Detail planety - Název:");
+                var koncIndex = innerHtml.IndexOf(" <br />",index);
+                var planeta = innerHtml.Substring(index + 24, koncIndex - index - 15 - 9);
+                index = innerHtml.IndexOf("\">", koncIndex);
+                var majitel = innerHtml.Substring(koncIndex + 13, index - koncIndex - 5 - 8);
                 index = innerHtml.IndexOf("coords");
                 koncIndex = innerHtml.IndexOf('"', index + 9);
                 var pozicia = innerHtml.Substring(index + 8, (koncIndex - index - 8));
