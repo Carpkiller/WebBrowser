@@ -49,6 +49,8 @@ namespace WebBrowser.ChytanieNN
             this.textBoxRelatY = new System.Windows.Forms.TextBox();
             this.checkBoxSuradniceRelativne = new System.Windows.Forms.CheckBox();
             this.checkBoxObry = new System.Windows.Forms.CheckBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.checkBoxIbaObry = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -221,10 +223,32 @@ namespace WebBrowser.ChytanieNN
             this.checkBoxObry.Text = "Kupovat obry ako prve";
             this.checkBoxObry.UseVisualStyleBackColor = true;
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(1168, 9);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(145, 23);
+            this.button3.TabIndex = 18;
+            this.button3.Text = "Nastavenie";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // checkBoxIbaObry
+            // 
+            this.checkBoxIbaObry.AutoSize = true;
+            this.checkBoxIbaObry.Location = new System.Drawing.Point(612, 48);
+            this.checkBoxIbaObry.Name = "checkBoxIbaObry";
+            this.checkBoxIbaObry.Size = new System.Drawing.Size(106, 17);
+            this.checkBoxIbaObry.TabIndex = 19;
+            this.checkBoxIbaObry.Text = "Kupovat iba obry";
+            this.checkBoxIbaObry.UseVisualStyleBackColor = true;
+            // 
             // ChytanieNNForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1325, 472);
+            this.Controls.Add(this.checkBoxIbaObry);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.checkBoxObry);
             this.Controls.Add(this.textBoxRelatX);
             this.Controls.Add(this.textBoxRelatY);
@@ -276,5 +300,7 @@ namespace WebBrowser.ChytanieNN
         private TextBox textBoxRelatY;
         private CheckBox checkBoxSuradniceRelativne;
         private CheckBox checkBoxObry;
+        private Button button3;
+        private CheckBox checkBoxIbaObry;
     }
 }

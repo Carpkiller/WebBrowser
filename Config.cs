@@ -160,5 +160,247 @@ namespace WebBrowser
                 }
             }
         }
+
+        public static string Vhodnost0
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var vhodnost = lines.Skip(7).First();
+
+                        return vhodnost;
+                    }
+                    return "1";
+                }
+                catch
+                {
+                    return "1";
+                }
+            }
+        }
+
+        public static string Vhodnost5
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var vhodnost = lines.Skip(8).First();
+
+                        return vhodnost;
+                    }
+                    return "0.95";
+                }
+                catch
+                {
+                    return "0.95";
+                }
+            }
+        }
+
+        public static string Vhodnost10
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var vhodnost = lines.Skip(9).First();
+
+                        return vhodnost;
+                    }
+                    return "0.85";
+                }
+                catch
+                {
+                    return "0.85";
+                }
+            }
+        }
+
+        public static string Vhodnost25
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var vhodnost = lines.Skip(10).First();
+
+                        return vhodnost;
+                    }
+                    return "1.05";
+                }
+                catch
+                {
+                    return "1.05";
+                }
+            }
+        }
+
+        public static string Vhodnost50
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var vhodnost = lines.Skip(11).First();
+
+                        return vhodnost;
+                    }
+                    return "1.1";
+                }
+                catch
+                {
+                    return "1.1";
+                }
+            }
+        }
+
+        public static string VhodnostDefault
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var vhodnost = lines.Skip(12).First();
+
+                        return vhodnost;
+                    }
+                    return "2";
+                }
+                catch
+                {
+                    return "2";
+                }
+            }
+        }
+
+        public static string PocetMiest130
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var pocetMiestPriorita = lines.Skip(13).First();
+
+                        return pocetMiestPriorita;
+                    }
+                    return "0.3";
+                }
+                catch
+                {
+                    return "0.3";
+                }
+            }
+        }
+
+        public static string PocetMiest110
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var pocetMiestPriorita = lines.Skip(14).First();
+
+                        return pocetMiestPriorita;
+                    }
+                    return "0.75";
+                }
+                catch
+                {
+                    return "0.75";
+                }
+            }
+        }
+
+        public static string PocetMiest100
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var pocetMiestPriorita = lines.Skip(15).First();
+
+                        return pocetMiestPriorita;
+                    }
+                    return "1";
+                }
+                catch
+                {
+                    return "1";
+                }
+            }
+        }
+
+        public static string PocetMiest90
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var pocetMiestPriorita = lines.Skip(16).First();
+
+                        return pocetMiestPriorita;
+                    }
+                    return "1.2";
+                }
+                catch
+                {
+                    return "1.2";
+                }
+            }
+        }
+
+        public static string PocetMiestDefault
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var pocetMiestPriorita = lines.Skip(17).First();
+
+                        return pocetMiestPriorita;
+                    }
+                    return "1.5";
+                }
+                catch
+                {
+                    return "1.5";
+                }
+            }
+        }
     }
 }

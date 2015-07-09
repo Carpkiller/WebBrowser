@@ -103,6 +103,7 @@ namespace WebBrowser.ChytanieNN
 
         private void webBrowser1_ProgressChanged(object sender, WebBrowserProgressChangedEventArgs e)
         {
+            bool naqOborVPonuke = false;
             if (!string.IsNullOrEmpty(webBrowser1.StatusText) && _pocetLoad == 0 && !webBrowser1.StatusText.Contains("obchod.php?page=6"))
             {
                 var elements = webBrowser1.Document.Body.GetElementsByTagName("input").GetElementsByName("pl_koupit");
@@ -130,9 +131,9 @@ namespace WebBrowser.ChytanieNN
                 {
                     bool akcia = _jadro.CheckKupuPlanety(_listPlanet,textBoxCena.Text);
                     var list = _listPlanet;
-                    var ind = _jadro.VypocitajSkore(list);
                     if (akcia)
                     {
+                        var ind = _jadro.VypocitajSkore(list);
                         HtmlElement element;
                         if (checkBoxObry.Checked)
                         {
@@ -141,6 +142,7 @@ namespace WebBrowser.ChytanieNN
                             if (index == -1)
                             {
                                 index = ind;
+                                naqOborVPonuke = true;
                             }
                             element = webBrowser1.Document.Body.GetElementsByTagName("input").GetElementsByName("pl_koupit")[index*2+1];
                         }else
@@ -172,7 +174,7 @@ namespace WebBrowser.ChytanieNN
                             _uloz = 1;
                         }
                       //  DoMouseClick(65535 / Screen.PrimaryScreen.WorkingArea.Size.Width * (Screen.PrimaryScreen.WorkingArea.Size.Width / 2 + 540), 65535 / Screen.PrimaryScreen.WorkingArea.Size.Height * (285 + ind * 100 - ind * 4));
-                        if (checkBox1.Checked)
+                        if ((checkBox1.Checked && !checkBoxIbaObry.Checked) || (checkBox1.Checked && checkBoxIbaObry.Checked && naqOborVPonuke))
                         {
                             var screenBounds = Screen.PrimaryScreen.Bounds;
                             if (!checkBoxSuradnice.Checked && !checkBoxSuradniceRelativne.Checked)
@@ -351,6 +353,12 @@ namespace WebBrowser.ChytanieNN
 
         private void textBoxCena_TextChanged(object sender, EventArgs e) 
         {
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var nastavenie = new NastavenieNN(_jadro);
+            nastavenie.Show(this);
         }
     }
 }

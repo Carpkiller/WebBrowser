@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WebBrowser.ChytanieNN
+﻿namespace WebBrowser.ChytanieNN
 {
     public class ObchodPlaneta
     {
@@ -19,7 +17,7 @@ namespace WebBrowser.ChytanieNN
             Vhodnost = vhodnost;
             PocetMiest = pocetMiest;
             Cena = cena;
-           // Console.WriteLine(typ + " "+vhodnost+" "+pocetMiest+" "+cena +"  - "+Skore());
+            // Console.WriteLine(typ + " "+vhodnost+" "+pocetMiest+" "+cena +"  - "+Skore());
         }
 
         public double Skore()
@@ -37,28 +35,28 @@ namespace WebBrowser.ChytanieNN
         {
             switch (Vhodnost)
             {
-                case "0%" :
+                case "0%":
                 {
-                   return 1;
+                    return double.Parse(Config.Vhodnost0);
                 }
                 case "+5%":
                 {
-                    return 0.95;
+                    return double.Parse(Config.Vhodnost5);
                 }
                 case "+10%":
                 {
-                    return 0.85;
+                    return double.Parse(Config.Vhodnost10);
                 }
                 case "-25%":
                 {
-                    return 1.05;
+                    return double.Parse(Config.Vhodnost25);
                 }
                 case "-50%":
                 {
-                    return 1.10;
+                    return double.Parse(Config.Vhodnost50);
                 }
-                default :
-                    return 2;
+                default:
+                    return double.Parse(Config.VhodnostDefault);
             }
         }
 
@@ -67,26 +65,22 @@ namespace WebBrowser.ChytanieNN
             var ret = 0;
             if (int.Parse(PocetMiest) >= 130)
             {
-                return 0.3;
+                return double.Parse(Config.PocetMiest130);
             }
             if (int.Parse(PocetMiest) >= 110)
             {
-                return 0.75;
+                return double.Parse(Config.PocetMiest110);
             }
             if (int.Parse(PocetMiest) >= 100)
             {
-                return 0.85;
-            }
-            if (int.Parse(PocetMiest) >= 100)
-            {
-                return 1;
+                return double.Parse(Config.PocetMiest100);
             }
             if (int.Parse(PocetMiest) >= 90)
             {
-                return 1.2;
+                return double.Parse(Config.PocetMiest90);
             }
 
-            return 1.5;
+            return double.Parse(Config.PocetMiestDefault);
         }
     }
 }

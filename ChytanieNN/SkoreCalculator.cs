@@ -11,7 +11,7 @@ namespace WebBrowser.ChytanieNN
         public SkoreCalculator(IEnumerable<ObchodPlaneta> listPlanet)
         {
             this.listPlanet = (List<ObchodPlaneta>) listPlanet;
-            pocitajSkore();
+            //pocitajSkore();
         }
 
         public int pocitajSkore()
