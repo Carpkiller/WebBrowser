@@ -293,7 +293,7 @@ namespace WebBrowser
                         query = "UPDATE Planety SET flagaktualny = 0 where idplanety = " + planeta.Id;
                         using (var mycommand = new SQLiteCommand(query, cnn))
                         {
-                            mycommand.ExecuteNonQuery();
+                            //mycommand.ExecuteNonQuery();
                         }
                         Console.WriteLine("Update flag - planeta -> " + planeta.Meno + " ,majitel : " + planeta.Majitel);
                     }
@@ -521,7 +521,7 @@ namespace WebBrowser
             var sektorKoniec = innerHtml.IndexOf("</H2>");
             var sektor = innerHtml.Substring(sektorIndex + 7, sektorKoniec - sektorIndex - 7);
             var sektorCislo = outerHtml.Substring(outerHtml.IndexOf("sektor=") + 7);
-
+            innerHtml = innerHtml.Substring(innerHtml.IndexOf("<AREA"));
             Console.WriteLine("Start : " + DateTime.Now.TimeOfDay);
 
             while (koniec)
@@ -531,16 +531,18 @@ namespace WebBrowser
                 index = innerHtml.IndexOf("Detail planety - Název:");
                 var koncIndex = innerHtml.IndexOf(" <br />",index);
                 var planeta = innerHtml.Substring(index + 24, koncIndex - index - 15 - 9);
-                index = innerHtml.IndexOf("\">", koncIndex);
+                index = innerHtml.IndexOf("\"", koncIndex);
                 var majitel = innerHtml.Substring(koncIndex + 13, index - koncIndex - 5 - 8);
                 index = innerHtml.IndexOf("coords");
                 koncIndex = innerHtml.IndexOf('"', index + 9);
                 var pozicia = innerHtml.Substring(index + 8, (koncIndex - index - 8));
-                innerHtml = innerHtml.Substring(koncIndex + 2);
-                index = innerHtml.IndexOf("</MAP>", koncIndex);
-                if (index < 25)
+                index = innerHtml.IndexOf("<AREA", 10);
+                if (index == -1)
                 {
                     koniec = false;
+                }else
+                {
+                    innerHtml = innerHtml.Substring(innerHtml.IndexOf("<AREA", 10));
                 }
 
                 listPlanetpar.Add(new Planeta(planeta, pozicia, id, majitel, null, sektor, true, User, DateTime.Now));
