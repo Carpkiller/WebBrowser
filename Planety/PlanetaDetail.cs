@@ -87,6 +87,7 @@ namespace WebBrowser.Planety
             }
             else if (_jadro.TypPlanety == "Neexistuje")
             {
+                MessageBox.Show(@"Planeta neexistuje", @"Chyba pri nahravani virusu", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 _jadro.ZmenaPlanety -= ZobrazTypPlanety;
                 _najdena = true;
             }                

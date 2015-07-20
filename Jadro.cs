@@ -256,7 +256,7 @@ namespace WebBrowser
                              planeta.Sektor + "', 1 ";
                 }
 
-                if (index%500 == 0)
+                if (index%500 == 0 && index > 0)
                 {
                     try
                     {
@@ -281,6 +281,24 @@ namespace WebBrowser
                 }
             }
 
+            try
+            {
+                using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                {
+                    cnn.Open();
+                    using (var mycommand = new SQLiteCommand(query, cnn))
+                    {
+                        mycommand.ExecuteNonQuery();
+                    }
+                    cnn.Close();
+                }
+                Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " +
+                                  listNaUlozenie.Count);
+            }
+            catch (Exception fail)
+            {
+                MessageBox.Show(fail.Message);
+            }
 
 
             using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
@@ -546,6 +564,10 @@ namespace WebBrowser
                 }
 
                 listPlanetpar.Add(new Planeta(planeta, pozicia, id, majitel, null, sektor, true, User, DateTime.Now));
+                if (majitel == "Karlosss.s")
+                {
+                    Console.WriteLine(sektor+"  "+majitel + " - " + planeta);
+                }
             }
 
             Console.WriteLine("Koniec : " + DateTime.Now.TimeOfDay);
@@ -913,7 +935,7 @@ namespace WebBrowser
                     break;
             }
 
-            if (wb1.Document.Body.InnerText.Contains("\r\nPlaneta: \r\nMajitel: \r\nRasa majitele: \r\nSíla majitele: \r\n\r\n\r\n\r\n\r\n\r\nTyp planety: \r\n\r\n"))
+            if (wb1.Document.Body.InnerText.Contains("Detail planety\r\nNázev\r\nMajitel\r\nRasa\r\nSíla0\r\n\r\nÚtoky\r\n\r\n"))
             {
                 Console.WriteLine(@"Neexistuje");
 
