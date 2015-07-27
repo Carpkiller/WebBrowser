@@ -174,11 +174,11 @@ namespace WebBrowser
 
                         return vhodnost;
                     }
-                    return "1";
+                    return "100";
                 }
                 catch
                 {
-                    return "1";
+                    return "100";
                 }
             }
         }
@@ -196,11 +196,11 @@ namespace WebBrowser
 
                         return vhodnost;
                     }
-                    return "0.95";
+                    return "95";
                 }
                 catch
                 {
-                    return "0.95";
+                    return "95";
                 }
             }
         }
@@ -218,11 +218,11 @@ namespace WebBrowser
 
                         return vhodnost;
                     }
-                    return "0.85";
+                    return "85";
                 }
                 catch
                 {
-                    return "0.85";
+                    return "85";
                 }
             }
         }
@@ -240,11 +240,11 @@ namespace WebBrowser
 
                         return vhodnost;
                     }
-                    return "1.05";
+                    return "105";
                 }
                 catch
                 {
-                    return "1.05";
+                    return "105";
                 }
             }
         }
@@ -262,11 +262,11 @@ namespace WebBrowser
 
                         return vhodnost;
                     }
-                    return "1.1";
+                    return "110";
                 }
                 catch
                 {
-                    return "1.1";
+                    return "110";
                 }
             }
         }
@@ -284,11 +284,11 @@ namespace WebBrowser
 
                         return vhodnost;
                     }
-                    return "2";
+                    return "200";
                 }
                 catch
                 {
-                    return "2";
+                    return "200";
                 }
             }
         }
@@ -306,11 +306,11 @@ namespace WebBrowser
 
                         return pocetMiestPriorita;
                     }
-                    return "0.3";
+                    return "30";
                 }
                 catch
                 {
-                    return "0.3";
+                    return "30";
                 }
             }
         }
@@ -328,11 +328,11 @@ namespace WebBrowser
 
                         return pocetMiestPriorita;
                     }
-                    return "0.75";
+                    return "75";
                 }
                 catch
                 {
-                    return "0.75";
+                    return "75";
                 }
             }
         }
@@ -350,11 +350,11 @@ namespace WebBrowser
 
                         return pocetMiestPriorita;
                     }
-                    return "1";
+                    return "100";
                 }
                 catch
                 {
-                    return "1";
+                    return "100";
                 }
             }
         }
@@ -372,11 +372,11 @@ namespace WebBrowser
 
                         return pocetMiestPriorita;
                     }
-                    return "1.2";
+                    return "120";
                 }
                 catch
                 {
-                    return "1.2";
+                    return "120";
                 }
             }
         }
@@ -394,11 +394,11 @@ namespace WebBrowser
 
                         return pocetMiestPriorita;
                     }
-                    return "1.5";
+                    return "150";
                 }
                 catch
                 {
-                    return "1.5";
+                    return "150";
                 }
             }
         }

@@ -1,4 +1,6 @@
-﻿namespace WebBrowser.ChytanieNN
+﻿using System.Globalization;
+
+namespace WebBrowser.ChytanieNN
 {
     public class ObchodPlaneta
     {
@@ -37,26 +39,26 @@
             {
                 case "0%":
                 {
-                    return double.Parse(Config.Vhodnost0);
+                    return double.Parse((decimal.Parse(Config.Vhodnost0)/100).ToString(CultureInfo.InvariantCulture));
                 }
                 case "+5%":
                 {
-                    return double.Parse(Config.Vhodnost5);
+                    return double.Parse((decimal.Parse(Config.Vhodnost5)/100).ToString(CultureInfo.InvariantCulture));
                 }
                 case "+10%":
                 {
-                    return double.Parse(Config.Vhodnost10);
+                    return double.Parse((decimal.Parse(Config.Vhodnost10)/100).ToString(CultureInfo.InvariantCulture));
                 }
                 case "-25%":
                 {
-                    return double.Parse(Config.Vhodnost25);
+                    return double.Parse((decimal.Parse(Config.Vhodnost25)/100).ToString(CultureInfo.InvariantCulture));
                 }
                 case "-50%":
                 {
-                    return double.Parse(Config.Vhodnost50);
+                    return double.Parse((decimal.Parse(Config.Vhodnost50)/100).ToString(CultureInfo.InvariantCulture));
                 }
                 default:
-                    return double.Parse(Config.VhodnostDefault);
+                    return double.Parse((decimal.Parse(Config.VhodnostDefault)/100).ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -65,22 +67,22 @@
             var ret = 0;
             if (int.Parse(PocetMiest) >= 130)
             {
-                return double.Parse(Config.PocetMiest130);
+                return double.Parse((decimal.Parse(Config.PocetMiest130)/100).ToString(CultureInfo.InvariantCulture));
             }
             if (int.Parse(PocetMiest) >= 110)
             {
-                return double.Parse(Config.PocetMiest110);
+                return double.Parse((decimal.Parse(Config.PocetMiest110)/100).ToString(CultureInfo.InvariantCulture));
             }
             if (int.Parse(PocetMiest) >= 100)
             {
-                return double.Parse(Config.PocetMiest100);
+                return double.Parse((decimal.Parse(Config.PocetMiest100)/100).ToString(CultureInfo.InvariantCulture));
             }
             if (int.Parse(PocetMiest) >= 90)
             {
-                return double.Parse(Config.PocetMiest90);
+                return double.Parse((decimal.Parse(Config.PocetMiest90)/100).ToString(CultureInfo.InvariantCulture));
             }
 
-            return double.Parse(Config.PocetMiestDefault);
+            return double.Parse((decimal.Parse(Config.PocetMiestDefault)/100).ToString(CultureInfo.InvariantCulture));
         }
     }
 }
