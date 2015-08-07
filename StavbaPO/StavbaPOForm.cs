@@ -63,6 +63,15 @@ namespace WebBrowser.StavbaPO
                 Console.WriteLine("podmienka   " + podmienka);
                 if (podmienka) // ma stavat
                 {
+                    
+                    while (true)
+                    {
+                        Application.DoEvents();
+                        if (!string.IsNullOrEmpty(webBrowser1.StatusText) &&
+                            !webBrowser1.StatusText.Contains("stavby.php"))
+                            break;
+                    }
+                    Thread.Sleep(refreshovaciCas * 1000);
                     int krok = 0;
 
                     if (!skontrolujBS())
@@ -81,23 +90,34 @@ namespace WebBrowser.StavbaPO
                         webBrowser1.Document.GetElementById("po").SetAttribute("value", pocetPO);
                     }
 
+                    postavTlacitko = webBrowser1.Document.GetElementsByTagName("input")[6];
+                    var ee = webBrowser1.Document.GetElementsByTagName("input");
+
                     if (krok > 0)
                     {
-                        Thread.Sleep(refreshovaciCas*1000);
                         // klik na stavat
-                        postavTlacitko.InvokeMember("Click");
-
-                        while (true)
+                        if (webBrowser1.Document.Body.InnerText.Contains("bylo postaveno") || webBrowser1.Document.Body.InnerText.Contains("není dostatek místa"))
                         {
-                            Application.DoEvents();
-                            if (!string.IsNullOrEmpty(webBrowser1.StatusText) &&
-                                !webBrowser1.StatusText.Contains("stavby.php"))
-                                break;
+                            PosunNaDalsiuPlanetu();
                         }
-                        Console.WriteLine("Staviame stavby");
-                    }
+                        else
+                        {
+                            postavTlacitko.InvokeMember("Click");
 
-                    PosunNaDalsiuPlanetu();                    
+                            while (true)
+                            {
+                                Application.DoEvents();
+                                if (!string.IsNullOrEmpty(webBrowser1.StatusText) &&
+                                    !webBrowser1.StatusText.Contains("stavby.php"))
+                                    break;
+                            }
+                            Console.WriteLine("Staviame stavby");
+                        }
+                    }
+                    if (krok ==0)
+                    {
+                        PosunNaDalsiuPlanetu();      
+                    }
                 }
 
                 if (!podmienka)  // nema stavat
@@ -184,8 +204,8 @@ namespace WebBrowser.StavbaPO
                 Stavaj = true;
                 while (Stavaj)
                 {
+                    PosunNaDalsiuPlanetu(); 
                     Thread.Sleep(refreshovaciCas * 1000);
-                    PosunNaDalsiuPlanetu();
                     while (cakaj)
                     {
                     }
@@ -202,6 +222,13 @@ namespace WebBrowser.StavbaPO
             dalsiaPlaneta = webBrowser1.Document.GetElementsByTagName("a")[4];  //6
             Console.WriteLine("posun dalej   " + Stavaj);
             dalsiaPlaneta.InvokeMember("Click");
+            while (true)
+            {
+                Application.DoEvents();
+                if (!string.IsNullOrEmpty(webBrowser1.StatusText) &&
+                    !webBrowser1.StatusText.Contains("stavby.php"))
+                    break;
+            }
         }
 
         private string zistiMaxPocetPO()

@@ -226,7 +226,8 @@ namespace WebBrowser.ChytanieNN
 
             if (webBrowser1.Document != null && webBrowser1.Document.Body != null)
             {
-
+                _listPlanet = _jadro.ParsujPlanetyObchod(webBrowser1.Document.Window.Document.Body.InnerHtml);
+                var ind = _jadro.VypocitajSkore(_listPlanet);
                 var element =
                     webBrowser1.Document.Body.GetElementsByTagName("input").GetElementsByName("pl_koupit")[i*2 + 1];
 
