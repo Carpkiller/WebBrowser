@@ -11,6 +11,7 @@ namespace WebBrowser.Hladanie
     {
         private readonly Jadro _jadro;
         private string _hladanyItem;
+        private string _hladanyTyp;
 
         public HladanieForm()
         {
@@ -30,6 +31,8 @@ namespace WebBrowser.Hladanie
             comboBoxRasaPovodna.DataSource = RasyId.ListId.Keys.ToList();
             comboBoxRasaSucasna.DataSource = RasyId.ListId.Keys.ToList();
             comboBox2.DataSource = _jadro.NaplnSektory();
+            comboBoxRasaTypPlanety.DataSource = RasyId.ListId.Keys.ToList();
+            comboBoxTypPlanety.DataSource = _jadro.NaplnTypyPlanet();
         }
 
         public void KoniecVlakana()
@@ -112,6 +115,29 @@ namespace WebBrowser.Hladanie
             var title = "Povodna rasa : " + comboBoxRasaPovodna.Text + " , sucasna rasa : "+comboBoxRasaSucasna.Text;
             var detailPlanety = new PlanetaDetail(_jadro.NajdiZmenenePlanety(comboBoxRasaSucasna.Text, comboBoxRasaPovodna.Text), _jadro, title);
             detailPlanety.Show(this);
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            progressBar1.Style = ProgressBarStyle.Marquee;
+            _jadro.UkoncenieHladaniaTypuPlanetRasy += KoniecHladaniaTypuPlanetRasy;
+            var rasa = comboBoxRasaTypPlanety.SelectedValue.ToString();
+            var typ = comboBoxTypPlanety.SelectedValue.ToString();
+            _hladanyItem = rasa;
+            _hladanyTyp = typ;
+            _jadro.VypisTypPlanetyRasy(rasa, typ);
+        }
+
+        public void KoniecHladaniaTypuPlanetRasy()
+        {
+            Invoke((MethodInvoker)(() =>
+            {
+                _jadro.UkoncenieHladaniePlanetRasy -= KoniecHladaniaPlanetRasy;
+                var title = "Vsetky planety rasy : " + _hladanyItem+ " a zadaneho typu "+_hladanyTyp;
+                var detailPlanety = new ZoznamHracovForm(_jadro.NajdenePlanety, _jadro, title, comboBox2.SelectedIndex.ToString(CultureInfo.InvariantCulture));
+                detailPlanety.Show(this);
+                progressBar1.Style = ProgressBarStyle.Blocks;
+            }));
         }
     }
 }

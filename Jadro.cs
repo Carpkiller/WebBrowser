@@ -61,6 +61,9 @@ namespace WebBrowser
         public delegate void UkoncenieHladaniePlanetRasyHandler();
         public event UkoncenieHladaniePlanetRasyHandler UkoncenieHladaniePlanetRasy;
 
+        public delegate void UkoncenieHladaniaTypuPlanetRasyHandler();
+        public event UkoncenieHladaniaTypuPlanetRasyHandler UkoncenieHladaniaTypuPlanetRasy;
+
         private Thread _refreshovacieVlakno;
         public Thread HladacieVlakno { get; set; }
         private Thread _vlakno;
@@ -75,6 +78,7 @@ namespace WebBrowser
         public List<SektorPlanety> NajdenePlanety { get; set; }
         public Planeta HladanaPlaneta { get; set; }
         private int WarMode = 0;
+        public string UdpateQuery;
         
         public Jadro(System.Windows.Forms.WebBrowser wb, HlavneOkno form1)
         {
@@ -233,114 +237,130 @@ namespace WebBrowser
             var query = string.Empty;
             var zaciatok = true;
 
-            for (int index = 0; index < listNaUlozenie.Count; index++)
+            using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
             {
-                var planeta = listNaUlozenie[index];
-                if (zaciatok)
-                {
-                    query +=
-                        "INSERT INTO Planety(idPlanety,vlozil,datumVlozenia,pozicia,nazov, majitel, sektor, flagAktualny)" +
-                        " SELECT '" + planeta.Id + "' AS idPlanety, '" + planeta.Vlozil + "' AS vlozil, '" +
-                        planeta.DatumVlozenia.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) +
-                        "' AS datumVlozenia, '" + planeta.Pozicia + "' AS pozicia, '" + planeta.Meno +
-                        "' AS nazov, '" + planeta.Majitel + "' AS majitel, '" + planeta.Sektor +
-                        "' AS sektor, " + "1 AS flagAktualny ";
-                    zaciatok = false;
-                }
-                else
-                {
-                    query += "UNION SELECT '" + planeta.Id + "','" + planeta.Vlozil + "','" +
-                             planeta.DatumVlozenia.Value.ToString("yyyy-MM-dd HH:mm:ss",
-                                 CultureInfo.InvariantCulture) + "','" +
-                             planeta.Pozicia + "','" + planeta.Meno + "','" + planeta.Majitel + "','" +
-                             planeta.Sektor + "', 1 ";
-                }
+                cnn.Open();
 
-                if (index%500 == 0 && index > 0)
+
+                for (int index = 0; index < listNaUlozenie.Count; index++)
                 {
-                    try
+                    var planeta = listNaUlozenie[index];
+                    if (zaciatok)
                     {
-                        using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                        query +=
+                            "INSERT INTO Planety(idPlanety,vlozil,datumVlozenia,pozicia,nazov, majitel, sektor, flagAktualny)" +
+                            " SELECT '" + planeta.Id + "' AS idPlanety, '" + planeta.Vlozil + "' AS vlozil, '" +
+                            planeta.DatumVlozenia.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) +
+                            "' AS datumVlozenia, '" + planeta.Pozicia + "' AS pozicia, '" + planeta.Meno +
+                            "' AS nazov, '" + planeta.Majitel + "' AS majitel, '" + planeta.Sektor +
+                            "' AS sektor, " + "1 AS flagAktualny ";
+                        zaciatok = false;
+                    }
+                    else
+                    {
+                        query += "UNION SELECT '" + planeta.Id + "','" + planeta.Vlozil + "','" +
+                                 planeta.DatumVlozenia.Value.ToString("yyyy-MM-dd HH:mm:ss",
+                                     CultureInfo.InvariantCulture) + "','" +
+                                 planeta.Pozicia + "','" + planeta.Meno + "','" + planeta.Majitel + "','" +
+                                 planeta.Sektor + "', 1 ";
+                    }
+
+                    if (index%500 == 0 && index > 0)
+                    {
+                        try
                         {
-                            cnn.Open();
+                            //using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                            //{
+                            //    cnn.Open();
                             using (var mycommand = new SQLiteCommand(query, cnn))
                             {
                                 mycommand.ExecuteNonQuery();
                             }
-                            cnn.Close();
-                        }
-                        Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " +
-                                          listNaUlozenie.Count);
-                    }
-                    catch (Exception fail)
-                    {
-                        MessageBox.Show(fail.Message);
-                    }
-                    query = string.Empty;
-                    zaciatok = true;
-                }
-            }
+                            //    cnn.Close();
+                            //}
+                            Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " +
+                                              listNaUlozenie.Count);
+                            for (int i = 0; i < listNaUlozenie.Count; i++)
+                            {
+                                Console.WriteLine(listNaUlozenie[i].Sektor + "  " + listNaUlozenie[i].Majitel + "  " +
+                                                  listNaUlozenie[i].Meno);
 
-            try
-            {
-                using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                            }
+                        }
+                        catch (Exception fail)
+                        {
+                            MessageBox.Show(fail.Message);
+                        }
+                        query = string.Empty;
+                        zaciatok = true;
+                    }
+                }
+
+                //using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                //{
+                try
                 {
-                    cnn.Open();
+
+                    //cnn.Open();
                     using (var mycommand = new SQLiteCommand(query, cnn))
                     {
                         mycommand.ExecuteNonQuery();
                     }
-                    cnn.Close();
+
+                    //cnn.Close();
+                    Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " +
+                                      listNaUlozenie.Count);
                 }
-                Console.WriteLine("Ukladanie do DB - sektor -> " + sektorCislo + " ,pocet zaznamov : " +
-                                  listNaUlozenie.Count);
-            }
-            catch (Exception fail)
-            {
-                MessageBox.Show(fail.Message);
-            }
+                catch
+                    (Exception
+                        fail)
+                {
+                    MessageBox.Show(fail.Message);
+                }
 
 
-            using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
-            {
-                cnn.Open();
+                // using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection))){
+                //     cnn.Open();
+                query = string.Empty;
                 foreach (var planeta in listNaZmazanie)
                 {
-                    try
-                    {
-                        query = "UPDATE Planety SET flagaktualny = 0 where idplanety = " + planeta.Id;
-                        using (var mycommand = new SQLiteCommand(query, cnn))
-                        {
-                            //mycommand.ExecuteNonQuery();
-                        }
-                        Console.WriteLine("Update flag - planeta -> " + planeta.Meno + " ,majitel : " + planeta.Majitel);
-                    }
-
-                    catch (Exception fail)
-                    {
-                        MessageBox.Show(fail.Message);
-                    }
-                } 
-                cnn.Close();
-            }
-
-            try
-            {
-                using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                    UdpateQuery += "UPDATE Planety SET flagaktualny = 0 where idplanety = " + planeta.Id + " and majitel = '"+planeta.Majitel+"';";
+                    Console.WriteLine("Update flag - planeta -> " + planeta.Meno + " ,majitel : " + planeta.Majitel);
+                }
+                try
                 {
-                    cnn.Open();
+                    //using (var mycommand = new SQLiteCommand(query, cnn))
+                    //{
+                    //    mycommand.ExecuteNonQuery();
+                    //}
+                }
+
+                catch (Exception fail)
+                {
+                    MessageBox.Show(fail.Message);
+                }
+
+                //      cnn.Close();
+                //   }
+
+                // using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection))){
+                try
+                {
+                    //cnn.Open();
                     using (var mycommand = new SQLiteCommand(query, cnn))
                     {
                         mycommand.ExecuteNonQuery();
                     }
                     cnn.Close();
+                    Console.WriteLine("Ukladanie do DB -- sektor -> " + sektorCislo + " ,pocet zaznamov : " +
+                                      listNaUlozenie.Count);
                 }
-                Console.WriteLine("Ukladanie do DB -- sektor -> " + sektorCislo + " ,pocet zaznamov : " +
-                                  listNaUlozenie.Count);
-            }
-            catch (Exception fail)
-            {
-                MessageBox.Show(fail.Message);
+
+
+                catch (Exception fail)
+                {
+                    MessageBox.Show(fail.Message);
+                }
             }
 
             if (listNaUlozenie.Count > 0)
@@ -564,14 +584,10 @@ namespace WebBrowser
                 }
 
                 listPlanetpar.Add(new Planeta(planeta, pozicia, id, majitel, null, sektor, true, User, DateTime.Now));
-                if (majitel == "Karlosss.s")
-                {
-                    Console.WriteLine(sektor+"  "+majitel + " - " + planeta);
-                }
             }
 
             Console.WriteLine("Koniec : " + DateTime.Now.TimeOfDay);
-            AktualizujSektoryDb(sektorCislo);
+            //AktualizujSektoryDb(sektorCislo);
 
             return listPlanetpar;
         }
@@ -1467,7 +1483,7 @@ namespace WebBrowser
                 "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ) as poslMajitel  from " +
                 "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel = '" +
                 hrac + "' and flagAktualny = '1' and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
-                "') group by pozicia order by datumVlozenia desc) where poslMajitel = '"+hrac+"';";
+                "') group by pozicia order by nazov asc) where poslMajitel = '"+hrac+"';";
 
             try
             {
@@ -1668,6 +1684,7 @@ namespace WebBrowser
 
         private void SkenovacieVlakno()
         {
+            UdpateQuery = string.Empty;
             int poc = 0;
             for (int i = 1; i <= 200; i++)
             {
@@ -1733,28 +1750,131 @@ namespace WebBrowser
             }
         }
 
-        private void VyhladajPlanetyRasa(IEnumerable<string> listHracov, int hladSektor)
+        public void VypisTypPlanetyRasy(string rasa, string typ)
+        {
+            var listHracov = new List<string>();
+
+            var wb = new System.Windows.Forms.WebBrowser();
+            string idRasy;
+            RasyId.ListId.TryGetValue(rasa, out idRasy);
+
+            if (!string.IsNullOrEmpty(idRasy))
+            {
+                var url = new Uri("http://www.stargate-game.cz/vesmir.php?page=1&id_rasa=" + idRasy + "&sort=2");
+                wb.Navigate(url);
+
+                while (true)
+                {
+                    Application.DoEvents();
+                    if (!string.IsNullOrEmpty(wb.StatusText) && !wb.StatusText.Contains("vesmir.php?page=1&id_rasa="))
+                        break;
+                }
+
+                if (wb.Document != null)
+                    if (wb.Document.Body != null)
+                        listHracov = ParsujVyvrhelov(wb.Document.Body.InnerHtml).Select(x => x.Meno).ToList();
+            }
+
+            if (listHracov.Any())
+            {
+                Thread t = new Thread(() => VyhladajTypPlanetyRasa(listHracov, typ));
+                t.SetApartmentState(ApartmentState.STA);
+                t.Start();
+            }
+        }
+
+        private void VyhladajTypPlanetyRasa(List<string> listHracov, string typ)
         {
             NajdenePlanety = new List<SektorPlanety>();
             var hraci = listHracov.Aggregate("(", (current, s) => current + ("'" + s + "', "));
             hraci += ")";
             hraci = hraci.Replace(", )", ")");
 
+            //try
+            //{
+            //    using (var cmd = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+            //    {
+            //        cmd.Open();
+            //        using (var mycommand = new SQLiteCommand("CREATE INDEX Iplanety2index ON planety(majitel, sektor, pozicia, datumVlozenia );", cmd))
+            //        {
+            //            mycommand.ExecuteNonQuery();
+            //        }
+            //    }
+            //}
+            //catch (Exception)
+            //{
+            //    Console.WriteLine(@"Chyba pri vytvarani indexu");
+            //}
+
+            string sql =
+                    "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ), " +
+                    "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ) as poslMajitel from " +
+                    "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in" +
+                    hraci + " and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
+                    "') and typ = '" + typ + "' and flagAktualny = '1' group by pozicia order by datumVlozenia desc) where poslMajitel in " + hraci + ";";
             try
             {
-                using (var cmd = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection));
+                cnn.Open();
+                using (var mycommand = new SQLiteCommand(sql, cnn))
                 {
-                    cmd.Open();
-                    using (var mycommand = new SQLiteCommand("CREATE INDEX Iplanety2index ON planety(majitel, sektor, pozicia, datumVlozenia );", cmd))
+                    using (var reader = mycommand.ExecuteReader())
                     {
-                        mycommand.ExecuteNonQuery();
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                var nazov = reader["nazov"].ToString();
+                                var majitel = reader["majitel"].ToString();
+                                var pozicia = reader["poziciaa"].ToString();
+                                var c = reader.GetString(3);
+                                var datum = DateTime.ParseExact(c, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                var typPlanety = reader["typ"].ToString();
+                                var sektor = reader["sektorr"].ToString();
+                                var pocetZmien = reader.GetInt32(7).ToString(CultureInfo.InvariantCulture);
+
+                                NajdenePlanety.Add(new SektorPlanety(nazov, pozicia, majitel, datum, typPlanety, sektor, pocetZmien));
+                            }
+                        }
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Console.WriteLine(@"Chyba pri vytvarani indexu");
+                throw new Exception(e.Message);
             }
+
+
+            if (UkoncenieHladaniaTypuPlanetRasy != null)
+            {
+                UkoncenieHladaniaTypuPlanetRasy();
+            }
+        }
+
+        private void VyhladajPlanetyRasa(IEnumerable<string> listHracov, int hladSektor)
+        {
+            var startTime = DateTime.Now.TimeOfDay;
+            Console.WriteLine(startTime);
+            NajdenePlanety = new List<SektorPlanety>();
+            var hraci = listHracov.Aggregate("(", (current, s) => current + ("'" + s + "', "));
+            hraci += ")";
+            hraci = hraci.Replace(", )", ")");
+
+            //try
+            //{
+            //    using (var cmd = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+            //    {
+            //        cmd.Open();
+            //        using (var mycommand = new SQLiteCommand("CREATE INDEX Iplanety2index ON planety(majitel, sektor, pozicia, datumVlozenia );", cmd))
+            //        {
+            //            mycommand.ExecuteNonQuery();
+            //        }
+            //    }
+            //}
+            //catch (Exception)
+            //{
+            //    Console.WriteLine(@"Chyba pri vytvarani indexu");
+            //}
 
             string sql;
 
@@ -1765,7 +1885,13 @@ namespace WebBrowser
                     "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ) as poslMajitel from " +
                     "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in" +
                     hraci + " and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
-                    "') and flagAktualny = '1' group by pozicia order by datumVlozenia desc) where poslMajitel in "+hraci+";";
+                    "') and flagAktualny = '1' group by pozicia order by majitel asc) where poslMajitel in " + hraci + ";";
+
+                //sql = "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia )," +
+                //    "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' and majitel in " + hraci + " group by pozicia ) as poslMajitel from " +
+                //    "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where flagAktualny = '1' and " +
+                //      "datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
+                //      "') and majitel in" +hraci + " group by pozicia);";
             }
             else
             {
@@ -1779,7 +1905,7 @@ namespace WebBrowser
                     "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ) as poslMajitel from " +
                     "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in" +
                     hraci + " and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
-                    "') and sektor = '" + nazovSektora + "' and flagAktualny = '1' group by pozicia order by datumVlozenia desc) where poslMajitel in " + hraci + ";";
+                    "') and sektor = '" + nazovSektora + "' and flagAktualny = '1' group by pozicia order by majitel asc) where poslMajitel in " + hraci + ";";
             }
 
             try
@@ -1814,26 +1940,29 @@ namespace WebBrowser
                 throw new Exception(e.Message);
             }
 
-            try
-            {
-                using (var cmd = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
-                {
-                    cmd.Open();
-                    using (var mycommand = new SQLiteCommand("drop INDEX Iplanety2index;", cmd))
-                    {
-                        mycommand.ExecuteNonQuery();
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine(@"Chyba pri dropovani indexu");
-            }
+            //try
+            //{
+            //    using (var cmd = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+            //    {
+            //        cmd.Open();
+            //        using (var mycommand = new SQLiteCommand("drop INDEX Iplanety2index;", cmd))
+            //        {
+            //            mycommand.ExecuteNonQuery();
+            //        }
+            //    }
+            //}
+            //catch (Exception)
+            //{
+            //    Console.WriteLine(@"Chyba pri dropovani indexu");
+            //}
 
             if (UkoncenieHladaniePlanetRasy!=null)
             {
                 UkoncenieHladaniePlanetRasy();
             }
+            var koniecTime = DateTime.Now.TimeOfDay;
+            Console.WriteLine(koniecTime);
+            Console.WriteLine(koniecTime-startTime);
         }
 
         public bool CheckSpojenie()
@@ -2397,6 +2526,43 @@ namespace WebBrowser
             }
 
             return dict;
+        }
+
+        public List<string> NaplnTypyPlanet()
+        {
+            var list = new List<string>();
+            var query = "select distinct(typ) from planety where datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") + "');";
+            int pocetUpdateRows = 0;
+            try
+            {
+                using (var cnn = new SQLiteConnection(new SQLiteConnection(_dbConnection)))
+                {
+                    cnn.Open();
+                    using (var mycommand = new SQLiteCommand(query, cnn))
+                    {
+                        using (var reader = mycommand.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    var typ = reader.GetValue(0).ToString();
+                                    if (typ != "")
+                                    {
+                                        list.Add(typ);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception fail)
+            {
+                Console.WriteLine(@"Chyba pri generovani typov planet pre hladanie");
+            }
+
+            return list;
         }
     }
 }

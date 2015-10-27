@@ -50,6 +50,7 @@ namespace WebBrowser.Planety
                 dataGridView1.DataSource = _listPlanetHraca;
                 //_jadro.VlozZaznamOnlineDB(_listPlanetHraca.First());
             }
+
         }
 
         public PlanetaDetail(List<Planeta> list, Jadro jadro, string title)
@@ -78,12 +79,17 @@ namespace WebBrowser.Planety
         {
             _typPlanety = _jadro.TypPlanety;
             Console.WriteLine(_typPlanety);
+
             if (_typPlanety.Contains("Výsledek průzkumu:"))
             {
                 _listPlanetHraca = _jadro.ZmenPlanetyDb(_typPlanety.Replace("Výsledek průzkumu: ", ""), _listPlanetHraca.FirstOrDefault());
                 dataGridView1.DataSource = _listPlanetHraca;
                 _jadro.ZmenaPlanety -= ZobrazTypPlanety;
                 _najdena = true;
+                if (KoniecOkna != null)
+                {
+                    //KoniecOkna(_typPlanety);
+                }
             }
             else if (_jadro.TypPlanety == "Neexistuje")
             {

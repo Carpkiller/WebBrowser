@@ -46,6 +46,10 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.comboBoxRasaTypPlanety = new System.Windows.Forms.ComboBox();
+            this.comboBoxTypPlanety = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonPlaneta
@@ -76,7 +80,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(199, 219);
+            this.button2.Location = new System.Drawing.Point(199, 260);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 3;
@@ -112,7 +116,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 248);
+            this.progressBar1.Location = new System.Drawing.Point(12, 289);
             this.progressBar1.Maximum = 200;
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(461, 23);
@@ -206,11 +210,50 @@
             this.label6.TabIndex = 17;
             this.label6.Text = "Sucasna rasa";
             // 
+            // comboBoxRasaTypPlanety
+            // 
+            this.comboBoxRasaTypPlanety.FormattingEnabled = true;
+            this.comboBoxRasaTypPlanety.Location = new System.Drawing.Point(246, 219);
+            this.comboBoxRasaTypPlanety.Name = "comboBoxRasaTypPlanety";
+            this.comboBoxRasaTypPlanety.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxRasaTypPlanety.TabIndex = 21;
+            // 
+            // comboBoxTypPlanety
+            // 
+            this.comboBoxTypPlanety.FormattingEnabled = true;
+            this.comboBoxTypPlanety.Location = new System.Drawing.Point(118, 218);
+            this.comboBoxTypPlanety.Name = "comboBoxTypPlanety";
+            this.comboBoxTypPlanety.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxTypPlanety.TabIndex = 20;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(22, 224);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(92, 13);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "Typ planety z rasy";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(373, 219);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 18;
+            this.button3.Text = "Zobraz z DB";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            // 
             // HladanieForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(485, 272);
+            this.ClientSize = new System.Drawing.Size(485, 324);
+            this.Controls.Add(this.comboBoxRasaTypPlanety);
+            this.Controls.Add(this.comboBoxTypPlanety);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.comboBoxRasaSucasna);
@@ -257,5 +300,9 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox comboBoxRasaTypPlanety;
+        private System.Windows.Forms.ComboBox comboBoxTypPlanety;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button button3;
     }
 }

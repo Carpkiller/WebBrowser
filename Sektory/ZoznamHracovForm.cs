@@ -39,7 +39,8 @@ namespace WebBrowser.Sektory
             Text = title;
             _sektor = sektor;
             _rasa = title.Substring(title.IndexOf(": ", System.StringComparison.Ordinal) + 2);
-            dataGridView1.DataSource = najdenePlanety.OrderByDescending(x => x.Sektor).ThenBy(x => x.Meno).ToList();
+
+            dataGridView1.DataSource = najdenePlanety;
         }
 
 
