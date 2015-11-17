@@ -2,18 +2,18 @@
 
 namespace WebBrowser
 {
-    public class SektoryID
+    public class SektoryId
     {
         public string Sektor { get; set; }
         public string Id { get; set; }
 
-        public SektoryID(string sektor, string id)
+        public SektoryId(string sektor, string id)
         {
             Sektor = sektor;
             Id = id;
         }
 
-        public static Dictionary<int, string> ListId = new Dictionary<int, string>
+        public static readonly Dictionary<int, string> ListId = new Dictionary<int, string>
         {
             {0,"Vsetko"},
             {1,"Odpad"},

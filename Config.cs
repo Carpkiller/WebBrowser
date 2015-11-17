@@ -262,11 +262,11 @@ namespace WebBrowser
 
                         return vhodnost;
                     }
-                    return "110";
+                    return "150";
                 }
                 catch
                 {
-                    return "110";
+                    return "150";
                 }
             }
         }
@@ -284,11 +284,11 @@ namespace WebBrowser
 
                         return vhodnost;
                     }
-                    return "200";
+                    return "300";
                 }
                 catch
                 {
-                    return "200";
+                    return "300";
                 }
             }
         }

@@ -1739,7 +1739,7 @@ namespace WebBrowser
 
                 if (wb.Document != null)
                     if (wb.Document.Body != null)
-                        listHracov = ParsujVyvrhelov(wb.Document.Body.InnerHtml).Select(x => x.Meno).ToList();
+                        listHracov = parsujHracov(wb.Document.Body.InnerHtml).Select(x => x.Meno).ToList();
             }
 
             if (listHracov.Any())
@@ -1885,7 +1885,7 @@ namespace WebBrowser
                     "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ) as poslMajitel from " +
                     "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in" +
                     hraci + " and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
-                    "') and flagAktualny = '1' group by pozicia order by majitel asc) where poslMajitel in " + hraci + ";";
+                    "') and flagAktualny = '1' group by pozicia order by majitel, nazov asc) where poslMajitel in " + hraci + ";";
 
                 //sql = "select *,(select count(majitel) as pocet from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia )," +
                 //    "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' and majitel in " + hraci + " group by pozicia ) as poslMajitel from " +
@@ -1896,7 +1896,7 @@ namespace WebBrowser
             else
             {
                 string nazovSektora;
-                nazovSektora = SektoryID.ListId.TryGetValue(hladSektor, out nazovSektora)
+                nazovSektora = SektoryId.ListId.TryGetValue(hladSektor, out nazovSektora)
                     ? nazovSektora
                     : hladSektor.ToString(CultureInfo.InvariantCulture);
 
@@ -1905,7 +1905,7 @@ namespace WebBrowser
                     "(select majitel from planety where sektor = sektorr and poziciaa = pozicia and flagAktualny = '1' group by pozicia ) as poslMajitel from " +
                     "(select nazov,majitel,pozicia as poziciaa,datetime(datumVlozenia) as datumVlozenia,typ,sektor as sektorr, idPlanety from planety where majitel in" +
                     hraci + " and datumVlozenia > datetime('" + Config.ZaciatokVeku.ToString("yyyy-MM-dd HH:mm:ss") +
-                    "') and sektor = '" + nazovSektora + "' and flagAktualny = '1' group by pozicia order by majitel asc) where poslMajitel in " + hraci + ";";
+                    "') and sektor = '" + nazovSektora + "' and flagAktualny = '1' group by pozicia order by majitel, nazov asc) where poslMajitel in " + hraci + ";";
             }
 
             try
@@ -2114,7 +2114,7 @@ namespace WebBrowser
             for (int i = 0; i <= 200; i++)
             {
                 string nazovSektora;
-                list.Add(SektoryID.ListId.TryGetValue(i, out nazovSektora)
+                list.Add(SektoryId.ListId.TryGetValue(i, out nazovSektora)
                     ? nazovSektora
                     : i.ToString(CultureInfo.InvariantCulture));
             }
@@ -2191,8 +2191,8 @@ namespace WebBrowser
 
         public List<Planeta> NajdiZmenenePlanety(string povodnaRasa, string sucasnaRasa)
         {
-            var listHracovPovodna = VypisHracovRasy(povodnaRasa);
-            var listHracovSucasna = VypisHracovRasy(sucasnaRasa);
+            var listHracovPovodna = VypisHracovRasy(povodnaRasa).Select(x => x.Meno).ToList();
+            var listHracovSucasna = VypisHracovRasy(sucasnaRasa).Select(x => x.Meno).ToList();
             var hraciPov = listHracovPovodna.Aggregate("(", (current, s) => current + ("'" + s + "', "));
             hraciPov += ")";
             hraciPov = hraciPov.Replace(", )", ")");
@@ -2254,9 +2254,9 @@ namespace WebBrowser
             return list;
         }
 
-        private List<string> VypisHracovRasy(string nazovRasy)
+        public List<Vyvrhel> VypisHracovRasy(string nazovRasy)
         {
-            var listHracov = new List<string>();
+            var listHracov = new List<Vyvrhel>();
 
             var wb = new System.Windows.Forms.WebBrowser();
             string idRasy;
@@ -2276,7 +2276,7 @@ namespace WebBrowser
 
                 if (wb.Document != null)
                     if (wb.Document.Body != null)
-                        listHracov = ParsujVyvrhelov(wb.Document.Body.InnerHtml).Select(x => x.Meno).ToList();
+                        listHracov = ParsujVyvrhelov(wb.Document.Body.InnerHtml);
             }
 
             return listHracov;
@@ -2564,6 +2564,8 @@ namespace WebBrowser
 
             return list;
         }
+
+        //public Hrac
     }
 }
 

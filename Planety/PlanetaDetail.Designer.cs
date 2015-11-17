@@ -49,6 +49,7 @@ namespace WebBrowser.Planety
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -82,15 +83,33 @@ namespace WebBrowser.Planety
             this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBox1.ItemHeight = 31;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Vygeneruj kod utoku",
+            "Dobyvaci",
+            "ML",
+            "Partyzansky",
+            "Orbitalny nalet",
+            "Lupezny",
+            "Otrokarsky",
+            "Spionazny",
+            "Utok vraha"});
             this.comboBox1.Location = new System.Drawing.Point(171, 168);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(184, 39);
             this.comboBox1.TabIndex = 3;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(378, 183);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(391, 20);
+            this.textBox1.TabIndex = 4;
+            // 
             // PlanetaDetail
             // 
             this.ClientSize = new System.Drawing.Size(781, 219);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
@@ -99,6 +118,7 @@ namespace WebBrowser.Planety
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PlanetaDetail_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -107,5 +127,6 @@ namespace WebBrowser.Planety
         private DataGridView dataGridView1;
         private Button button1;
         private ComboBox comboBox1;
+        private TextBox textBox1;
     }
 }

@@ -12,7 +12,7 @@
             this.Meno = meno;
             this.Sila = sila;
             this.PocetPlanet = pocetPlanet;
-            SystemovyHrac = false || (meno == "Tartarus" || meno=="Ashrak");
+            SystemovyHrac = (meno == "Tartarus" || meno=="Ashrak");
         }
     }
 }

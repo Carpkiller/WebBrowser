@@ -13,30 +13,30 @@ namespace WebBrowser
             Id = id;
         }
 
-        public static Dictionary<string, string> ListId = new Dictionary<string, string>
+        public static readonly Dictionary<string, string> ListId = new Dictionary<string, string>
         {
             {"Goauldi","4"},
             {"Jaffové","12"},
             {"Tau´ri","2"},
-            {"Tagreřané","25"},
+            //{"Tagreřané","25"},
             {"Asgardi","1"},
-            {"Ori","14"},
-            {"Euronďané","32"},
+            //{"Ori","14"},
+            //{"Euronďané","32"},
             {"Reetou","19"},
             {"Tokrové","7"},
-            {"Atanikové","18"},
+            //{"Atanikové","18"},
             {"Replikátoři","9"},
             {"Luciáni","21"},
 
             {"Unasové","30"},
             {"Kelowňané","24"},
-            {"Oanessané","3"},
+            //{"Oanessané","3"},
             {"Noxové","15"},
             {"Antikové","8"},
             {"Tolláni","6"},
-            {"Bedrosiani","20"},
+            //{"Bedrosiani","20"},
             {"Ascheni","5"},
-            {"Furlingové","23"},
+            //{"Furlingové","23"},
 
             {"Vyvrhel","11"}
         }; 

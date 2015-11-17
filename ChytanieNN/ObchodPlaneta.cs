@@ -1,4 +1,7 @@
-﻿namespace WebBrowser.ChytanieNN
+﻿using System;
+using System.Globalization;
+
+namespace WebBrowser.ChytanieNN
 {
     public class ObchodPlaneta
     {
@@ -6,6 +9,7 @@
         public string Vhodnost { get; set; }
         public string PocetMiest { get; set; }
         public string Cena { get; set; }
+        public string Koeficient { get; set; }
 
         public ObchodPlaneta(string typ, string vhodnost, string pocetMiest, string cena)
         {
@@ -17,7 +21,8 @@
             Vhodnost = vhodnost;
             PocetMiest = pocetMiest;
             Cena = cena;
-            // Console.WriteLine(typ + " "+vhodnost+" "+pocetMiest+" "+cena +"  - "+Skore());
+            Koeficient = Skore().ToString(CultureInfo.InvariantCulture);
+             Console.WriteLine(typ + " "+vhodnost+" "+pocetMiest+" "+cena +"  - "+Skore());
         }
 
         public double Skore()

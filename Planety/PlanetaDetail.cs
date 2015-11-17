@@ -51,6 +51,7 @@ namespace WebBrowser.Planety
                 //_jadro.VlozZaznamOnlineDB(_listPlanetHraca.First());
             }
 
+            comboBox1.SelectedIndex = 0;
         }
 
         public PlanetaDetail(List<Planeta> list, Jadro jadro, string title)
@@ -86,16 +87,16 @@ namespace WebBrowser.Planety
                 dataGridView1.DataSource = _listPlanetHraca;
                 _jadro.ZmenaPlanety -= ZobrazTypPlanety;
                 _najdena = true;
-                if (KoniecOkna != null)
-                {
-                    //KoniecOkna(_typPlanety);
-                }
             }
             else if (_jadro.TypPlanety == "Neexistuje")
             {
                 MessageBox.Show(@"Planeta neexistuje", @"Chyba pri nahravani virusu", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 _jadro.ZmenaPlanety -= ZobrazTypPlanety;
                 _najdena = true;
+                if (KoniecOkna != null)
+                {
+                    KoniecOkna(_typPlanety);
+                }
             }                
             else
             {
@@ -126,10 +127,19 @@ namespace WebBrowser.Planety
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var hladanaPlaneta = _listPlanetHraca.FirstOrDefault();
-            var url = "http://www.stargate-game.cz/utok.php?jakej=2&cil="+hladanaPlaneta.Majitel;
-            var id = hladanaPlaneta.Meno;
-            var browser = new DefaultBrowser(url, id);
-            browser.Show();
+            //var url = "http://www.stargate-game.cz/utok.php?jakej=2&cil="+hladanaPlaneta.Majitel;
+            //var id = hladanaPlaneta.Meno;
+            //var browser = new DefaultBrowser(url, id);
+            //browser.Show();
+
+            //_jadro.VypisHracovRasy()
+
+            if (hladanaPlaneta != null)
+            {
+                var url = string.Format("http://www.stargate-game.cz/utok.php?page=0&hrac_id={0}&utok_id={1}&pl_id={2}", "", "", hladanaPlaneta.Id);
+
+                textBox1.Text = url;
+            }
         }
     }
 }
