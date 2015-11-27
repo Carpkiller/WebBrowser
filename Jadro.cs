@@ -2366,9 +2366,10 @@ namespace WebBrowser
         {
             while (WarMode == 1)
             {
+                Thread.Sleep(refreshovaciCas * 1000);
                 Wb.Refresh();
                 //wbNezamestnany.Refresh();
-                Thread.Sleep(refreshovaciCas*1000);
+
             }
         }
 
@@ -2387,10 +2388,14 @@ namespace WebBrowser
         public void VypniWarMod()
         {
             WarMode = 0;
-            Wb.DocumentCompleted -=
+            if (WarMode == 1)
+            {
+                Wb.DocumentCompleted -=
                     new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
-            wbNezamestnany.DocumentCompleted -=
-                    new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.wbNezamestnany_DocumentCompleted);
+                wbNezamestnany.DocumentCompleted -=
+                    new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(
+                        this.wbNezamestnany_DocumentCompleted);
+            }
         }
 
         private void SkontrolujStav()
@@ -2398,18 +2403,19 @@ namespace WebBrowser
             try
             {  // Probíhá údržba
                 if (Wb.Document.Body.InnerText.Contains("Probíhá údržba") || 
-                    //Wb.Document.Window.Frames[1].Document.Body.InnerText.Contains("Probíhá údržba") ||
-                    Wb.Document.Body.InnerText.Contains("Váš profil byl pro neaktivitu odhlášen"))
+                    Wb.Url.ToString() == "http://www.stargate-game.cz/vyprsela-platnost-prihlaseni" ||
+                    Wb.Url.ToString() == "http://www.stargate-game.cz/neaktivita")
                 {
-                    Wb.Navigate("http://www.stargate-game.cz/index.php");
+                    Wb.Navigate("http://www.stargate-game.cz");
                     while (true)
                     {
                         Application.DoEvents();
                         if (!string.IsNullOrEmpty(Wb.StatusText) && !Wb.StatusText.Contains("index"))
                             break;
                     }
+                    return;
                 }
-                else if (Wb.Url.AbsoluteUri == "http://www.stargate-game.cz/index.php")
+                else if (Wb.Url.AbsoluteUri == "http://www.stargate-game.cz/")
                 {
                     Wb.Document.GetElementById("log-jmeno").SetAttribute("value", User);
                     Wb.Document.GetElementById("log-heslo").SetAttribute("value", Heslo);
@@ -2419,34 +2425,8 @@ namespace WebBrowser
                     d[1].InvokeMember("Click");
                     Console.WriteLine("Opakovany login ... ");
                 }
-                else if (Wb.Document.Window.Frames[1].Document.Url.AbsoluteUri ==
-                         "http://www.stargate-game.cz/neaktivita")
-                {
-                    Wb.Navigate("http://www.stargate-game.cz/index.php");
-                    while (true)
-                    {
-                        Application.DoEvents();
-                        if (!string.IsNullOrEmpty(Wb.StatusText) && !Wb.StatusText.Contains("index"))
-                            break;
-                    }
-                }
-                else if (Wb.Document.Window.Frames[1].Document.Body != null)
-                {
-                    var g = Wb.Document.Window.Frames[1].Document.Body.InnerText;
-                    var naq =
-                        int.Parse(g.Substring(g.IndexOf("Naquadah") + 8,
-                            g.IndexOf(" kg", g.IndexOf("Naquadah")) - g.IndexOf("Naquadah") - 8)
-                            .Replace(" ", ""));
-                    if (naq > HranicneMnozstvoNaqu)
-                    {
-                        OdosliNaqDoFondu(naq);
-                    }
-
-                   // SkontrolujLudi();
-
-                } // http://www.stargate-game.cz/neaktivita
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
             }

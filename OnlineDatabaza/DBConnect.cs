@@ -27,7 +27,7 @@ namespace WebBrowser.OnlineDatabaza
             _database = "sgtool";
             _uid = "sgtool";
             _password = "sgtool123456";
-            string connectionString = "SERVER=" + _server + ";" + "DATABASE=" + _database + ";" + "UID=" + _uid + ";" +
+            string connectionString = "SERVER=" + _server + ";Port=3307;" + "DATABASE=" + _database + ";" + "UID=" + _uid + ";" +
                                       "PASSWORD=" + _password + ";";
 
             _connection = new MySqlConnection(connectionString);

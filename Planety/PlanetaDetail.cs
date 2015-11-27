@@ -126,7 +126,11 @@ namespace WebBrowser.Planety
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var hladanaPlaneta = _listPlanetHraca.FirstOrDefault();
+            Planeta hladanaPlaneta = null;
+            if (_listPlanetHraca != null)
+            {
+                hladanaPlaneta = _listPlanetHraca.FirstOrDefault();
+            }
             //var url = "http://www.stargate-game.cz/utok.php?jakej=2&cil="+hladanaPlaneta.Majitel;
             //var id = hladanaPlaneta.Meno;
             //var browser = new DefaultBrowser(url, id);
