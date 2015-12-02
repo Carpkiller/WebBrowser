@@ -118,6 +118,7 @@
       <DependentUpon>InfoHrac.cs</DependentUpon>
     </Compile>
     <Compile Include="Dohadzovanie\PoctyJadnotiek.cs" />
+    <Compile Include="Enum\WarModeEnum.cs" />
     <Compile Include="Export\ExportForm.cs">
       <SubType>Form</SubType>
     </Compile>

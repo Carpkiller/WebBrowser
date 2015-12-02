@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using WebBrowser.Dohadzovanie;
@@ -127,37 +128,41 @@ namespace WebBrowser.ChytanieTrolov
             d[0].InvokeMember("Click");
 
             var c = wbJednotky.Document.GetElementById("jed1").GetAttribute("value");
-            Console.WriteLine("Poslanie jednotiek ... ");
+            Console.WriteLine(DateTime.Now.TimeOfDay + "  Poslanie jednotiek ... ");
             var cs = wbJednotky.Document.GetElementById("jed1");
-            while (true)
-            {
-                Application.DoEvents();
-                if (!string.IsNullOrEmpty(wbJednotky.StatusText) &&
-                    !wbJednotky.StatusText.Contains("jednotky.php?page=3#nakup") &&
-                    wbJednotky.Document.Body.InnerText.Contains("byly úspěšně přesunuty k hráči"))
-                {
-                    Console.WriteLine("OK");
-                    break;
-                }
-                if (!string.IsNullOrEmpty(wbJednotky.StatusText) &&
-                    !wbJednotky.StatusText.Contains("jednotky.php?page=3#nakup") &&
-                    wbJednotky.Document.Body.InnerText.Contains("Odeslat musíte nejméně 1 jednotku!"))
-                {
+            //while (true)
+            //{
+            //    Application.DoEvents();
+            //    if (!string.IsNullOrEmpty(wbJednotky.StatusText) &&
+            //        !wbJednotky.StatusText.Contains("jednotky.php?page=3#nakup") &&
+            //        wbJednotky.Document.Body.InnerText.Contains("byly úspěšně přesunuty k hráči"))
+            //    {
+            //        Console.WriteLine("OK");
+            //        break;
+            //    }
+            //    if (!string.IsNullOrEmpty(wbJednotky.StatusText) &&
+            //        !wbJednotky.StatusText.Contains("jednotky.php?page=3#nakup") &&
+            //        wbJednotky.Document.Body.InnerText.Contains("Odeslat musíte nejméně 1 jednotku!"))
+            //    {
 
-                    Console.WriteLine("Chyba");
-                    MessageBox.Show("Odeslat musíte nejméně 1 jednotku!", "Chyba pri odosielani jednotie");
-                    break;
-                }
-            }
+            //        Console.WriteLine(@"Chyba");
+            //        MessageBox.Show("Odeslat musíte nejméně 1 jednotku!", "Chyba pri odosielani jednotie");
+            //        break;
+            //    }
+            //}
 
-            if (
+            //if (
 
-                wbJednotky.Document.Body.InnerText.Contains("byly úspěšně přesunuty k hráči"))
-            {
-                Console.WriteLine("Jednotky byly úspěšně odeslány.");
-                if (UtokJeMozny != null) //vyvolani udalosti
-                    UtokMozny();
-            }
+            //    wbJednotky.Document.Body.InnerText.Contains("byly úspěšně přesunuty k hráči"))
+            //{
+            //    Console.WriteLine(DateTime.Now.TimeOfDay + @"  Jednotky byly úspěšně odeslány.");
+            //    if (UtokJeMozny != null) //vyvolani udalosti
+            //        UtokMozny();
+            //}
+            Thread.Sleep(100);
+            Console.WriteLine(DateTime.Now.TimeOfDay + @"  Jednotky byly úspěšně odeslány.");
+            if (UtokJeMozny != null) //vyvolani udalosti
+                UtokMozny();
         }
 
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -173,7 +178,6 @@ namespace WebBrowser.ChytanieTrolov
 
         private void ZautocNaHraca()
         {
-            Console.WriteLine(@"Utok");
             pocetZobrazeni = 0;
             idHrac = _form.listHracov[_form.listHracov.IndexOf(new Hrac(hladanyHrac, "", ""))].ID;
 
@@ -219,6 +223,7 @@ namespace WebBrowser.ChytanieTrolov
             _form.TopMost = true;
 
             var screenBounds = Screen.PrimaryScreen.Bounds;
+            Console.WriteLine(DateTime.Now.TimeOfDay + @"  Utok");
             DoMouseClick(x*65535/screenBounds.Width, y*65535/screenBounds.Height);
         }
 

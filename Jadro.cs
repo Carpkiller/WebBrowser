@@ -12,6 +12,7 @@ using WebBrowser.ChytanieNN;
 using WebBrowser.ChytanieTrolov;
 using WebBrowser.ChytanieVV;
 using WebBrowser.Dohadzovanie;
+using WebBrowser.Enum;
 using WebBrowser.Hladanie;
 using WebBrowser.OnlineDatabaza;
 using WebBrowser.PomocneTriedy;
@@ -23,7 +24,7 @@ namespace WebBrowser
     {
         private System.Windows.Forms.WebBrowser Wb { get; set; }
         private HlavneOkno Form { get; set; }
-        private int AktualnySektor;
+        public int AktualnySektor;
         private List<Planeta> AktualnyListPlanet;
         public List<SektorPrehlad> PrehladSektorovList { get; set; }
         public List<CelkovaTabulka> ListPlanetpar;
@@ -77,7 +78,7 @@ namespace WebBrowser
         public List<Planeta> KoniecVlaknaList { get; set; }
         public List<SektorPlanety> NajdenePlanety { get; set; }
         public Planeta HladanaPlaneta { get; set; }
-        private int WarMode = 0;
+        private WarModeEnum WarMode;
         public string UdpateQuery;
         
         public Jadro(System.Windows.Forms.WebBrowser wb, HlavneOkno form1)
@@ -455,13 +456,13 @@ namespace WebBrowser
 
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            if (WarMode == 0)
+            if (WarMode == WarModeEnum.Stopped)
             {
                 var o =
                 ((System.Windows.Forms.WebBrowser)(sender)).Document.Body.InnerHtml;
                 UlozData(o, "vesmir.php?page=3");
             }
-            if (WarMode == 1)
+            if (WarMode == WarModeEnum.Running)
             {
                 SkontrolujStav();
             }
@@ -560,7 +561,7 @@ namespace WebBrowser
             var sektor = innerHtml.Substring(sektorIndex + 7, sektorKoniec - sektorIndex - 7);
             var sektorCislo = outerHtml.Substring(outerHtml.IndexOf("sektor=") + 7);
             innerHtml = innerHtml.Substring(innerHtml.IndexOf("<AREA"));
-            Console.WriteLine("Start : " + DateTime.Now.TimeOfDay);
+            Console.WriteLine("Running : " + DateTime.Now.TimeOfDay);
 
             while (koniec)
             {
@@ -2071,7 +2072,7 @@ namespace WebBrowser
                     }
                     catch (Exception fail)
                     {
-                        MessageBox.Show(fail.Message, "Exception pri ukladani novych planet");
+                        MessageBox.Show(fail.Message, @"Exception pri ukladani novych planet");
                     }
 
                     if (pocetUpdateRows == 0)
@@ -2095,7 +2096,7 @@ namespace WebBrowser
                         }
                         catch (Exception fail)
                         {
-                            MessageBox.Show(fail.Message, "Exception pri ukladani novych planet, ak predtym ...");
+                            MessageBox.Show(fail.Message, @"Exception pri ukladani novych planet, ak predtym ...");
                         }
                     }
                 }
@@ -2166,10 +2167,10 @@ namespace WebBrowser
                 }
 
                 if (
-                    wb1.Document.Body.InnerText.Contains("nabízena za "))
+                    wb1.Document != null && (wb1.Document.Body != null && (wb1.Document != null && wb1.Document.Body.InnerText.Contains("nabízena za "))))
                 {
-                    var zac = wb1.Document.Body.InnerText.IndexOf("nabízena za ") + 12;
-                    var kon = wb1.Document.Body.InnerText.IndexOf("kg naquadahu", zac);
+                    var zac = wb1.Document.Body.InnerText.IndexOf("nabízena za ", StringComparison.Ordinal) + 12;
+                    var kon = wb1.Document.Body.InnerText.IndexOf("kg naquadahu", zac, StringComparison.Ordinal);
 
                     var cena =
                         wb1.Document.Body.InnerText.Substring(zac,
@@ -2177,7 +2178,7 @@ namespace WebBrowser
 
                     if (int.Parse(cena) < cen)
                     {
-                        MessageBox.Show("Lacne HB", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(@"Lacne HB", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         break;
                     }
 
@@ -2338,7 +2339,7 @@ namespace WebBrowser
 
         public void SpustWarMod(int refreshovaciCas, int mnozstvoNaqu)
         {
-            WarMode = 1;
+            WarMode = WarModeEnum.Running;
             HranicneMnozstvoNaqu = mnozstvoNaqu;
             Wb.DocumentCompleted +=
                     new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
@@ -2364,7 +2365,7 @@ namespace WebBrowser
 
         private void SpustHlavnyRefresh(int refreshovaciCas)
         {
-            while (WarMode == 1)
+            while (WarMode == WarModeEnum.Running)
             {
                 Thread.Sleep(refreshovaciCas * 1000);
                 Wb.Refresh();
@@ -2387,8 +2388,7 @@ namespace WebBrowser
 
         public void VypniWarMod()
         {
-            WarMode = 0;
-            if (WarMode == 1)
+            if (WarMode == WarModeEnum.Running)
             {
                 Wb.DocumentCompleted -=
                     new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
@@ -2396,10 +2396,15 @@ namespace WebBrowser
                     new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(
                         this.wbNezamestnany_DocumentCompleted);
             }
+            WarMode = WarModeEnum.Stopped;
         }
 
         private void SkontrolujStav()
         {
+            //if (DateTime.Now.Date > new DateTime(2015,11,28,5,12,10))
+            //{
+            //    WarMode = WarModeEnum.Stopped;
+            //}
             try
             {  // Probíhá údržba
                 if (Wb.Document.Body.InnerText.Contains("Probíhá údržba") || 
