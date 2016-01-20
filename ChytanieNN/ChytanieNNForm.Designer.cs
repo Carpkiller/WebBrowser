@@ -51,6 +51,10 @@ namespace WebBrowser.ChytanieNN
             this.checkBoxObry = new System.Windows.Forms.CheckBox();
             this.button3 = new System.Windows.Forms.Button();
             this.checkBoxIbaObry = new System.Windows.Forms.CheckBox();
+            this.domainUpDownHodiny = new System.Windows.Forms.DomainUpDown();
+            this.domainUpDownMinuty = new System.Windows.Forms.DomainUpDown();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -244,10 +248,48 @@ namespace WebBrowser.ChytanieNN
             this.checkBoxIbaObry.Text = "Kupovat iba obry";
             this.checkBoxIbaObry.UseVisualStyleBackColor = true;
             // 
+            // domainUpDownHodiny
+            // 
+            this.domainUpDownHodiny.Location = new System.Drawing.Point(1168, 48);
+            this.domainUpDownHodiny.Name = "domainUpDownHodiny";
+            this.domainUpDownHodiny.Size = new System.Drawing.Size(49, 20);
+            this.domainUpDownHodiny.TabIndex = 21;
+            // 
+            // domainUpDownMinuty
+            // 
+            this.domainUpDownMinuty.Location = new System.Drawing.Point(1223, 48);
+            this.domainUpDownMinuty.Name = "domainUpDownMinuty";
+            this.domainUpDownMinuty.Size = new System.Drawing.Size(49, 20);
+            this.domainUpDownMinuty.TabIndex = 22;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(1087, 48);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 23;
+            this.button4.Text = "Odoslat";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(1278, 48);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(23, 23);
+            this.button5.TabIndex = 24;
+            this.button5.Text = "X";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // ChytanieNNForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1325, 472);
+            this.Controls.Add(this.button5);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.domainUpDownMinuty);
+            this.Controls.Add(this.domainUpDownHodiny);
             this.Controls.Add(this.checkBoxIbaObry);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.checkBoxObry);
@@ -303,5 +345,9 @@ namespace WebBrowser.ChytanieNN
         private CheckBox checkBoxObry;
         private Button button3;
         private CheckBox checkBoxIbaObry;
+        private DomainUpDown domainUpDownHodiny;
+        private DomainUpDown domainUpDownMinuty;
+        private Button button4;
+        private Button button5;
     }
 }

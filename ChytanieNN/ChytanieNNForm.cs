@@ -47,6 +47,17 @@ namespace WebBrowser.ChytanieNN
 
             textBoxRelatX.Text = Config.RelativnaSuradnicaX;
             textBoxRelatY.Text = Config.RelativnaSuradnicaY;
+
+            DomainUpDown.DomainUpDownItemCollection itemsHodiny = domainUpDownHodiny.Items;
+            for (int i = 23; i >= 0; i--)
+            {
+                itemsHodiny.Add(i);
+            }
+            DomainUpDown.DomainUpDownItemCollection itemsMinuty = domainUpDownMinuty.Items;
+            for (int i = 59; i >= 0; i--)
+            {
+                itemsMinuty.Add(i);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -360,6 +371,38 @@ namespace WebBrowser.ChytanieNN
         {
             var nastavenie = new NastavenieNN(_jadro);
             nastavenie.Show(this);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            domainUpDownHodiny.Text = DateTime.Now.Hour.ToString();
+            domainUpDownMinuty.Text = DateTime.Now.Minute.ToString();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var wbPosta = new System.Windows.Forms.WebBrowser();
+            wbPosta.Navigate("http://www.stargate-game.cz/posta.php?page=1");
+            while (true)
+            {
+                Application.DoEvents();
+                if (!string.IsNullOrEmpty(wbPosta.StatusText) && !wbPosta.StatusText.Contains("posta"))
+                    break;
+            }
+
+            var cas = new TimeSpan(int.Parse(domainUpDownHodiny.Text), int.Parse(domainUpDownMinuty.Text), 0);
+            var casNN = string.Format("NN {0}-{1}", cas.Add(new TimeSpan(1, 0, 0)).ToString("hh':'mm"),
+                cas.Add(new TimeSpan(1, 30, 0)).ToString("hh':'mm"));
+
+            wbPosta.Document.GetElementById("predmet").SetAttribute("value", casNN);
+            wbPosta.Document.GetElementById("typ").SetAttribute("value", "3");
+
+            Console.WriteLine(casNN);
+
+            var c = wbPosta.Document.GetElementsByTagName("input");
+            var d = c.GetElementsByName("posta_odeslat");
+
+            d[0].InvokeMember("Click");
         }
     }
 }
