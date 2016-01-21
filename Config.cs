@@ -402,5 +402,27 @@ namespace WebBrowser
                 }
             }
         }
+
+        public static string TextNp
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var text = lines.Skip(18).First();
+
+                        return text;
+                    }
+                    return "NN {0}-{1}";
+                }
+                catch
+                {
+                    return "NN {0}-{1}";
+                }
+            }
+        }
     }
 }

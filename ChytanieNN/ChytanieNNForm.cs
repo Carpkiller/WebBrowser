@@ -15,6 +15,7 @@ namespace WebBrowser.ChytanieNN
         private int _refreshovaciCas;
         private int _poc;
         private int _uloz;
+        private string textNp;
 
         [DllImport("user32.dll")]
         static extern void mouse_event(int dwFlags, int dx, int dy,int dwData, UIntPtr dwExtraInfo);
@@ -58,6 +59,8 @@ namespace WebBrowser.ChytanieNN
             {
                 itemsMinuty.Add(i);
             }
+
+            textNp = Config.TextNp;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -391,7 +394,7 @@ namespace WebBrowser.ChytanieNN
             }
 
             var cas = new TimeSpan(int.Parse(domainUpDownHodiny.Text), int.Parse(domainUpDownMinuty.Text), 0);
-            var casNN = string.Format("NN {0}-{1}", cas.Add(new TimeSpan(1, 0, 0)).ToString("hh':'mm"),
+            var casNN = string.Format(textNp, cas.Add(new TimeSpan(1, 0, 0)).ToString("hh':'mm"),
                 cas.Add(new TimeSpan(1, 30, 0)).ToString("hh':'mm"));
 
             wbPosta.Document.GetElementById("predmet").SetAttribute("value", casNN);
