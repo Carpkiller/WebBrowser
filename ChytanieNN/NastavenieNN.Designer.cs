@@ -56,6 +56,11 @@
             this.button2 = new System.Windows.Forms.Button();
             this.textBoxNP = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBoxMinMinut = new System.Windows.Forms.TextBox();
+            this.textBoxMaxMinut = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -281,7 +286,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(107, 251);
+            this.button1.Location = new System.Drawing.Point(109, 280);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 26;
@@ -291,7 +296,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(219, 251);
+            this.button2.Location = new System.Drawing.Point(221, 280);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 27;
@@ -317,11 +322,61 @@
             this.label8.TabIndex = 28;
             this.label8.Text = "NP text :";
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(158, 244);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(69, 13);
+            this.label15.TabIndex = 30;
+            this.label15.Text = "Dalsie okno :";
+            // 
+            // textBoxMinMinut
+            // 
+            this.textBoxMinMinut.Location = new System.Drawing.Point(233, 241);
+            this.textBoxMinMinut.Name = "textBoxMinMinut";
+            this.textBoxMinMinut.Size = new System.Drawing.Size(50, 20);
+            this.textBoxMinMinut.TabIndex = 31;
+            this.textBoxMinMinut.Text = "60";
+            this.textBoxMinMinut.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBoxMaxMinut
+            // 
+            this.textBoxMaxMinut.Location = new System.Drawing.Point(313, 241);
+            this.textBoxMaxMinut.Name = "textBoxMaxMinut";
+            this.textBoxMaxMinut.Size = new System.Drawing.Size(50, 20);
+            this.textBoxMaxMinut.TabIndex = 32;
+            this.textBoxMaxMinut.Text = "90";
+            this.textBoxMaxMinut.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(289, 244);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(18, 13);
+            this.label16.TabIndex = 33;
+            this.label16.Text = "az";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(369, 244);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(32, 13);
+            this.label17.TabIndex = 34;
+            this.label17.Text = "minut";
+            // 
             // NastavenieNN
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(438, 286);
+            this.ClientSize = new System.Drawing.Size(438, 315);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.textBoxMaxMinut);
+            this.Controls.Add(this.textBoxMinMinut);
+            this.Controls.Add(this.label15);
             this.Controls.Add(this.textBoxNP);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.button2);
@@ -390,6 +445,11 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox textBoxNP;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox textBoxMinMinut;
+        private System.Windows.Forms.TextBox textBoxMaxMinut;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
 
     }
 }

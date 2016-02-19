@@ -23,6 +23,8 @@ namespace WebBrowser.ChytanieNN
             textBoxPocetMiest90.Text = (double.Parse(Config.PocetMiest90) / 100).ToString(CultureInfo.InvariantCulture);
             textBoxPocetMiestDef.Text = (double.Parse(Config.PocetMiestDefault) / 100).ToString(CultureInfo.InvariantCulture);
             textBoxNP.Text = Config.TextNp;
+            textBoxMinMinut.Text = Config.NNMinMinut;
+            textBoxMaxMinut.Text = Config.NNMaxMinut;
         }
 
         private void button2_Click(object sender, System.EventArgs e)
@@ -44,7 +46,8 @@ namespace WebBrowser.ChytanieNN
             _jadro.AktualizujConfig(double.Parse(textBoxPocetMiest90.Text, NumberStyles.Any, CultureInfo.InvariantCulture) * 100, 16);
             _jadro.AktualizujConfig(double.Parse(textBoxPocetMiestDef.Text, NumberStyles.Any, CultureInfo.InvariantCulture) * 100, 17);
             _jadro.AktualizujConfig(textBoxNP.Text, 18);
-
+            _jadro.AktualizujConfig(textBoxMinMinut.Text, 19);
+            _jadro.AktualizujConfig(textBoxMaxMinut.Text, 20);
             Close();
         }
     }

@@ -16,6 +16,8 @@ namespace WebBrowser.ChytanieNN
         private int _poc;
         private int _uloz;
         private string textNp;
+        private int NNMinMinut;
+        private int NNMaxMinut;
 
         [DllImport("user32.dll")]
         static extern void mouse_event(int dwFlags, int dx, int dy,int dwData, UIntPtr dwExtraInfo);
@@ -61,6 +63,8 @@ namespace WebBrowser.ChytanieNN
             }
 
             textNp = Config.TextNp;
+            NNMinMinut = int.Parse(Config.NNMinMinut);
+            NNMaxMinut = int.Parse(Config.NNMaxMinut);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -394,8 +398,8 @@ namespace WebBrowser.ChytanieNN
             }
 
             var cas = new TimeSpan(int.Parse(domainUpDownHodiny.Text), int.Parse(domainUpDownMinuty.Text), 0);
-            var casNN = string.Format(textNp, cas.Add(new TimeSpan(1, 0, 0)).ToString("hh':'mm"),
-                cas.Add(new TimeSpan(1, 30, 0)).ToString("hh':'mm"));
+            var casNN = string.Format(textNp, cas.Add(new TimeSpan(0, NNMinMinut, 0)).ToString("hh':'mm"),
+                cas.Add(new TimeSpan(0, NNMaxMinut, 0)).ToString("hh':'mm"));
 
             wbPosta.Document.GetElementById("predmet").SetAttribute("value", casNN);
             wbPosta.Document.GetElementById("typ").SetAttribute("value", "3");

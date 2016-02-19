@@ -424,5 +424,47 @@ namespace WebBrowser
                 }
             }
         }
+        public static string NNMinMinut
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var cena = lines.Skip(19).First();
+
+                        return cena;
+                    }
+                    return "60";
+                }
+                catch
+                {
+                    return "60";
+                }
+            }
+        }
+        public static string NNMaxMinut
+        {
+            get
+            {
+                try
+                {
+                    if (File.Exists("UserConfig.dat"))
+                    {
+                        IEnumerable<string> lines = File.ReadLines("UserConfig.dat");
+                        var cena = lines.Skip(20).First();
+
+                        return cena;
+                    }
+                    return "90";
+                }
+                catch
+                {
+                    return "90";
+                }
+            }
+        }
     }
 }
