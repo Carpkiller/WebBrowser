@@ -37,6 +37,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxSDI = new System.Windows.Forms.TextBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBoxBuranie = new System.Windows.Forms.CheckBox();
+            this.checkBoxStavbaVyrobni = new System.Windows.Forms.CheckBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBoxParky = new System.Windows.Forms.TextBox();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // webBrowser1
@@ -127,11 +133,61 @@
             this.checkBox1.Text = "Max PO";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
+            // checkBoxBuranie
+            // 
+            this.checkBoxBuranie.AutoSize = true;
+            this.checkBoxBuranie.Location = new System.Drawing.Point(464, 41);
+            this.checkBoxBuranie.Name = "checkBoxBuranie";
+            this.checkBoxBuranie.Size = new System.Drawing.Size(109, 17);
+            this.checkBoxBuranie.TabIndex = 9;
+            this.checkBoxBuranie.Text = "Zburat vsetky PO";
+            this.checkBoxBuranie.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxStavbaVyrobni
+            // 
+            this.checkBoxStavbaVyrobni.AutoSize = true;
+            this.checkBoxStavbaVyrobni.Location = new System.Drawing.Point(7, 5);
+            this.checkBoxStavbaVyrobni.Name = "checkBoxStavbaVyrobni";
+            this.checkBoxStavbaVyrobni.Size = new System.Drawing.Size(98, 17);
+            this.checkBoxStavbaVyrobni.TabIndex = 10;
+            this.checkBoxStavbaVyrobni.Text = "Stavat vyrobne";
+            this.checkBoxStavbaVyrobni.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.textBoxParky);
+            this.panel1.Controls.Add(this.checkBoxStavbaVyrobni);
+            this.panel1.Location = new System.Drawing.Point(579, 5);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(144, 53);
+            this.panel1.TabIndex = 11;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(4, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(71, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "Pocet parkov";
+            // 
+            // textBoxParky
+            // 
+            this.textBoxParky.Location = new System.Drawing.Point(81, 28);
+            this.textBoxParky.Name = "textBoxParky";
+            this.textBoxParky.Size = new System.Drawing.Size(58, 20);
+            this.textBoxParky.TabIndex = 11;
+            this.textBoxParky.Text = "0";
+            // 
             // StavbaPOForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(847, 582);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.checkBoxBuranie);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBoxSDI);
@@ -143,6 +199,8 @@
             this.Controls.Add(this.webBrowser1);
             this.Name = "StavbaPOForm";
             this.Text = "StavbaPOForm";
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -159,5 +217,10 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBoxSDI;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBoxBuranie;
+        private System.Windows.Forms.CheckBox checkBoxStavbaVyrobni;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBoxParky;
     }
 }

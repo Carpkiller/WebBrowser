@@ -74,20 +74,49 @@ namespace WebBrowser.StavbaPO
                     Thread.Sleep(refreshovaciCas * 1000);
                     int krok = 0;
 
-                    if (!skontrolujBS())
+                    if (!checkBoxBuranie.Checked && !checkBoxStavbaVyrobni.Checked)
                     {
-                        krok++;
-                        webBrowser1.Document.GetElementById("bs").SetAttribute("value", pocetBS);
+                        if (!skontrolujBS())
+                        {
+                            krok++;
+                            webBrowser1.Document.GetElementById("bs").SetAttribute("value", pocetBS);
+                        }
+                        if (!skontrolujSDI())
+                        {
+                            krok++;
+                            webBrowser1.Document.GetElementById("sdi").SetAttribute("value", pocetSDI);
+                        }
+                        if (!skontrolujPO())
+                        {
+                            krok++;
+                            webBrowser1.Document.GetElementById("po").SetAttribute("value", pocetPO);
+                        }
                     }
-                    if (!skontrolujSDI())
+                    else if (checkBoxBuranie.Checked)
                     {
-                        krok++;
-                        webBrowser1.Document.GetElementById("sdi").SetAttribute("value", pocetSDI);
+                        if (pocetPostavenychPO() > 0)
+                        {
+                            krok++;
+                            webBrowser1.Document.GetElementById("po").SetAttribute("value", "0");
+                        }
                     }
-                    if (!skontrolujPO())
+                    else if (checkBoxStavbaVyrobni.Checked)
                     {
-                        krok++;
-                        webBrowser1.Document.GetElementById("po").SetAttribute("value", pocetPO);
+                        if (skontrolujVyrobne())
+                        {                            
+                            if (int.Parse(textBoxParky.Text) > pocetPostavenychParkov())
+                            {
+                                krok++;
+                                int pocetVyrobni = int.Parse(zistiMaxPocetVyrobni());
+                                int pocetParkov = int.Parse(textBoxParky.Text);
+                                webBrowser1.Document.GetElementById("vyrobna").SetAttribute("value", (pocetVyrobni-pocetParkov).ToString());
+                                webBrowser1.Document.GetElementById("park").SetAttribute("value", (pocetParkov).ToString());
+                            }
+                            else
+                            {
+                                webBrowser1.Document.GetElementById("vyrobna").SetAttribute("value", zistiMaxPocetVyrobni());
+                            }
+                        }
                     }
 
                     postavTlacitko = webBrowser1.Document.GetElementsByTagName("input")[6];
@@ -96,7 +125,8 @@ namespace WebBrowser.StavbaPO
                     if (krok > 0)
                     {
                         // klik na stavat
-                        if (webBrowser1.Document.Body.InnerText.Contains("bylo postaveno") || webBrowser1.Document.Body.InnerText.Contains("není dostatek místa"))
+                        if (webBrowser1.Document.Body.InnerText.Contains("bylo postaveno") || webBrowser1.Document.Body.InnerText.Contains("není dostatek místa")
+                            || webBrowser1.Document.Body.InnerText.Contains("bylo zbouráno") || webBrowser1.Document.Body.InnerText.Contains("lze minimálně"))
                         {
                             PosunNaDalsiuPlanetu();
                         }
@@ -126,6 +156,11 @@ namespace WebBrowser.StavbaPO
                     //cakaj = true; // uvolnenie vlakna, posun na dlasiu planetu
                 }
             }
+        }
+
+        private int pocetPostavenychParkov()
+        {
+            return int.Parse(webBrowser1.Document.Body.GetElementsByTagName("input")[3].GetAttribute("value").Replace(".", ""));
         }
 
         private bool postavenePodlaPodmienok(string aktualnaPlaneta)
@@ -174,46 +209,30 @@ namespace WebBrowser.StavbaPO
             return int.Parse(value) == int.Parse(pocetPO);
         }
 
+        private bool skontrolujVyrobne()
+        {
+            var value = webBrowser1.Document.Body.GetElementsByTagName("input")[1].GetAttribute("value").Replace(".", "");
+            return int.Parse(value) != int.Parse(zistiMaxPocetVyrobni()) || textBoxParky.Text != "0";
+        }
+
+        private int pocetPostavenychPO()
+        {
+            var value = webBrowser1.Document.Body.GetElementsByTagName("input")[9].GetAttribute("value").Replace(".", "");
+            return int.Parse(value);
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             Console.WriteLine("--stavaj   " + Stavaj);
             if (!Stavaj)
             {
                 button1.Text = "Zastavit";
-            //    SpustRefreshDohadzovanie();
                 Stavaj = true;
                 PosunNaDalsiuPlanetu();
             }else if (Stavaj)
             {
                 button1.Text = "Start";
                 Stavaj = false;
-            }
-            //Stavaj = false;
-        }
-
-        private void SpustRefreshDohadzovanie()
-        {
-            refreshovacieVlakno = new Thread(WorkThreadFunction);
-            refreshovacieVlakno.Start();
-        }
-
-        private void WorkThreadFunction()
-        {
-            try
-            {
-                Stavaj = true;
-                while (Stavaj)
-                {
-                    PosunNaDalsiuPlanetu(); 
-                    Thread.Sleep(refreshovaciCas * 1000);
-                    while (cakaj)
-                    {
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Exception pri behu vlakna " + ex);
             }
         }
 
@@ -246,6 +265,23 @@ namespace WebBrowser.StavbaPO
             var pocet = webBrowser1.Document.Body.GetElementsByTagName("span")[9].InnerText;
 
             return pocet.Replace(" ","");
+        }
+
+        private string zistiMaxPocetVyrobni()
+        {
+            if (webBrowser1.Document.Body.InnerText.Contains("bylo postaveno"))
+            {
+                var text = webBrowser1.Document.Body;
+                text.InnerHtml = text.InnerHtml.Replace("<SPAN class=postaveno>", "");
+
+                var pocet1 = text.GetElementsByTagName("span")[2].InnerText;
+                //  var pocet1 = webBrowser1.Document.Body.GetElementsByTagName("span")[9].InnerText;
+
+                return pocet1.Replace(" ", "");
+            }
+            var pocet = webBrowser1.Document.Body.GetElementsByTagName("span")[1].InnerText;
+
+            return pocet.Replace(" ", "");
         }
 
         private string parsujAktualnaPlaneta()

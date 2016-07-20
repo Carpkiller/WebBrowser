@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using WebBrowser.PomocneTriedy;
@@ -27,7 +28,7 @@ namespace WebBrowser.OnlineDatabaza
             _database = "sgtool";
             _uid = "sgtool";
             _password = "sgtool123456";
-            string connectionString = "SERVER=" + _server + ";Port=3307;" + "DATABASE=" + _database + ";" + "UID=" + _uid + ";" +
+            string connectionString = "SERVER=" + _server + ";Port=3306;" + "DATABASE=" + _database + ";" + "UID=" + _uid + ";" +
                                       "PASSWORD=" + _password + ";";
 
             _connection = new MySqlConnection(connectionString);
@@ -178,7 +179,7 @@ namespace WebBrowser.OnlineDatabaza
                 while (dataReader.Read())
                 {
 
-                    var datum = dataReader.GetDateTime(9);
+                    var datum = (DateTime)dataReader["DatumVlozenia"];
                     list.Add(new Planeta(dataReader["nazov"].ToString(), dataReader["pozicia"].ToString(),
                         dataReader["idPlanety"].ToString(), dataReader["majitel"].ToString(),
                         dataReader["typ"].ToString(), dataReader["sektor"].ToString(),
@@ -202,3 +203,12 @@ namespace WebBrowser.OnlineDatabaza
         }
     }
 }
+
+
+
+//CREATE TABLE `sgtool`.`planety` 
+//( `idPlanety` INT NOT NULL , `Nazov` VARCHAR(15) NOT NULL , 
+//`Pozicia` VARCHAR(15) NOT NULL , `Majitel` VARCHAR(20) NOT NULL , 
+//`Typ` VARCHAR(30) NOT NULL , `Sektor` VARCHAR(10) NOT NULL , 
+//`FlagAktualny` VARCHAR(3) NOT NULL , `Vlozil` VARCHAR(20) NOT NULL , 
+//`DatumVlozenia` DATE NOT NULL ) ENGINE = InnoDB;
